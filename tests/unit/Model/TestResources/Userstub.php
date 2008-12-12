@@ -1,0 +1,67 @@
+<?php
+require_once 'modules/storefront/models/resources/User/Interface.php';
+require_once 'modules/storefront/models/resources/User/Item/Interface.php';
+
+class Test_UserStub extends PHPUnit_Framework_TestCase implements Storefront_Resource_User_Interface 
+{
+    protected $_rowset = null;
+    
+    public function __construct()
+    {
+        $data = array();
+        for($i=0; $i<10; $i++) {
+            $mock = $this->getMock('Storefront_Resource_User_Item_Interface');
+            
+            $mock->userId = $i;
+            $mock->title = $i % 2 ? 'Mr' : 'Mrs';
+            $mock->firstname = 'John' . $i;
+            $mock->lastname = 'Doe' . $i;
+            $mock->email = 'jd' . $i . '@noemail.com';
+            $mock->passwd = sha1(1234561);
+            $mock->salt = md5(1);
+            $mock->role = $i % 2 ? 'Customer' : 'Admin';
+            
+            $data[] = $mock;
+        }
+        $this->_rowset = $data;
+    }
+    
+    public function getUserById($id)
+    {
+        foreach ($this->_rowset as $user) {
+            if($id === $user->userId) {
+                return $user;
+            }
+        }
+        return null;
+    }
+    
+    public function getUserByEmail($email)
+    {
+        foreach ($this->_rowset as $user) {
+            if($email === $user->email) {
+                return $user;
+            }
+        }
+        return null;
+    }
+    
+    public function info($key = null)
+    {
+        if($key == 'cols') {
+            return array('userId','title','firstname','lastname','email','passwd','salt','role');
+        }
+    }
+    
+    public function createRow(array $data = array(), $defaultSource = null)
+    {
+        $mock = $this->getMock('Storefront_Resource_User_Item_Interface', array('save'));
+        $mock->expects($this->any())
+             ->method('save')
+             ->will($this->returnValue(10));
+       
+        $this->_rowset[] = $mock;
+        
+        return $mock;
+    }
+}
