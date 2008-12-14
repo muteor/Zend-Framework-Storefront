@@ -66,12 +66,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
         $this->_initModules();
-        $this->_initHelpers();
         $this->_configure();
-        $this->_initDb();
         $this->_initView();
-        $this->_registerFrontPlguins();
-        $this->_initRoutes();
     }
     
     /**
@@ -143,48 +139,6 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
     }
     
     /**
-     * Setup the default db adapter
-     * 
-     * @return SF_Plugin_Initialization This instance for chaining calls
-     */
-    protected function _initDb()
-    {
-        $config = $this->_getConfig();
-        if (!isset($config->db)) {
-            return $this;
-        }
-
-        $db = Zend_Db::factory($config->db);
-        
-        if ($this->_env == 'development') {
-            $db->getProfiler()->setEnabled(true);
-        }
-        
-        Zend_Db_Table_Abstract::setDefaultAdapter($db);
-        Zend_Registry::set('db', $db);
-        
-        // Setup metadata cache
-        $frontendOptions = array(
-            'automatic_serialization' => true
-        );
-        
-        $backendOptions  = array(
-            'cache_dir' => $this->_root . '/data/cache/meta'
-        );
-        
-        $cache = Zend_Cache::factory('Core',
-                                     'File',
-                                     $frontendOptions,
-                                     $backendOptions);
-        
-        if ('production' === $this->_env) {
-            Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
-        }                        
-        
-        return $this;
-    }
-    
-    /**
      * Setup the modules and realted settings.
      * 
      * @return SF_Plugin_Initialization This instance for chaining calls
@@ -196,16 +150,6 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         $this->_front->setDefaultModule('storefront');
         
         
-        return $this;
-    }
-    
-    /**
-     * Add the global action helpers
-     * @return SF_Plugin_Initialization This instance for chaining calls
-     */
-    public function _initHelpers()
-    {
-        Zend_Controller_Action_HelperBroker::addPath($this->_root . '/library/SF/Controller/helpers', 'SF_Helper');
         return $this;
     }
 
@@ -262,40 +206,5 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         );
         
         return $this;
-    }
-    
-    /**
-     * Register additional plugins, only ones that use
-     * hooks after routeStartup though!
-     */
-    protected function _registerFrontPlguins()
-    {
-        $this->_front->registerPlugin( new SF_Plugin_Action());
-        $this->_front->registerPlugin( new SF_Plugin_AdminContext());
-        
-        if ('development' == $this->_env) {
-            $this->_front->registerPlugin( new SF_Plugin_DBProfiler());
-        }
-    }
-    
-    /**
-     * Add required routes to the router
-     */
-    protected function _initRoutes()
-    {
-        $router = $this->_front->getRouter();
-
-        // Admin context route
-        $route = new Zend_Controller_Router_Route(
-            'admin/:module/:controller/:action',
-            array(
-                'action'     => 'index',
-                'controller' => 'admin',
-                'module'     => 'storefront',
-                'isAdmin'    => true
-            )
-        );
-        
-        $router->addRoute('admin', $route);
     }
 }
