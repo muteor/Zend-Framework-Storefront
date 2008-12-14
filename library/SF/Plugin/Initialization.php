@@ -70,7 +70,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         $this->_configure();
         $this->_initDb();
         $this->_initView();
-        $this->_registerFrontPlguins();
+        $this->_registerFrontPlugins();
         $this->_initRoutes();
     }
     
@@ -268,7 +268,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      * Register additional plugins, only ones that use
      * hooks after routeStartup though!
      */
-    protected function _registerFrontPlguins()
+    protected function _registerFrontPlugins()
     {
         $this->_front->registerPlugin( new SF_Plugin_Action());
         $this->_front->registerPlugin( new SF_Plugin_AdminContext());
