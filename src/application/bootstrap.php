@@ -10,5 +10,5 @@ Zend_Loader::registerAutoload();
  */
 $front = Zend_Controller_Front::getInstance();
 
-$front->registerPlugin( new SF_Plugin_Initialization('@ENVIRONMENT@') );
+$front->registerPlugin( new SF_Plugin_Initialization('development') );
 $front->dispatch(); 

@@ -1,0 +1,21 @@
+<? if ($this->dbProfiler): ?>
+<pre>
+    DB PROFILE
+    
+    Executed <?=$this->dbp_queryCount; ?> queries in <?= $this->dbp_totalTime; ?>
+    
+    Average query length: <?= $this->dbp_totalTime / $this->dbp_queryCount; ?>
+    
+    Queries per second: <?= $this->dbp_queryCount / $this->dbp_totalTime; ?>
+    
+    Longest query length: <?= $this->dbp_longestTime; ?>
+    
+    Longest query: <?= $this->dbp_longestQuery; ?>
+    
+    <?if($this->showQueries): ?>
+        <?foreach ($this->qp as $query): ?>
+            <?=$query->getQuery(). "\n"; ?>
+        <?endforeach; ?>
+    <?endif; ?>
+</pre>
+<? endif; ?>
