@@ -58,7 +58,7 @@ class Storefront_User extends Storefront_Model
         $user = array_key_exists('userId', $info) ? 
             $this->getResource()->getUserById($info['userId']) : null;
         
-        return parent::_dbSave($info, 'User', $user);        
+        return $this->getResource()->saveRow($info, $user);        
     }
     
     private function createSalt()

@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . '/User/Item.php';
  * @copyright  Copyright (c) 2005-2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Resource_User extends Zend_Db_Table_Abstract implements Storefront_Resource_User_Interface 
+class Storefront_Resource_User extends SF_Model_Resource_Db_Table_Abstract implements Storefront_Resource_User_Interface 
 {
     protected $_name = 'user';
     protected $_primary = 'userId';

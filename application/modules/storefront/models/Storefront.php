@@ -3,7 +3,7 @@
  * Storefront_Model
  * 
  * All models within the Storefront module will extend from
- * this abstract class. Thos is used to cleany namespace our module.
+ * this abstract class. This is used to cleany namespace our module.
  * 
  * @category   Storefront
  * @package    Storefront_Model
