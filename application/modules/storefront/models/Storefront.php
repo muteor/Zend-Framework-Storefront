@@ -55,30 +55,4 @@ abstract class Storefront_Model extends SF_Model_Abstract
         
         return $this->_instances[$name];
     }
-    
-    
-    /**
-     * Save a row to the database
-     *
-     * @param array             $info The data to insert/update
-     * @param string            $resourceName The resource to use
-     * @param Zend_DB_Table_Row $row Optional The row to use
-     * @return mixed The primary key
-     * @todo Add check for Db resource
-     */
-    protected function _dbSave($info, $resourceName, $row = null)
-    {
-        if (null === $row) {
-            $row = $this->getResource($resourceName)->createRow();
-        }
-        
-        $columns = $this->getResource($resourceName)->info('cols');
-        foreach ($columns as $column) {
-            if (array_key_exists($column, $info)) {
-                $row->$column = $info[$column];
-            }
-        }
-        
-        return $row->save();
-    }
 }

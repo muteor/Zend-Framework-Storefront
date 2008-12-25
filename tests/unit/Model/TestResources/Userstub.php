@@ -65,5 +65,17 @@ class Test_UserStub extends PHPUnit_Framework_TestCase implements Storefront_Res
         return $mock;
     }
 	
-	public function saveRow($info, $row = null){}
+	public function saveRow($info, $row = null)
+	{
+		if (null === $row) {
+            $row = $this->createRow();
+        }
+        
+        $columns = $this->info('cols');
+        foreach ($columns as $column) {
+            if (array_key_exists($column, $info)) {
+                $row->$column = $info[$column];
+            }
+        }
+	}
 }

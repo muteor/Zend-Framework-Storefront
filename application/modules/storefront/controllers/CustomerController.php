@@ -90,6 +90,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
 	
 	public function authenticateAction()
 	{
+		$this->view->showQueries = true;
         $request = $this->getRequest();
 
         if (!$request->isPost()) {

@@ -170,22 +170,19 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `userAddress`;
-CREATE TABLE `userAddress` (
-  `addressId` int(10) unsigned NOT NULL auto_increment,
-  `userId` int(10) unsigned NOT NULL,
-  `firstname` varchar(128)  NOT NULL,
-  `lastname` varchar(128)  NOT NULL,
-  `street1` varchar(200)  NOT NULL,
-  `street2` varchar(200)  NOT NULL,
-  `city` varchar(200)  NOT NULL,
-  `stateOrProvince` varchar(200)  NOT NULL,
-  `zip` varchar(20)  NOT NULL,
-  `country` varchar(200)  NOT NULL,
-  `isDefault` enum('Yes','No')  NOT NULL,
-  PRIMARY KEY  (`addressId`),
-  KEY `ind_userid` (`userId`),
-  CONSTRAINT `fk_user` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE  `user` (
+  `userId` int(10) unsigned NOT NULL auto_increment,
+  `title` varchar(10) NOT NULL,
+  `firstname` varchar(128) NOT NULL,
+  `lastname` varchar(128) NOT NULL,
+  `email` varchar(128) NOT NULL,
+  `passwd` char(40) NOT NULL,
+  `salt` char(32) NOT NULL,
+  `role` varchar(100) NOT NULL default 'customer',
+  PRIMARY KEY  (`userId`),
+  KEY `email_pass` (`email`,`passwd`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 --
 -- Dumping data for table `userAddress`
