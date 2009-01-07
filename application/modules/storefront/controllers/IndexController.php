@@ -11,8 +11,10 @@ class Storefront_IndexController extends Zend_Controller_Action
 
         $ps = $this->_helper->getModel('Catalog')->getProductsByCategory(3, array(2,1), array('name'));
         
-        $user = $this->_helper->getModel('User')->getUserByEmail('thepope@thepopeisdead.com');
+        $user = $this->_helper->getModel('User')->getUserByEmail('keith.pope@allpay.net');
         
         print_r($user);
+        
+        $this->view->headTitle('Product1', 'PREPEND');
     }
 }

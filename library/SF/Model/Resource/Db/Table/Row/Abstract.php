@@ -1,0 +1,49 @@
+<?php
+/**
+ * SF_Model_Resource_Db_Table_Row_Abstract
+ * 
+ * Composite the Zend_Db_Table_Row
+ * 
+ * @category   Storefront
+ * @package    Storefront_Model_Resource
+ * @copyright  Copyright (c) 2005-2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
+ */
+abstract class SF_Model_Resource_Db_Table_Row_Abstract
+{
+    protected $_row = null;
+
+    public function __construct(array $config = array()) 
+    {
+        $this->setRow($config);
+    }
+    
+    public function __get($columnName)
+    {
+        return $this->getRow()->__get($columnName);
+    }
+
+    public function __isset($columnName)
+    {
+        return $this->getRow()->__isset($columnName);
+    }
+
+    public function __set($columnName, $value)
+    {
+        return $this->getRow()->__set($columnName, $value);
+    }
+    
+    public function getRow()
+    {
+        return $this->_row;
+    }
+    
+    public function setRow(array $config = array(), $rowClass = null)
+    {
+        if (null === $rowClass) {
+            $rowClass = 'Zend_Db_Table_Row';
+        }
+        
+        $this->_row = new $rowClass($config);
+    }
+}
