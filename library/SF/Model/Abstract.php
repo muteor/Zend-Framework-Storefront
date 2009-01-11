@@ -111,6 +111,10 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
 	/**
 	 * Load the resource class and instantiate it.
 	 * 
+	 * Each module has its own abstract model class that all of its 
+	 * models extend from, this will implement this method with 
+	 * resource loading functionality specialized for that module. 
+	 * 
 	 * @param $name The name of the resource to load
 	 * return SF_Model_Resource_Interface
 	 */
@@ -118,6 +122,8 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
 	
 	/**
 	 * Get the plugin loader and configure it.
+	 *
+	 * Implemented by the modules abstract model.
 	 */
 	abstract public function getPluginLoader();
 	
