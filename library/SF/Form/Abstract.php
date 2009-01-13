@@ -6,7 +6,7 @@
  * 
  * @category   Storefront
  * @package    SF_Form
- * @copyright  Copyright (c) 2005-2008 Keith Pope (http://www.thepopeisdead.com)
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 abstract class SF_Form_Abstract extends Zend_Form 

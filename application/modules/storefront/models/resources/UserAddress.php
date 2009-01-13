@@ -7,7 +7,7 @@ require_once dirname(__FILE__) . '/User.php';
  * 
  * @category   Storefront
  * @package    Storefront_Model_Resource
- * @copyright  Copyright (c) 2005-2008 Keith Pope (http://www.thepopeisdead.com)
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_Resource_UserAddress extends Zend_Db_Table_Abstract

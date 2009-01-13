@@ -6,7 +6,7 @@
  * 
  * @category   Storefront
  * @package    Storefront_View_Helper
- * @copyright  Copyright (c) 2005-2008 Keith Pope (http://www.thepopeisdead.com)
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 require_once 'Zend/View/Interface.php';
