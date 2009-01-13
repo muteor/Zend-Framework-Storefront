@@ -304,11 +304,22 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
             array(
                 'action'        => 'index',
                 'controller'    => 'catalog',
-                'module'        => 'storefront',
-                'categoryIdent' => '0'
+                'module'        => 'storefront'
             )
         );
         
         $router->addRoute('catalog_category', $route);
+        
+        // catalog category product route
+        $route = new Zend_Controller_Router_Route(
+            'catalog/:categoryIdent/:productIdent',
+            array(
+                'action'        => 'view',
+                'controller'    => 'catalog',
+                'module'        => 'storefront'
+            )
+        );
+        
+        $router->addRoute('catalog_category_product', $route);
     }
 }

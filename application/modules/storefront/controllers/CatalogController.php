@@ -11,6 +11,9 @@ class Storefront_CatalogController extends Zend_Controller_Action
     public function indexAction()
     {}
     
+    public function viewAction()
+    {}
+    
     public function adminAction()
     {}
 }
