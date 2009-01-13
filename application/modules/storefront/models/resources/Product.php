@@ -58,8 +58,7 @@ class Storefront_Resource_Product extends Zend_Db_Table_Abstract implements Stor
     {
         $select = $this->select()->setIntegrityCheck(true);
         $select->from(array('p' => 'product'))
-               ->joinLeft(array('cp' => 'category_product'), 'cp.productId = p.productId', array())
-               ->where('cp.categoryId', $categoryId);
+               ->where('categoryId', $categoryId);
        
         if (true === is_array($limit)) {
             $offset = isset($limit[1]) ? $limit[1] : 0;

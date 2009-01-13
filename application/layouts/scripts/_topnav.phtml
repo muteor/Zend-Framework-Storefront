@@ -6,7 +6,8 @@
                 <?= $this->url(array(
                         'controller' => 'index',
                         'action'     => 'index',
-                        )
+                        ), 
+                        'default'
                     ); 
                  ?>" 
                title="Homepage">Store</a>
@@ -17,7 +18,8 @@
                 <?= $this->url(array(
                         'controller' => 'customer',
                         'action'     => 'logout',
-                        )
+                        ), 
+                        'default'
                     ); 
                  ?>"
                title="logout">Logout</a>
@@ -28,7 +30,8 @@
                 <?= $this->url(array(
                         'controller' => 'customer',
                         'action'     => 'login',
-                        )
+                        ), 
+                        'default'
                     ); 
                  ?>"
                title="login">Login</a>
@@ -40,7 +43,8 @@
                 <?= $this->url(array(
                         'controller' => 'customer',
                         'action'     => 'register',
-                        )
+                        ), 
+                        'default'
                     ); 
                  ?>"
                title="register">Register</a>
@@ -52,7 +56,8 @@
                         'controller' => 'index',
                         'action'     => 'index',
                         'module'     => 'cms'
-                        )
+                        ), 
+                        'default'
                     ); 
                  ?>"
                title="about">About</a>
@@ -63,7 +68,8 @@
                         'controller' => 'index',
                         'action'     => 'index',
                         'module'     => 'cms'
-                        )
+                        ), 
+                        'default'
                     ); 
                  ?>"
                title="Contact">Contact</a>
@@ -72,8 +78,10 @@
             <a href="
                 <?= $this->url(array(
                         'controller' => 'admin',
-                        'action'     => 'index'
-                        )
+                        'action'     => 'index',
+                        'module'     => 'storefront'
+                        ), 
+                        'default'
                     ); 
                  ?>"
                title="administration area">Admin</a>
