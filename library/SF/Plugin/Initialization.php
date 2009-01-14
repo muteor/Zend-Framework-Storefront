@@ -70,25 +70,34 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
+    	$this->_initModules();
         $this->_initLogging();
-        $this->_initModules();
         $this->_initHelpers();
         $this->_configure();
         $this->_initDb();
         $this->_initView();
         $this->_registerFrontPlugins();
         $this->_initRoutes();
+
     }
     
     protected function _initLogging()
     {
         $logger = new Zend_Log();
-        $writer = new Zend_Log_Writer_Firebug();
+		
+        $writer = 'production' == $this->_env ? 
+			new Zend_Log_Writer_Stream($this->_root . '/data/logs/app.log') : 
+			new Zend_Log_Writer_Firebug();
         $logger->addWriter($writer);
         
+		if ('production' == $this->_env) {
+			$filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
+			$logger->addFilter($filter);
+		}
+		
         $this->_logger = $logger;
-        Zend_Registry::set('devlog', $logger);
-        
+        Zend_Registry::set('log', $logger);
+		
         return $this;
     }
     
@@ -214,9 +223,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      * @return SF_Plugin_Initialization This instance for chaining calls
      */
     protected function _initModules()
-    {
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-        
+    {        
         $this->_front->getDispatcher()->setParam('prefixDefaultModule', true);
         $this->_front->addModuleDirectory($this->_root . '/application/modules');
         $this->_front->setDefaultModule('storefront');
