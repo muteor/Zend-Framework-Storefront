@@ -56,13 +56,9 @@ class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract im
      */
     public function getProductsByCategory($categoryId, $limit=null, $order=null)
     {
-        if (is_array($categoryId)) {
-            $categoryId = join(',', $categoryId);
-        }
-        
         $select = $this->select()->setIntegrityCheck(true);
         $select->from('product')
-               ->where("categoryId IN($categoryId)");
+               ->where("categoryId IN(?)", $categoryId);
        
         if (true === is_array($limit)) {
             $offset = isset($limit[1]) ? $limit[1] : 0;
