@@ -138,38 +138,10 @@ LOCK TABLES `productImage` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `userId` int(10) unsigned NOT NULL,
-  `title` varchar(10)  NOT NULL,
-  `firstname` varchar(128)  NOT NULL,
-  `lastname` varchar(128)  NOT NULL,
-  `email` varchar(128)  NOT NULL,
-  `passwd` varchar(100)  NOT NULL,
-  `salt` char(10)  NOT NULL,
-  `role` varchar(100) NOT NULL default 'customer',
-  PRIMARY KEY  (`userId`),
-  KEY `email_pass` (`email`,`passwd`),
-  KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `user`
---
-
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `userAddress`
 --
 
-DROP TABLE IF EXISTS `userAddress`;
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE  `user` (
   `userId` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(10) NOT NULL,
@@ -182,16 +154,8 @@ CREATE TABLE  `user` (
   PRIMARY KEY  (`userId`),
   KEY `email_pass` (`email`,`passwd`),
   KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `userAddress`
---
-
-LOCK TABLES `userAddress` WRITE;
-/*!40000 ALTER TABLE `userAddress` DISABLE KEYS */;
-/*!40000 ALTER TABLE `userAddress` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

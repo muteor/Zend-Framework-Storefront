@@ -18,7 +18,7 @@ require_once dirname(__FILE__) . '/CategoryProductMap.php';
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Resource_Product extends Zend_Db_Table_Abstract implements Storefront_Resource_Product_Interface 
+class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract implements Storefront_Resource_Product_Interface 
 {
     protected $_name    = 'product';
     protected $_primary  = 'productId';
@@ -56,9 +56,13 @@ class Storefront_Resource_Product extends Zend_Db_Table_Abstract implements Stor
      */
     public function getProductsByCategory($categoryId, $limit=null, $order=null)
     {
+        if (is_array($categoryId)) {
+            $categoryId = join(',', $categoryId);
+        }
+        
         $select = $this->select()->setIntegrityCheck(true);
-        $select->from(array('p' => 'product'))
-               ->where('categoryId', $categoryId);
+        $select->from('product')
+               ->where("categoryId IN($categoryId)");
        
         if (true === is_array($limit)) {
             $offset = isset($limit[1]) ? $limit[1] : 0;
@@ -70,7 +74,7 @@ class Storefront_Resource_Product extends Zend_Db_Table_Abstract implements Stor
             $select->order($order);
         }
                
-        return $this->fetchAll($select);
+        return $this->fetchAll($select, array('catIds' => $categoryId));
     } 
     
     public function saveProduct($info)
