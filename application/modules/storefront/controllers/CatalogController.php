@@ -9,16 +9,12 @@ class Storefront_CatalogController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    {
-        $this->view->showQueries = true;
-        
+    {       
         $products = $this->_catalogModel->getProductsByCategory(
             $this->_getParam('categoryIdent', 0)
         );
         
-        foreach ($products as $product) {
-            echo $product->productId . '<br />';
-        }
+        $this->view->products = $products;
     }
     
     public function viewAction()

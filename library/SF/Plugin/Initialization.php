@@ -39,6 +39,11 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
     protected static $_config;
     
     /**
+     * @var Zend_Log
+     */
+    protected $_logger;
+    
+    /**
      * Constructor
      * 
      * @param string $env    The runtime environment
@@ -51,7 +56,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
              ->_initPHPEnv();
         
         $this->_front = Zend_Controller_Front::getInstance();
-    }
+    } 
     
     /**
      * Start application initialization using the routeStartup hook.
@@ -65,6 +70,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
+        $this->_initLogging();
         $this->_initModules();
         $this->_initHelpers();
         $this->_configure();
@@ -72,6 +78,18 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         $this->_initView();
         $this->_registerFrontPlugins();
         $this->_initRoutes();
+    }
+    
+    protected function _initLogging()
+    {
+        $logger = new Zend_Log();
+        $writer = new Zend_Log_Writer_Firebug();
+        $logger->addWriter($writer);
+        
+        $this->_logger = $logger;
+        Zend_Registry::set('devlog', $logger);
+        
+        return $this;
     }
     
     /**
@@ -83,7 +101,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      * @return SF_Plugin_Initialization This instance for chaining calls
      */
     protected function _setRoot($root)
-    {
+    {        
         if (null === $root) { 
             $root = realpath(dirname(__FILE__) . '/../../../');
         }
@@ -135,6 +153,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _getConfig()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         if (null === self::$_config) {
             self::$_config = new Zend_Config_Ini($this->_root . '/application/config/store.ini', $this->_env, true);
             self::$_config->root = $this->_root;
@@ -149,6 +169,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _initDb()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         $config = $this->_getConfig();
         if (!isset($config->db)) {
             return $this;
@@ -157,7 +179,9 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         $db = Zend_Db::factory($config->db);
         
         if ($this->_env == 'development') {
-            $db->getProfiler()->setEnabled(true);
+            $profiler = new Zend_Db_Profiler_Firebug('All DB Queries');
+            $profiler->setEnabled(true);
+            $db->setProfiler($profiler);
         }
         
         Zend_Db_Table_Abstract::setDefaultAdapter($db);
@@ -191,6 +215,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _initModules()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         $this->_front->getDispatcher()->setParam('prefixDefaultModule', true);
         $this->_front->addModuleDirectory($this->_root . '/application/modules');
         $this->_front->setDefaultModule('storefront');
@@ -205,6 +231,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     public function _initHelpers()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         Zend_Controller_Action_HelperBroker::addPath($this->_root . '/library/SF/Controller/helpers', 'SF_Helper');
         return $this;
     }
@@ -216,6 +244,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _configure()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         if($this->_env == 'development' || $this->_env == 'test') {
             $this->_front->throwExceptions(true);
         }
@@ -230,6 +260,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _initView()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         $viewRenderer->init();
         
@@ -270,6 +302,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _registerFrontPlugins()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         $this->_front->registerPlugin( new SF_Plugin_Action());
         $this->_front->registerPlugin( new SF_Plugin_AdminContext());
         
@@ -283,6 +317,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _initRoutes()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         $router = $this->_front->getRouter();
 
         // Admin context route
