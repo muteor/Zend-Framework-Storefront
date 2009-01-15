@@ -313,10 +313,6 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         
         $this->_front->registerPlugin( new SF_Plugin_Action());
         $this->_front->registerPlugin( new SF_Plugin_AdminContext());
-        
-        if ('development' == $this->_env) {
-            $this->_front->registerPlugin( new SF_Plugin_DBProfiler());
-        }
     }
     
     /**

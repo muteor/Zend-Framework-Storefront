@@ -54,21 +54,29 @@ class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract im
      * @param unknown_type $order
      * @return unknown
      */
-    public function getProductsByCategory($categoryId, $limit=null, $order=null)
+    public function getProductsByCategory($categoryId, $paged=null, $order=null)
     {
-        $select = $this->select()->setIntegrityCheck(true);
+        $select = $this->select();
         $select->from('product')
                ->where("categoryId IN(?)", $categoryId);
-       
-        if (true === is_array($limit)) {
-            $offset = isset($limit[1]) ? $limit[1] : 0;
-            $limit  = $limit[0];
-            $select->limit((int) $limit, (int) $offset);
-        }
         
         if (true === is_array($order)) {
             $select->order($order);
         }
+		
+		if (false !== $paged) {
+			$adapter = new Zend_Paginator_Adapter_DbSelect($select);
+			$count = clone $select;
+			$count->reset(Zend_Db_Select::COLUMNS);
+			$count->reset(Zend_Db_Select::FROM);
+			$count->from('product', new Zend_Db_Expr('COUNT(*) AS `zend_paginator_row_count`'));
+			$adapter->setRowCount($count);
+			
+			$paginator = new Zend_Paginator($adapter);
+			$paginator->setItemCountPerPage(5)
+		          	  ->setCurrentPageNumber((int) $paged);
+			return $paginator;
+		}
                
         return $this->fetchAll($select, array('catIds' => $categoryId));
     } 

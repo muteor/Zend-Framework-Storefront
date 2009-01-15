@@ -34,7 +34,7 @@ class Storefront_Catalog extends Storefront_Model
         return $this->getResource('Product')->getProductByIdent($ident);
     }
     
-    public function getProductsByCategory($category, $limit=null, $order=null, $deep = true)
+    public function getProductsByCategory($category, $paged=false, $order=null, $deep=true)
     {
         if (is_string($category)) {
             $cat = $this->getResource('Category')->getCategoryByIdent($category);
@@ -49,7 +49,7 @@ class Storefront_Catalog extends Storefront_Model
             $categoryId = null === $ids ? $categoryId : $ids;
         }
         
-        return $this->getResource('Product')->getProductsByCategory($categoryId, $limit, $order);
+        return $this->getResource('Product')->getProductsByCategory($categoryId, $paged, $order);
     }
     
     public function getCategoryChildrenIds($categoryId, $recursive = false)
