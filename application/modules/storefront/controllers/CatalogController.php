@@ -14,7 +14,7 @@ class Storefront_CatalogController extends Zend_Controller_Action
             $this->_getParam('categoryIdent', 0),
 			$this->_getParam('page', 1)
         );
-        
+
         $this->view->products = $products;
     }
     

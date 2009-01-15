@@ -65,7 +65,7 @@ class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract im
         }
 		
 		if (false !== $paged) {
-			$adapter = new Zend_Paginator_Adapter_DbSelect($select);
+			$adapter = new Zend_Paginator_Adapter_DbTableSelect($select);
 			$count = clone $select;
 			$count->reset(Zend_Db_Select::COLUMNS);
 			$count->reset(Zend_Db_Select::FROM);
