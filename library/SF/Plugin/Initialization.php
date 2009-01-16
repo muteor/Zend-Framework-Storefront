@@ -337,18 +337,6 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         
         $router->addRoute('admin', $route);
         
-        // catalog category route
-        $route = new Zend_Controller_Router_Route(
-            'catalog/:categoryIdent',
-            array(
-                'action'        => 'index',
-                'controller'    => 'catalog',
-                'module'        => 'storefront'
-            )
-        );
-        
-        $router->addRoute('catalog_category', $route);
-        
         // catalog category product route
         $route = new Zend_Controller_Router_Route(
             'catalog/:categoryIdent/:productIdent',
@@ -356,9 +344,30 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
                 'action'        => 'view',
                 'controller'    => 'catalog',
                 'module'        => 'storefront'
+            ),
+            array(
+                'categoryIdent' => '\w+',
+                'productIdent'  => '\w+'
             )
         );
         
         $router->addRoute('catalog_category_product', $route);
+        
+        // catalog category route
+        $route = new Zend_Controller_Router_Route(
+            'catalog/:categoryIdent/:page',
+            array(
+                'action'        => 'index',
+                'controller'    => 'catalog',
+                'module'        => 'storefront',
+                'page'          => 1
+            ),
+            array(
+                'categoryIdent' => '\w+',
+                'page'          => '\d+'
+            )
+        );
+        
+        $router->addRoute('catalog_category', $route);
     }
 }

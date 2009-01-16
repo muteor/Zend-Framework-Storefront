@@ -6,3 +6,7 @@
     <p>$49.99</p>
 </div>
 <? endforeach; ?>
+
+<?= $this->paginationControl($this->products,
+                             'Sliding',
+                             'catalog/_paginator.phtml'); ?>
