@@ -1,6 +1,9 @@
 <?php
 class Storefront_CatalogController extends Zend_Controller_Action
 {
+    /**
+     * @var Storefront_Catalog
+     */
     protected $_catalogModel;
     
     public function init()
@@ -15,7 +18,13 @@ class Storefront_CatalogController extends Zend_Controller_Action
 			$this->_getParam('page', 1)
         );
 
-        $this->view->products = $products;
+        $category = $this->_catalogModel->getCategoryIdent($this->_getParam('categoryIdent', ''));
+        
+        $this->view->assign(array(
+            'category' => $category, 
+            'products' => $products
+            )
+        );
     }
     
     public function viewAction()

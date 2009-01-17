@@ -346,8 +346,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
                 'module'        => 'storefront'
             ),
             array(
-                'categoryIdent' => '\w+',
-                'productIdent'  => '\w+'
+                'categoryIdent' => '[a-zA-Z-_0-9]+',
+                'productIdent'  => '[a-zA-Z-_0-9]+'
             )
         );
         
@@ -363,7 +363,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
                 'page'          => 1
             ),
             array(
-                'categoryIdent' => '\w+',
+                'categoryIdent' => '[a-zA-Z-_0-9]+',
                 'page'          => '\d+'
             )
         );

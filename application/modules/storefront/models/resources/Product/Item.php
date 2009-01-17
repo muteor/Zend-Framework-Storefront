@@ -11,7 +11,7 @@ require_once dirname(__FILE__) . '/Item/Interface.php';
  */
 class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Abstract implements Storefront_Resource_Product_Item_Interface
 {
-    public function getImages()
+    public function getImages($includeDefault=false)
     {}
     
     public function getDefaultImage()

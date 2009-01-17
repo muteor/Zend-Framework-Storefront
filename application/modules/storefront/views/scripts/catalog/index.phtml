@@ -1,8 +1,10 @@
 <h3>categoryname</h3>
 <? foreach($this->products as $product):  ?>
 <div class="productitem clearfix">
-    <img src="/images/product/<?=$this->productImage($product,true)->thumbnail(); ?>" class="right" />
-    <h4><a href=""><?=$this->Escape($product->name); ?></a></h4>
+    <?=$this->productImage($product->getDefaultImage(), array('class' => 'right'))->thumbnail(); ?>
+    <h4><a href="<?=$this->url(array('productIdent' => $product->ident, 
+                               'categoryIdent' => $this->category->ident),
+                               'catalog_category_product'); ?>"><?=$this->Escape($product->name); ?></a></h4>
     <p><?=$this->Escape($product->shortDescription); ?></p>
     <p>$ <?=$this->Escape($product->price); ?></p>
 </div>

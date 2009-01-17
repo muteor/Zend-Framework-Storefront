@@ -21,6 +21,11 @@ class Storefront_Catalog extends Storefront_Model
         
         return $this->getResource('Category')->getCategories($parentID);
     }
+    
+    public function getCategoryIdent($ident)
+    {
+        return $this->getResource('Category')->getCategoryByIdent($ident);
+    }
 
     public function getProductById($id)
     {
