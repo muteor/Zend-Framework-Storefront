@@ -46,4 +46,9 @@ abstract class SF_Model_Resource_Db_Table_Row_Abstract
         
         $this->_row = new $rowClass($config);
     }
+    
+    public function __call($name, $arguments)
+    {
+        return call_user_func_array(array($this->getRow(), $name), $arguments);
+    }
 }

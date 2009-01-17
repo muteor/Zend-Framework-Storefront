@@ -1,9 +1,9 @@
 <?php
+/** Storefront_Resource_ProductImage_Item */
+require_once dirname(__FILE__) . '/ProductImage/Item.php';
+
 /** Storefront_Resource_Product */
 require_once dirname(__FILE__) . '/Product.php';
-
-/** Storefront_Resource_ProductImageMap */
-require_once dirname(__FILE__) . '/ProductImageMap.php';
 
 /**
  * Storefront_Resource_ProductImage
@@ -17,6 +17,7 @@ class Storefront_Resource_ProductImage extends Zend_Db_Table_Abstract
 {
     protected $_name = 'productImage';
     protected $_primary = 'imageId';
+    protected $_rowClass = 'Storefront_Resource_ProductImage_Item';
 
     protected $_referenceMap = array(
         'Image' => array(
