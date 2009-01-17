@@ -74,6 +74,6 @@ class Zend_View_Helper_ProductImage extends Zend_View_Helper_HtmlElement
         }
         
         $tag = 'img src="' . $this->view->baseUrl('images/product/' . $file) . '" ';
-        return '<' . $tag . $attribs . $this->_closingBracket . self::EOL;
+        return '<' . $tag . $attribs . $this->getClosingBracket() . self::EOL;
     }
 }

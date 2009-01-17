@@ -11,8 +11,21 @@ require_once dirname(__FILE__) . '/Item/Interface.php';
  */
 class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Abstract implements Storefront_Resource_Product_Item_Interface
 {
+    protected $_images;
+    
     public function getImages($includeDefault=false)
-    {}
+    {
+        $select = $this->select();
+        if (false === $includeDefault) {
+            $select->where('isDefault != ?', 'Yes');
+        }
+        $this->_images = $this->findDependentRowset('Storefront_Resource_ProductImage', 
+            'Image', 
+            $select
+        )->toArray();
+        
+        return $this->_images;
+    }
     
     public function getDefaultImage()
     {
@@ -20,8 +33,14 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
             'Image', 
             $this->select()
                  ->where('isDefault = ?', 'Yes')
+                 ->limit(1)
         )->current();
         
         return $row;
+    }
+    
+    public function getPrice()
+    {
+        
     }
 }
