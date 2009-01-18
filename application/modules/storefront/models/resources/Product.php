@@ -34,10 +34,10 @@ class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract im
     }
     
     /**
-     * Enter description here...
+     * Get a product by its ident string
      *
-     * @param unknown_type $ident
-     * @return unknown
+     * @param string $ident The ident to search for
+     * @return Storefront_Resource_Product_Item|null
      */
     public function getProductByIdent($ident)
     {
@@ -45,12 +45,12 @@ class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract im
     }
     
     /**
-     * Enter description here...
+     * Get a list of product by their category
      *
-     * @param unknown_type $categoryId
-     * @param unknown_type $limit
-     * @param unknown_type $order
-     * @return unknown
+     * @param  int|array $categoryId The category id(s)
+     * @param  boolean   $paged      Use Zend_Paginator?
+     * @param  array     $order      Order results
+     * @return Zend_Db_Table_Rowset|Zend_Paginator
      */
     public function getProductsByCategory($categoryId, $paged=null, $order=null)
     {

@@ -1,4 +1,5 @@
 <?php
+/** Storefront_Resource_Product_Interface */
 require_once dirname(__FILE__) . '/Item/Interface.php';
 
 /**
@@ -11,8 +12,19 @@ require_once dirname(__FILE__) . '/Item/Interface.php';
  */
 class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Abstract implements Storefront_Resource_Product_Item_Interface
 {
+    /**
+     * Product images
+     *
+     * @var array
+     */
     protected $_images;
     
+    /**
+     * Get product images
+     *
+     * @param  boolean $includeDefault Whether to include the default
+     * @return array Containing Storefront_Resource_ProductImage_Item
+     */
     public function getImages($includeDefault=false)
     {
         $select = $this->select();
@@ -27,6 +39,11 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
         return $this->_images;
     }
     
+    /**
+     * Get the default image
+     *
+     * @return Storefront_Resource_ProductImage_Item
+     */
     public function getDefaultImage()
     {
         $row = $this->findDependentRowset('Storefront_Resource_ProductImage', 
@@ -39,7 +56,15 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
         return $row;
     }
     
-    public function getPrice($withDiscount=true)
+    /**
+     * Get the price
+     *
+     * @param  boolean $withDiscount Include discount calculation
+     * @param  boolean $withTax      Include tax calculation
+     * @return string The products price
+     * @todo Remove hardcoded tax value
+     */
+    public function getPrice($withDiscount=true,$withTax=true)
     {
         $price = $this->getRow()->price;
         if (true === $this->isDiscounted() && true === $withDiscount) {
@@ -47,11 +72,30 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
             $discounted = ($price*$discount)/100;
             $price = round($price - $discounted, 2);
         }
+        if (true === $this->isTaxable() && true === $withTax) {
+            $tax = ($price*15)/100;
+            $price = round($price + $tax,2);
+        }
         return $price;
     }
     
+    /**
+     * Is this product discounted ?
+     *
+     * @return boolean
+     */
     public function isDiscounted()
     {
         return 0 == $this->getRow()->discountPercent ? false : true;
+    }
+    
+    /**
+     * Is this product taxable?
+     *
+     * @return boolean
+     */
+    public function isTaxable()
+    {
+        return 'Yes' == $this->getRow()->taxable ? true : false;
     }
 }

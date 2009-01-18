@@ -1,5 +1,7 @@
 <?php
+/** Storefront_Resource_ProductImage_Item_Interface */
 require_once dirname(__FILE__) . '/Item/Interface.php';
+
 /**
  * Storefront_Resource_ProductImage_Item
  * 
@@ -10,11 +12,21 @@ require_once dirname(__FILE__) . '/Item/Interface.php';
  */
 class Storefront_Resource_ProductImage_Item extends SF_Model_Resource_Db_Table_Row_Abstract implements Storefront_Resource_ProductImage_Item_Interface
 {
+    /**
+     * Get the thumbnail
+     *
+     * @return string
+     */
     public function thumbnail()
     {
         return $this->thumbnail;
     }
     
+    /**
+     * Get the full image
+     *
+     * @return string
+     */
     public function full()
     {
         return $this->full;
