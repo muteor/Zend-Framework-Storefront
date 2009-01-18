@@ -71,14 +71,27 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
     	$this->_initModules();
-        $this->_initLogging();
+    	$this->_initLogging();
+    	$this->_setLocale();
         $this->_initHelpers();
         $this->_configure();
         $this->_initDb();
         $this->_initView();
         $this->_registerFrontPlugins();
         $this->_initRoutes();
-
+    }
+    
+    /**
+     * Set the default locale
+     */
+    protected function _setLocale()
+    {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
+        $locale = new Zend_Locale('en_GB');
+        Zend_Registry::set('Zend_Locale', $locale);
+        
+        return $this;
     }
     
     protected function _initLogging()

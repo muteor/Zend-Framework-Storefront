@@ -6,7 +6,7 @@
                                'categoryIdent' => $this->category->ident),
                                'catalog_category_product'); ?>"><?=$this->Escape($product->name); ?></a></h4>
     <p><?=$this->Escape($product->shortDescription); ?></p>
-    <p>$ <?=$this->Escape($product->price); ?></p>
+    <p><?=$this->productPrice($product); ?></p>
 </div>
 <? endforeach; ?>
 

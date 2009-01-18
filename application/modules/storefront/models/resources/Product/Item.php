@@ -39,8 +39,19 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
         return $row;
     }
     
-    public function getPrice()
+    public function getPrice($withDiscount=true)
     {
-        
+        $price = $this->getRow()->price;
+        if (true === $this->isDiscounted() && true === $withDiscount) {
+            $discount = $this->getRow()->discountPercent;
+            $discounted = ($price*$discount)/100;
+            $price = round($price - $discounted, 2);
+        }
+        return $price;
+    }
+    
+    public function isDiscounted()
+    {
+        return 0 == $this->getRow()->discountPercent ? false : true;
     }
 }
