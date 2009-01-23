@@ -9,7 +9,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_Register extends SF_Form_Abstract 
+class Storefront_Form_Register extends Zend_Form
 {
     public function init()
     {
@@ -46,12 +46,14 @@ class Storefront_Form_Register extends SF_Form_Abstract
             'label'      => 'lastname',
         ));
         
+        print_r($this->_model);
+        
         $this->addElement('text', 'email', array(
             'filters'    => array('StringTrim', 'StringToLower'),
             'validators' => array(
                 array('StringLength', true, array(3, 128)),
                 array('EmailAddress'),
-                array('UniqueEmail', false, array($this->_model)),
+                array('UniqueEmail', false, array(new Storefront_Model_User())),
             ),
             'required'   => true,
             'label'      => 'Email',

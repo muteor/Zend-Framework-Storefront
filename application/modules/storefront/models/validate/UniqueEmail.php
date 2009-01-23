@@ -7,9 +7,7 @@ class Storefront_Validate_UniqueEmail extends Zend_Validate_Abstract
         self::EMAIL_EXISTS => 'Email "%value%" already exists in our system',
     );
 
-    protected $_model;
-
-    public function __construct(Storefront_User $model)
+    public function __construct(Storefront_Model_User $model)
     {
         $this->_model = $model;
     }

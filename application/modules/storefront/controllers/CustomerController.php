@@ -18,39 +18,9 @@ class Storefront_CustomerController extends Zend_Controller_Action
         // get the default model
         $this->_model = $this->_helper->resourceLoader->getModel('User');
         
-        $urlHelper = $this->_helper->getHelper('Url');
-        
-        $this->_forms['register'] = $this->_helper->resourceLoader->getForm(
-            'register',
-            array(
-                'method' => 'post',
-                'action' => $urlHelper->url(
-                    array(
-                        'controller' => 'customer',
-                        'action'     => 'post',
-                    )
-                )
-            )
-        );
-        
-        $this->_forms['login'] = $this->_helper->resourceLoader->GetForm(
-            'login',
-            array(
-                'method' => 'post',
-                'action' => $urlHelper->url(
-                    array(
-                        'controller' => 'customer',
-                        'action'     => 'authenticate',
-                    )
-                )
-            ),
-            $this->_model
-        );
-        
-        $this->view->registerForm = $this->_forms['register'];
-        $this->view->loginForm = $this->_forms['login'];
-        
-         print_r($this->_forms);
+        // add forms
+        $this->view->registerForm = $this->getRegistrationForm();
+        $this->view->loginForm = $this->getLoginForm();
     }
     
 	public function indexAction() 
@@ -117,5 +87,37 @@ class Storefront_CustomerController extends Zend_Controller_Action
     {
         $this->_helper->getService('authentication')->clear();
         $this->_helper->redirector('index');
+    }
+    
+    public function getRegistrationForm()
+    {
+        $urlHelper = $this->_helper->getHelper('url');
+        
+        $this->_forms['register'] = $this->_helper->resourceLoader->getForm('register');
+        $this->_forms['register']->setAction($urlHelper->url(array(
+            'controller' => 'customer' , 
+            'action' => 'post'
+            ), 
+            'default'
+        ));
+        $this->_forms['register']->setMethod('post');
+        
+        return $this->_forms['register'];
+    }
+    
+    public function getLoginForm()
+    {
+        $urlHelper = $this->_helper->getHelper('url');
+        
+        $this->_forms['login'] = $this->_helper->resourceLoader->GetForm('login');
+        $this->_forms['login']->setAction($urlHelper->url(array(
+            'controller' => 'customer',
+            'action'     => 'authenticate',
+            ), 
+            'default'
+        ));
+        $this->_forms['login']->setMethod('post');
+        
+        return $this->_forms['login'];
     }
 }
