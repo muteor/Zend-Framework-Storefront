@@ -16,11 +16,11 @@ class Storefront_CustomerController extends Zend_Controller_Action
     public function preDispatch()
     {
         // get the default model
-        $this->_model = $this->_helper->GetModel('User');
+        $this->_model = $this->_helper->resourceLoader->getModel('User');
         
         $urlHelper = $this->_helper->getHelper('Url');
         
-        $this->_forms['register'] = $this->_helper->GetForm(
+        $this->_forms['register'] = $this->_helper->resourceLoader->getForm(
             'register',
             array(
                 'method' => 'post',
@@ -30,11 +30,10 @@ class Storefront_CustomerController extends Zend_Controller_Action
                         'action'     => 'post',
                     )
                 )
-            ),
-            $this->_model
+            )
         );
         
-        $this->_forms['login'] = $this->_helper->GetForm(
+        $this->_forms['login'] = $this->_helper->resourceLoader->GetForm(
             'login',
             array(
                 'method' => 'post',
@@ -50,6 +49,8 @@ class Storefront_CustomerController extends Zend_Controller_Action
         
         $this->view->registerForm = $this->_forms['register'];
         $this->view->loginForm = $this->_forms['login'];
+        
+         print_r($this->_forms);
     }
     
 	public function indexAction() 

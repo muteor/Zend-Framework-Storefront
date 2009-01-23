@@ -2,9 +2,6 @@
 /** Storefront_Resource_ProductImage */
 require_once dirname(__FILE__) . '/ProductImage.php';
 
-/** Storefront_Resource_Product_Interface */
-require_once dirname(__FILE__) . '/Product/Interface.php';
-
 /** Storefront_Resource_Product_Item */
 require_once dirname(__FILE__) . '/Product/Item.php';
 

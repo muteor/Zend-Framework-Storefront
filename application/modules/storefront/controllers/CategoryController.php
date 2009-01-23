@@ -17,7 +17,7 @@ class Storefront_CategoryController extends Zend_Controller_Action
     public function indexAction() 
 	{    
 		$id = $this->_getParam('categoryId', 0);
-        $this->view->categories = $this->_helper->getModel('Catalog')->getCategories($id);
+        $this->view->categories = $this->_helper->resourceLoader->getModel('Catalog')->getCategories($id);
         
         $this->_helper->viewRenderer->setResponseSegment($this->_getParam('responseSegment'));
 	}

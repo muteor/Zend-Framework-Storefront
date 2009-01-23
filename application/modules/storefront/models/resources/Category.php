@@ -1,7 +1,4 @@
 <?php
-/** Storefront_Resource_Category_Interface */
-require_once dirname(__FILE__) . '/Category/Interface.php';
-
 /** Storefront_Resource_Category_Item */
 require_once dirname(__FILE__) . '/Category/Item.php';
 

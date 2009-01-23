@@ -10,7 +10,7 @@ require_once dirname(__FILE__) . '/Storefront.php';
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Catalog extends Storefront_Model
+class Storefront_Model_Catalog extends Storefront_Model
 {
     /**
      * Construct

@@ -253,7 +253,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
         
-        Zend_Controller_Action_HelperBroker::addPath($this->_root . '/library/SF/Controller/helpers', 'SF_Helper');
+        Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_ResourceLoader());
         return $this;
     }
 

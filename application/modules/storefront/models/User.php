@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__FILE__) . '/Storefront.php';
 
-class Storefront_User extends Storefront_Model
+class Storefront_Model_User extends Storefront_Model
 {
     public function __construct()
     {
