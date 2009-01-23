@@ -1,4 +1,4 @@
-<h3>categoryname</h3>
+<h3><?= $this->Escape($this->category->name); ?></h3>
 <? foreach($this->products as $product):  ?>
 <div class="productitem clearfix">
     <?=$this->productImage($product->getDefaultImage(), array('class' => 'right'))->thumbnail(); ?>

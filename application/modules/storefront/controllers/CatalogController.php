@@ -19,10 +19,12 @@ class Storefront_CatalogController extends Zend_Controller_Action
         );
 
         $category = $this->_catalogModel->getCategoryByIdent($this->_getParam('categoryIdent', ''));
+        $subs = $this->_catalogModel->getCategories($category->categoryId);
         
         $this->view->assign(array(
-            'category' => $category, 
-            'products' => $products
+            'category' => $category,
+            'subCategories' => $subs,
+            'products' => $products,
             )
         );
     }
