@@ -62,7 +62,6 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
      * @param  boolean $withDiscount Include discount calculation
      * @param  boolean $withTax      Include tax calculation
      * @return string The products price
-     * @todo Remove hardcoded tax value
      */
     public function getPrice($withDiscount=true,$withTax=true)
     {
@@ -73,8 +72,8 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
             $price = round($price - $discounted, 2);
         }
         if (true === $this->isTaxable() && true === $withTax) {
-            $tax = ($price*15)/100;
-            $price = round($price + $tax,2);
+            $taxService = new Storefront_Service_Taxation();
+            $price = $taxService->addTax($price);
         }
         return $price;
     }
