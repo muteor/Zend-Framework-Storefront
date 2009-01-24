@@ -19,12 +19,21 @@ class Storefront_CatalogController extends Zend_Controller_Action
         );
 
         $category = $this->_catalogModel->getCategoryByIdent($this->_getParam('categoryIdent', ''));
-        $subs = $this->_catalogModel->getCategories($category->categoryId);
         
+        if (null === $category) {
+            $this->getResponse()->setException(new Zend_Controller_Action_Exception('',404));
+            $this->_forward('error','error');
+            return;
+        }
+        
+        $subs = $this->_catalogModel->getCategories($category->categoryId);
+        $bread = $this->_catalogModel->getParentCategories($category);
+
         $this->view->assign(array(
             'category' => $category,
             'subCategories' => $subs,
             'products' => $products,
+            'bread' => $bread,
             )
         );
     }

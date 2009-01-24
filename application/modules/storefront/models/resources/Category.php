@@ -48,4 +48,9 @@ class Storefront_Resource_Category extends SF_Model_Resource_Db_Table_Abstract i
                        
         return $this->fetchRow($select);
     }
+    
+    public function getParentCategory(Storefront_Resource_Category_Item $category)
+    {
+        return $category->findParentRow('Storefront_Resource_Category');
+    }
 }

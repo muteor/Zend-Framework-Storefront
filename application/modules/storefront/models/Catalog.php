@@ -120,4 +120,27 @@ class Storefront_Model_Catalog extends Storefront_Model
 
         return $cats;
     }
+    
+    public function getParentCategories($category)
+    {
+        $cats = array($category);
+        
+        if (0 == $category->parentId) {
+            return $cats;
+        }
+        
+        $parent = $this->getParentCategory($category);
+        $cats[] = $parent;
+        
+        if (0 != $parent->parentId) {
+            $cats = array_merge($cats, $this->getParentCategories($parent)); 
+        }
+        
+        return $cats;
+    }
+    
+    public function getParentCategory(Storefront_Resource_Category_Item $category)
+    {
+        return $this->getResource('Category')->getParentCategory($category);
+    }
 }
