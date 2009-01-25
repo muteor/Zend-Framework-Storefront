@@ -1,14 +1,13 @@
 <?php
-require_once 'modules/storefront/models/resources/Product/Interface.php';
+require_once 'modules/storefront/models/resources/Category/Interface.php';
 require_once 'modules/storefront/models/resources/Product/Item/Interface.php';
 
-class Test_CategoryStub extends PHPUnit_Framework_TestCase implements Storefront_Resource_Product_Interface 
+class Test_CategoryStub extends PHPUnit_Framework_TestCase implements Storefront_Resource_Category_Interface
 {
     protected $_rowset = null;
-    protected $_mockRow = null;
     
-    public function __construct()
-    {       
+    function __construct ()
+    {
         $data = array();
         for($i=0; $i<10; $i++) {
             $mock = $this->getMock('Storefront_Resource_Product_Item_Interface');
@@ -35,41 +34,15 @@ class Test_CategoryStub extends PHPUnit_Framework_TestCase implements Storefront
         $this->_rowset = $data;
     }
     
-    public function getProductById($id)
-    {
-        $this->assertNotEquals(0, $id, 'Assertion failed in ' . __CLASS__);
-        
-        foreach ($this->_rowset as $product) {
-            if($product->productId == $id) {
-                return $product;
-            }
-        }
-        
-        return false;
-    }
+    public function getCategories ($parentId)
+    {}
     
-    public function getProductByIdent($ident)
-    {
-        foreach ($this->_rowset as $product) {
-            if($product->ident == $ident) {
-                return $product;
-            }
-        }
-        return false;
-    }
+    public function getCategoryById ($id)
+    {}
     
-    public function getProducts($limit=null, $order=null)
-    {
-        return true;
-    }
+    public function getCategoryByIdent ($ident)
+    {}
     
-    public function getProductsByCategory($categoryId)
-    {
-        return true;
-    }
-    
-    public function saveProduct($info)
-    {
-        return true;
-    }
+    public function getParentCategory (Storefront_Resource_Category_Item $category)
+    {}
 }

@@ -69,6 +69,11 @@ Zend_Loader::registerAutoload();
 Zend_Session::start();
 
 /**
+ * Set root
+ */
+Zend_Registry::set('root', $root);
+
+/**
  * Ignore folders from code coverage etc
  */
 PHPUnit_Util_Filter::addDirectoryToFilter($tests);

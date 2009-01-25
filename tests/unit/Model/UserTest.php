@@ -25,14 +25,20 @@ class UserTest extends PHPUnit_Framework_TestCase
          * Replace resources
          */
         $user = new SF_Model_Resource_Registry_Container(
-            'Storefront_User_User',
+            'Storefront_Model_User_User',
             'UserStub',
             true,
             true
         );
         SF_Model_Resource_Registry::set($user->identifier, $user);
+        
+        /**
+         * Configure Resource Loader/Autoloader
+         */
+        $rl = new SF_Controller_Helper_ResourceLoader();
+        $rl->initModule('storefront', Zend_Registry::get('root') . '/application/modules/storefront' );
            
-        $this->_model = new Storefront_User();
+        $this->_model = $rl->getModel('User');
         $this->_model->getPluginLoader()->addPrefixPath( 'Test', dirname(__FILE__) . '/TestResources' );
     }
     

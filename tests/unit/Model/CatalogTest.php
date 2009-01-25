@@ -31,21 +31,30 @@ class CatalogTest extends PHPUnit_Framework_TestCase
          * Replace resources
          */
         $product = new SF_Model_Resource_Registry_Container(
-            'Storefront_Catalog_Product',
+            'Storefront_Model_Catalog_Product',
             'ProductStub',
             true,
             true
         );
         $category = new SF_Model_Resource_Registry_Container(
-            'Storefront_Catalog_Category',
+            'Storefront_Model_Catalog_Category',
             'CategoryStub',
             true,
             true
         );
         SF_Model_Resource_Registry::set($product->identifier, $product);
         SF_Model_Resource_Registry::set($category->identifier, $category);
-           
-        $this->_model = new Storefront_Catalog();
+        
+        /**
+         * Configure Resource Loader/Autoloader
+         */
+        $rl = new SF_Controller_Helper_ResourceLoader();
+        $rl->initModule('storefront', Zend_Registry::get('root') . '/application/modules/storefront' );
+        
+        /**
+         * Setup model and path for model resources
+         */
+        $this->_model = $rl->getModel('Catalog');
         $this->_model->getPluginLoader()->addPrefixPath( 'Test', dirname(__FILE__) . '/TestResources' );
     }
     
@@ -81,9 +90,9 @@ class CatalogTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('array', $i);
     }
-    
-    public function test_Catalog_Can_Get_Products_By_Category()
-    {
-        $products = $this->_model->getProductsByCategory(1);
-    }
+//    
+//    public function test_Catalog_Can_Get_Products_By_Category()
+//    {
+//        $products = $this->_model->getProductsByCategory(1);
+//    }
 }
