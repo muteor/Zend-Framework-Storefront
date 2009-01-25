@@ -13,6 +13,12 @@ class Storefront_ErrorController extends Zend_Controller_Action
                      ->setRawHeader('HTTP/1.1 404 Not Found');
                 $this->view->message = '404 page not found.';
                 break;
+            case 'SF_Exception_404':
+                // send 404
+                $this->getResponse()
+                     ->setRawHeader('HTTP/1.1 404 Not Found');
+                $this->view->message = $errors->exception->getMessage();
+                break;
             default:
                 // application error
                 $this->view->message = $errors->exception->getMessage();

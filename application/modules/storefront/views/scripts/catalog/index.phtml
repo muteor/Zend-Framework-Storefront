@@ -1,6 +1,6 @@
 <h3><?= $this->Escape($this->category->name); ?></h3>
 <p>
-    <?= $this->breadcrumb(); ?>
+    <?= $this->breadcrumb('catalog_category'); ?>
 </p>
 <? foreach($this->products as $product):  ?>
 <div class="productitem clearfix">

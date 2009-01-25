@@ -1,2 +1,11 @@
-<h3>product name</h3>
+<?=$this->productImage($this->product->getDefaultImage(), array('class' => 'right'))->full(); ?>
+<h3><?=$this->Escape($this->product->name); ?></h3>
+<p>
+    <?= $this->breadcrumb('catalog_category_product', $this->product); ?>
+</p>
+
+<div>
+    <p><?=$this->product->description; ?></p>
+    <p><?=$this->productPrice($this->product); ?></p>
+</div>
  

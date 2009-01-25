@@ -21,26 +21,42 @@ class Storefront_CatalogController extends Zend_Controller_Action
         $category = $this->_catalogModel->getCategoryByIdent($this->_getParam('categoryIdent', ''));
         
         if (null === $category) {
-            $this->getResponse()->setException(new Zend_Controller_Action_Exception('',404));
-            $this->_forward('error','error');
-            return;
+            throw new SF_Exception_404('Unknown category ' . $this->_getParam('categoryIdent'));
         }
         
         $subs = $this->_catalogModel->getCategories($category->categoryId);
-        $bread = $this->_catalogModel->getParentCategories($category);
+        $this->getBreadcrumb($category);
 
         $this->view->assign(array(
             'category' => $category,
             'subCategories' => $subs,
-            'products' => $products,
-            'bread' => $bread,
+            'products' => $products
             )
         );
     }
     
     public function viewAction()
-    {}
+    {
+        $product = $this->_catalogModel->getProductByIdent($this->_getParam('productIdent', 0));
+        
+        if (null === $product) {
+            throw new SF_Exception_404('Unknown product ' . $this->_getParam('productIdent'));
+        }
+        
+        $category = $this->_catalogModel->getCategoryByIdent($this->_getParam('categoryIdent', ''));
+        $this->getBreadcrumb($category);
+        
+        $this->view->assign(array(
+            'product' => $product,
+            )
+        );
+    }
     
     public function adminAction()
     {}
+    
+    public function getBreadcrumb($category)
+    {
+        $this->view->bread = $this->_catalogModel->getParentCategories($category);
+    }
 }
