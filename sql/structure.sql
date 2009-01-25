@@ -16,21 +16,6 @@ CREATE TABLE  `storefront`.`category` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
--- Definition of table `storefront`.`categoryImage`
---
-
-DROP TABLE IF EXISTS `storefront`.`categoryImage`;
-CREATE TABLE  `storefront`.`categoryImage` (
-  `imageId` int(10) unsigned NOT NULL auto_increment,
-  `thumbnail` varchar(200) NOT NULL,
-  `full` varchar(200) NOT NULL,
-  `categoryId` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`imageId`),
-  KEY `categoryImage` (`categoryId`),
-  CONSTRAINT `categoryImage` FOREIGN KEY (`categoryId`) REFERENCES `category` (`categoryId`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
---
 -- Definition of table `storefront`.`product`
 --
 
@@ -61,6 +46,7 @@ CREATE TABLE  `storefront`.`productImage` (
   `productId` int(10) unsigned NOT NULL,
   `thumbnail` varchar(200) NOT NULL,
   `full` varchar(200) NOT NULL,
+  `isDefault` enum('Yes', 'No') NOT NULL,
   PRIMARY KEY  (`imageId`),
   KEY `productId` (`productId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

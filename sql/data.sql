@@ -14,8 +14,8 @@ UNLOCK TABLES;
 
 /*!40000 ALTER TABLE `categoryImage` DISABLE KEYS */;
 LOCK TABLES `categoryImage` WRITE;
-INSERT INTO `storefront`.`categoryImage` VALUES  (1,'hats_sm.png','hats.png',7),
- (2,'scarf_sm.png','scarf.png',6);
+INSERT INTO `storefront`.`categoryImage` VALUES  (1,'hats_sm.png','hats.png',7,'Yes'),
+ (2,'scarf_sm.png','scarf.png',6,'Yes');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `categoryImage` ENABLE KEYS */;
 
