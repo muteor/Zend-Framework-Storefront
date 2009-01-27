@@ -2,9 +2,6 @@
 /** SF_Model_Interface */
 require_once 'SF/Model/Interface.php';
 
-/** Zend_Registry */
-require_once 'SF/Model/Resource/Registry.php';
-
 /**
  * SF_Model_Abstract
  * 
