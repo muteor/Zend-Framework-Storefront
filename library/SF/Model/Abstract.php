@@ -26,127 +26,167 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
      * @var Zend_Loader_PluginLoader
      */
     protected $_loader;
-	
-	/**
-	 * Add a resource that will stored for later retrieval by
-	 * the model.
-	 * 
-	 * @see SF_Model_Interface::addResource()
-	 * 
-	 * @param string  $name      The name of the resource class to add
-	 * @param boolean $isDefault Is this the default resource 
-	 * @param boolean $lock      Can this resource be overwritten
-	 * @param string  $className The resource class name if different from $name
-	 * @return SF_Model_Abstract Used to chain methods
-	 */
-	public function addResource($name, $isDefault=false, $lock=false, $className=null) 
-	{	    
-	    $name = $this->_formatName($name);
-	    
-	    $ident = get_class($this) . '_' . $name;
-	    
-	    if (SF_Model_Resource_Registry::isRegistered($ident) && SF_Model_Resource_Registry::get($ident)->isLocked()) {
-	        return $this;
-	    }
-	    
-	    if (null === $className) {
-	        $className = $name;
-	    }
-	    
-	    if (true === $isDefault) {
-	        $registry = SF_Model_Resource_Registry::getInstance();
-            
-            foreach ($registry as $key => $container) {
-                if (($container instanceof SF_Model_Resource_Registry_Container) 
-                    && $container->isDefault() && $container->inNamespace(get_class($this))) {
-                    $container->isDefault = false;
-                }
-            }           
-	    }
-	    
-	    $container = new SF_Model_Resource_Registry_Container($ident, $className, $isDefault, $lock);
-	    
-	    SF_Model_Resource_Registry::set($ident, $container);
-	    
-	    return $this;
-	}
+    
+    /**
+     * @var array Model resource instances
+     */
+    protected $_instances = array();
+    
+    /**
+     * @var string The path to the model resources
+     */
+    protected $_resourcePath;
+    
+    /**
+     * @var string The prefix of the model resources
+     */
+    protected $_resourcePrefix;
+    
+    /**
+     * Construct
+     *
+     * @param array $options Optional options array
+     */
+    public function __construct($options = null)
+    {
+        // inits the module specific defaults (can be overwritten for testing)
+        $this->initDefaults();
+        
+        if (is_array($options)) {
+            $this->setOptions($options);
+        } elseif ($options instanceof Zend_Config) {
+            $this->setConfig($options);
+        }
+        
+        // extensions
+        $this->init();
+    }
+    
+    /**
+     * Set the options
+     *
+     * @param array $options
+     * @return SF_Model_Abstract
+     */
+    public function setOptions(array $options)
+    {
+        if (isset($options['prefix'])) {
+            $this->setResourcePrefix($options['prefix']);
+            unset($options['prefix']);
+        }
+        
+        if (isset($options['path'])) {
+            $this->setResourcePath($options['path']);
+            unset($options['path']);
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Set options via Zend_Config
+     *
+     * @param Zend_Config $config
+     * @return SF_Model_Abstract
+     */
+    public function setConfig(Zend_Config $config)
+    {
+        return $this->setOptions($config->toArray());
+    }
+    
+    /**
+     * Used by extending classes
+     */
+    public function init()
+    {}
+    
+    /**
+     * Set the resource class path
+     *
+     * @param string $path
+     * @return SF_Model_Abstract
+     */
+    public function setResourcePath($path)
+    {
+        $this->_resourcePath = $path;
+        
+        return $this;
+    }
+    
+    /**
+     * Set the prefix (used in setOptions)
+     *
+     * @param string $prefix
+     * @return SF_Model_Abstract
+     */
+    public function setResourcePrefix($prefix)
+    {
+        $this->_resourcePrefix = $prefix;
+        
+        return $this;
+    }
+    
+    /**
+     * Get the class path for the resources
+     *
+     * @return string|null
+     */
+    public function getResourcePath()
+    {
+        return $this->_resourcePath;
+    }
+    
+    /**
+     * Get the class prefix to use when loading resources
+     *
+     * @return string|null
+     */
+    public function getResourcePrefix()
+    {
+        return $this->_resourcePrefix;
+    }
 	
 	/**
 	 * Get a resource
-	 * 
-	 * @see SF_Model_Interface::getResource()
-	 * @param string $name Optional The resource to get or null for default
-	 * @return SF_Model_Resource_Interface
+	 *
+	 * @param string $name
+	 * @return SF_Model_Resource_Interface 
 	 */
-	public function getResource($name=null) 
+	public function getResource($name) 
 	{    
-	    $resource = null;
-	    
-	    if(null === $name) {
-	        $registry = SF_Model_Resource_Registry::getInstance();
-	        
-	        foreach ($registry as $key => $container) {
-	            if (($container instanceof SF_Model_Resource_Registry_Container) 
-	               && $container->isDefault() && $container->inNamespace(get_class($this))) {
-	                $resource = $this->_loadResource($container->className);
-	            }
-	        }	        
-	        return $resource;
-	    }
-	    
-	    $name = get_class($this) . '_' . $this->_formatName($name);
-	    
-	    if(SF_Model_Resource_Registry::isRegistered($name)) {
-	        $container = SF_Model_Resource_Registry::get($name);
-	        $resource = $this->_loadResource($container->className);
-	    }
-	    
-	    if(null === $resource) {
-	        throw new SF_Model_Exception("Resource $name is not registered");
-	    }
-	    
-	    return $resource;
+	    return $this->_loadResource($name);
 	}
 	
 	/**
-	 * Load the resource class and instantiate it.
-	 * 
-	 * Each module has its own abstract model class that all of its 
-	 * models extend from, this will implement this method with 
-	 * resource loading functionality specialized for that module. 
-	 * 
-	 * @param $name The name of the resource to load
-	 * return SF_Model_Resource_Interface
-	 */
-	abstract protected function _loadResource($name);
-	
-	/**
-	 * Get the plugin loader and configure it.
+	 * Loads the resource
 	 *
-	 * Implemented by the modules abstract model.
+	 * @param string $name
+	 * @return SF_Model_Resource_Interface
 	 */
-	abstract public function getPluginLoader();
-	
-	/**
-	 * Format the name of the resource to load
-	 * 
-	 * @param string The unformatted string
-	 * @return string The formatted string
-	 */
-    protected function _formatName($unformatted)
-    {
-        if(null == $unformatted) {
-            throw new SF_Model_Exception('Resource name must not be null');
+	protected function _loadResource($name)
+	{        
+        if(array_key_exists($name, $this->_instances)) {
+            return $this->_instances[$name];
         }
         
-        $segments = explode('_', $unformatted);
-
-        foreach ($segments as $key => $segment) {
-            $segment        = str_replace(array('-', '.'), ' ', strtolower($segment));
-            $segment        = preg_replace('/[^a-z0-9 ]/', '', $segment);
-            $segments[$key] = str_replace(' ', '', ucwords($segment));
-        }
-
-        return implode('_', $segments);
-    }
+        $class = $this->getPluginLoader()->load($name);
+        $this->_instances[$name] = new $class;
+        
+        return $this->_instances[$name];
+	}
+	
+	/**
+	 * Get the plugin loader
+	 *
+	 * @return Zend_Loader_PluginLoader
+	 */
+	public function getPluginLoader()
+	{
+	    if (null === $this->_loader) {
+	        $this->_loader = new Zend_Loader_PluginLoader();
+            $this->_loader->addPrefixPath($this->getResourcePrefix(), $this->getResourcePath());
+	    }
+	    
+	    return $this->_loader;
+	}
 }

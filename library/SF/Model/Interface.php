@@ -10,6 +10,6 @@
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 interface SF_Model_Interface {
-    public function addResource($name, $isDefault=false, $lock=false, $className=null);
-    public function getResource($name=null);
+    //public function addResource($name, $isDefault=false, $lock=false, $className=null);
+    //public function getResource($name=null);
 }

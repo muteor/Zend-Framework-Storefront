@@ -2,12 +2,7 @@
 require_once dirname(__FILE__) . '/Storefront.php';
 
 class Storefront_Model_User extends Storefront_Model
-{
-    public function __construct()
-    {
-        $this->addResource('User', true);
-    }
-    
+{   
     public function getUserById($id)
     {
         $id = (int) $id;

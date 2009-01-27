@@ -11,18 +11,7 @@ require_once dirname(__FILE__) . '/Storefront.php';
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_Model_Catalog extends Storefront_Model
-{
-    /**
-     * Construct
-     * 
-     * Add required resources
-     */
-    public function __construct()
-    {
-        $this->addResource('Product', true);
-        $this->addResource('Category');
-    }
-    
+{    
     /**
      * Get categories
      *
