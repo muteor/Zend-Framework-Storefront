@@ -128,8 +128,11 @@ class Storefront_Model_Catalog extends Storefront_Model
         return $cats;
     }
     
-    public function getParentCategory(Storefront_Resource_Category_Item $category)
+    public function getParentCategory(Storefront_Resource_Category_Item_Interface $category)
     {
+        if (0 == $category->parentId) {
+            return null;
+        }
         return $this->getResource('Category')->getParentCategory($category);
     }
 }

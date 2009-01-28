@@ -26,42 +26,19 @@ class CatalogTest extends PHPUnit_Framework_TestCase
     protected $_model;
     
     protected function setUp()
-    {
-        /**
-         * Replace resources
-         */
-        $product = new SF_Model_Resource_Registry_Container(
-            'Storefront_Model_Catalog_Product',
-            'ProductStub',
-            true,
-            true
-        );
-        $category = new SF_Model_Resource_Registry_Container(
-            'Storefront_Model_Catalog_Category',
-            'CategoryStub',
-            true,
-            true
-        );
-        SF_Model_Resource_Registry::set($product->identifier, $product);
-        SF_Model_Resource_Registry::set($category->identifier, $category);
-        
-        /**
-         * Configure Resource Loader/Autoloader
-         */
-        $rl = new SF_Controller_Helper_ResourceLoader();
-        $rl->initModule('storefront', Zend_Registry::get('root') . '/application/modules/storefront' );
-        
+    {        
         /**
          * Setup model and path for model resources
          */
-        $this->_model = $rl->getModel('Catalog');
-        $this->_model->getPluginLoader()->addPrefixPath( 'Test', dirname(__FILE__) . '/TestResources' );
+        $this->_model = new Storefront_Model_Catalog(array(
+            'path'   => dirname(__FILE__) . '/TestResources' ,
+            'prefix' => 'Test'
+            )
+        );
     }
     
     protected function tearDown()
-    {
-        SF_Model_Resource_Registry::clear();
-    }
+    {}
     
     public function test_Catalog_Get_Product_By_Id_Returns_Product_Item()
     {
@@ -90,9 +67,35 @@ class CatalogTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('array', $i);
     }
-//    
-//    public function test_Catalog_Can_Get_Products_By_Category()
-//    {
-//        $products = $this->_model->getProductsByCategory(1);
-//    }
+    
+    public function test_Catalog_Can_Get_Categories_By_parentId()
+    {
+        $cats= $this->_model->getCategories(0);
+        
+        $this->assertType('Zend_Db_Table_Rowset', $cats);
+        $this->assertEquals(6, count($cats));
+    }
+    
+    public function test_Catalog_Can_Get_Category_By_Ident()
+    {
+        $category = $this->_model->getCategoryByIdent('Category-5');
+        
+        $this->assertType('Storefront_Resource_Category_Item_Interface', $category);
+        $this->assertEquals(5, $category->categoryId);
+    }
+    
+    public function test_Catalog_Can_Get_Category_Parent()
+    {
+        $category = $this->_model->getCategoryByIdent('Category-8');
+        $parent   = $this->_model->getParentCategory($category);
+
+        $this->assertType('Storefront_Resource_Category_Item_Interface', $parent);
+        $this->assertEquals(7, $parent->categoryId);
+        
+        $category = $this->_model->getCategoryByIdent('Category-1');
+        $parent   = $this->_model->getParentCategory($category);
+        
+        $this->assertNull($parent);
+        
+    }
 }

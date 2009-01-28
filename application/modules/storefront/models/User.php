@@ -6,17 +6,17 @@ class Storefront_Model_User extends Storefront_Model
     public function getUserById($id)
     {
         $id = (int) $id;
-        return $this->getResource()->getUserById($id);
+        return $this->getResource('User')->getUserById($id);
     }
 
     public function getUserByEmail($email)
     {
-        return $this->getResource()->getUserByEmail($email);
+        return $this->getResource('User')->getUserByEmail($email);
     }
     
     public function getUsers()
     {
-        return $this->getResource()->getUsers();
+        return $this->getResource('User')->getUsers();
     }
     
     public function saveUser($info)
@@ -35,7 +35,7 @@ class Storefront_Model_User extends Storefront_Model
             if (!array_key_exists('title', $info)) {
                 throw new SF_Model_Exception('Title is required');
             }
-            if (null !== $this->getResource()->getUserByEmail($info['email'])) {
+            if (null !== $this->getResource('User')->getUserByEmail($info['email'])) {
                 throw new SF_Model_Exception('Email address already registered');
             }
         }
@@ -51,9 +51,9 @@ class Storefront_Model_User extends Storefront_Model
         }
         
         $user = array_key_exists('userId', $info) ? 
-            $this->getResource()->getUserById($info['userId']) : null;
+            $this->getResource('User')->getUserById($info['userId']) : null;
         
-        return $this->getResource()->saveRow($info, $user);        
+        return $this->getResource('User')->saveRow($info, $user);        
     }
     
     private function createSalt()

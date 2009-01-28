@@ -2,7 +2,7 @@
 require_once 'modules/storefront/models/resources/User/Interface.php';
 require_once 'modules/storefront/models/resources/User/Item/Interface.php';
 
-class Test_UserStub extends PHPUnit_Framework_TestCase implements Storefront_Resource_User_Interface 
+class Test_User extends PHPUnit_Framework_TestCase implements Storefront_Resource_User_Interface 
 {
     protected $_rowset = null;
     

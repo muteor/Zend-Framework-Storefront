@@ -26,7 +26,7 @@ class SF_Unit_AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('Storefront Unit Tests');
-        $suite->addTestSuite('ModelAbstractTest');
+        //$suite->addTestSuite('ModelAbstractTest');
         $suite->addTestSuite('CatalogTest');
         $suite->addTestSuite('UserTest');
         $suite->addTestSuite('AuthenticationTest');

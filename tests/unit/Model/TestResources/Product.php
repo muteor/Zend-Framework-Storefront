@@ -2,7 +2,7 @@
 require_once 'modules/storefront/models/resources/Product/Interface.php';
 require_once 'modules/storefront/models/resources/Product/Item/Interface.php';
 
-class Test_ProductStub extends PHPUnit_Framework_TestCase implements Storefront_Resource_Product_Interface 
+class Test_Product extends PHPUnit_Framework_TestCase implements Storefront_Resource_Product_Interface 
 {
     protected $_rowset = null;
     protected $_mockRow = null;

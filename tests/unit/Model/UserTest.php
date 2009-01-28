@@ -21,31 +21,15 @@ class UserTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        /**
-         * Replace resources
-         */
-        $user = new SF_Model_Resource_Registry_Container(
-            'Storefront_Model_User_User',
-            'UserStub',
-            true,
-            true
+        $this->_model = new Storefront_Model_User(array(
+            'path'   => dirname(__FILE__) . '/TestResources',
+            'prefix' => 'Test',
+            )
         );
-        SF_Model_Resource_Registry::set($user->identifier, $user);
-        
-        /**
-         * Configure Resource Loader/Autoloader
-         */
-        $rl = new SF_Controller_Helper_ResourceLoader();
-        $rl->initModule('storefront', Zend_Registry::get('root') . '/application/modules/storefront' );
-           
-        $this->_model = $rl->getModel('User');
-        $this->_model->getPluginLoader()->addPrefixPath( 'Test', dirname(__FILE__) . '/TestResources' );
     }
     
     protected function tearDown()
-    {
-        SF_Model_Resource_Registry::clear();
-    }
+    {}
     
     public function test_User_Get_User_By_Id_Returns_User_Row()
     {
