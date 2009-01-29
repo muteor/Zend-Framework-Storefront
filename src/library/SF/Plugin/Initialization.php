@@ -68,6 +68,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         $this->_initModules();
         $this->_configure();
         $this->_initView();
+        $this->_initDb();
     }
     
     /**
@@ -122,20 +123,6 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         }
         
         return $this;
-    }
-    
-    /**
-     * Get the config
-     * 
-     * @return Zend_Config_Ini
-     */
-    protected function _getConfig()
-    {
-        if (null === self::$_config) {
-            self::$_config = new Zend_Config_Ini($this->_root . '/application/config/store.ini', $this->_env, true);
-            self::$_config->root = $this->_root;
-        }
-        return self::$_config;
     }
     
     /**
@@ -206,5 +193,43 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         );
         
         return $this;
+    }
+    
+    /**
+     * Setup the default db adapter
+     * 
+     * @return SF_Plugin_Initialization This instance for chaining calls
+     */
+    protected function _initDb()
+    {
+        $config = $this->_getConfig();
+        if (!isset($config->db)) {
+            return $this;
+        }
+
+        $db = Zend_Db::factory($config->db);                     
+        
+        return $this;
+    }
+    
+    /**
+     * Get the config
+     * 
+     * @return Zend_Config_Ini
+     */
+    protected function _getConfig()
+    {
+        if (null === self::$_config) {
+            self::$_config = new Zend_Config_Ini(
+                $this->_root .
+                    '/application/config/store.ini', 
+                $this->_env, 
+                true
+            );
+            self::$_config->root = $this->_root;
+        }
+        
+        print_r(self::$_config);
+        return self::$_config;
     }
 }
