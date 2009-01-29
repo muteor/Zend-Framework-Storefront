@@ -1,6 +1,6 @@
-Zend Framework - Chapter 4 - Basic Storefront
+Zend Framework - Chapter 6 - Implementing the Catalog
 
-This package conatins the example files for chapter 4, there are two folders 
+This package conatins the example files for chapter 6, there are two folders 
 assets and src. Use assets to quickly follow the setp-by-step instructions in 
 the chapter, src contains the fully working application.
 
@@ -8,7 +8,7 @@ INSTALLATION
 1. Extract the zip into a directory that your web server can access or checkout the 
    latest source from the Google Code repository using:
    
-   svn checkout http://zendframeworkstorefront.googlecode.com/svn/trunk/ zendframeworkstorefront-read-only
+   svn checkout http://zendframeworkstorefront.googlecode.com/svn/branches/006_Implmenting_The_Catalog chapter6
     
 2. Download Zend Framework package and extract the Zend folder to the library directory.
 3. Point your webserver to the public directory
