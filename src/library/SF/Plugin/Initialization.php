@@ -228,8 +228,6 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
             );
             self::$_config->root = $this->_root;
         }
-        
-        print_r(self::$_config);
         return self::$_config;
     }
 }
