@@ -249,7 +249,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      * Add the global action helpers
      * @return SF_Plugin_Initialization This instance for chaining calls
      */
-    public function _initHelpers()
+    protected function _initHelpers()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
         
