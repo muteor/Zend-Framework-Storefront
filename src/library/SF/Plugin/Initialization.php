@@ -207,7 +207,10 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
             return $this;
         }
 
-        $db = Zend_Db::factory($config->db);                     
+        $db = Zend_Db::factory($config->db);
+        
+        Zend_Db_Table_Abstract::setDefaultAdapter($db);
+        Zend_Registry::set('db', $db);                     
         
         return $this;
     }
