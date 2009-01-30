@@ -1,4 +1,4 @@
-INSERT INTO `storefront`.`category` VALUES  (1,'Cashmere',6,'cashmere'),
+INSERT INTO `category` VALUES  (1,'Cashmere',6,'cashmere'),
  (2,'Silk',6,'silk'),
  (3,'Woolen',6,'woolen'),
  (4,'Caps',7,'caps'),
@@ -7,7 +7,7 @@ INSERT INTO `storefront`.`category` VALUES  (1,'Cashmere',6,'cashmere'),
  (7,'Hats',0,'hats'),
  (8,'red-eye',5,'red-eye');
 
-INSERT INTO `storefront`.`product` VALUES  (1,7,'product-1','product 1','My lovely product...','My lovely product...','10.99',0,'Yes','Mail','InStock'),
+INSERT INTO `product` VALUES  (1,7,'product-1','product 1','My lovely product...','My lovely product...','10.99',0,'Yes','Mail','InStock'),
  (2,7,'product-2','product 2','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
  (3,6,'product-3','product 3','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
  (4,5,'product-4','product 4','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
@@ -17,7 +17,7 @@ INSERT INTO `storefront`.`product` VALUES  (1,7,'product-1','product 1','My love
  (8,1,'product-8','product 8','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
  (9,1,'product-9','product 9','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
  (10,2,'product-10','product 10','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock');
-INSERT INTO `storefront`.`product` VALUES  (11,3,'product-11','product 11','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
+INSERT INTO `product` VALUES  (11,3,'product-11','product 11','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
  (12,4,'product-12','product 12','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
  (13,5,'product-13','product 13','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
  (14,6,'product-14','product 14','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
@@ -27,7 +27,7 @@ INSERT INTO `storefront`.`product` VALUES  (11,3,'product-11','product 11','My l
  (18,4,'product-18','product 18','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock'),
  (19,8,'product-19','product 19','My lovely product...','My lovely product...','11.99',0,'Yes','Mail','InStock');
 
-INSERT INTO `storefront`.`productImage` VALUES  (1,5,'sm_raver.png','raver.jpg','Yes'),
+INSERT INTO `productImage` VALUES  (1,5,'sm_raver.png','raver.jpg','Yes'),
  (2,19,'sm_raver.png','raver.jpg','Yes'),
  (3,18,'sm_wooly_beenie.png','wooly_beenie.jpg','Yes'),
  (4,17,'sm_raver.png','raver.jpg','Yes'),

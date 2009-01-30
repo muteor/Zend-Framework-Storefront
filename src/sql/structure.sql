@@ -1,12 +1,9 @@
-CREATE DATABASE IF NOT EXISTS storefront;
-USE storefront;
-
 --
 -- Definition of table `storefront`.`category`
 --
 
-DROP TABLE IF EXISTS `storefront`.`category`;
-CREATE TABLE  `storefront`.`category` (
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE  `category` (
   `categoryId` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(200) NOT NULL,
   `parentId` int(10) unsigned NOT NULL,
@@ -19,8 +16,8 @@ CREATE TABLE  `storefront`.`category` (
 -- Definition of table `storefront`.`product`
 --
 
-DROP TABLE IF EXISTS `storefront`.`product`;
-CREATE TABLE  `storefront`.`product` (
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE  `product` (
   `productId` int(10) unsigned NOT NULL auto_increment,
   `categoryId` int(10) unsigned NOT NULL,
   `ident` varchar(56) NOT NULL,
@@ -40,8 +37,8 @@ CREATE TABLE  `storefront`.`product` (
 -- Definition of table `storefront`.`productImage`
 --
 
-DROP TABLE IF EXISTS `storefront`.`productImage`;
-CREATE TABLE  `storefront`.`productImage` (
+DROP TABLE IF EXISTS `productImage`;
+CREATE TABLE  `productImage` (
   `imageId` int(10) unsigned NOT NULL auto_increment,
   `productId` int(10) unsigned NOT NULL,
   `thumbnail` varchar(200) NOT NULL,
@@ -49,23 +46,4 @@ CREATE TABLE  `storefront`.`productImage` (
   `isDefault` enum('Yes', 'No') NOT NULL,
   PRIMARY KEY  (`imageId`),
   KEY `productId` (`productId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Definition of table `storefront`.`user`
---
-
-DROP TABLE IF EXISTS `storefront`.`user`;
-CREATE TABLE  `storefront`.`user` (
-  `userId` int(10) unsigned NOT NULL auto_increment,
-  `title` varchar(10) NOT NULL,
-  `firstname` varchar(128) NOT NULL,
-  `lastname` varchar(128) NOT NULL,
-  `email` varchar(128) NOT NULL,
-  `passwd` char(40) NOT NULL,
-  `salt` char(32) NOT NULL,
-  `role` varchar(100) NOT NULL default 'customer',
-  PRIMARY KEY  (`userId`),
-  KEY `email_pass` (`email`,`passwd`),
-  KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
