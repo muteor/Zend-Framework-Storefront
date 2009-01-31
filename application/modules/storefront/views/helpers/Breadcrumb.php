@@ -11,7 +11,7 @@
  */
 class Zend_View_Helper_Breadcrumb extends Zend_View_Helper_Abstract 
 {       
-    public function breadcrumb($route, $product = null)
+    public function breadcrumb($product = null)
     {
         if ($this->view->bread) {
             $bread = $this->view->bread;
@@ -22,7 +22,7 @@ class Zend_View_Helper_Breadcrumb extends Zend_View_Helper_Abstract
                 $href = $this->view->url(array(
                     'categoryIdent' => $category->ident,
                     ), 
-                    $route
+                    'catalog_category'
                 );
                 $crumbs[] = '<a href="' . $href . '">' . $this->view->Escape($category->name) . '</a>';
             }

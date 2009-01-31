@@ -1,7 +1,7 @@
 <?=$this->productImage($this->product->getDefaultImage(), array('class' => 'right'))->full(); ?>
 <h3><?=$this->Escape($this->product->name); ?></h3>
 <p>
-    <?= $this->breadcrumb('catalog_category_product', $this->product); ?>
+    <?= $this->breadcrumb($this->product); ?>
 </p>
 
 <div>
