@@ -180,6 +180,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         if (null === self::$_config) {
             self::$_config = new Zend_Config_Ini($this->_root . '/application/config/store.ini', $this->_env, true);
             self::$_config->root = $this->_root;
+            Zend_Registry::set('config', self::$_config);
         }
         return self::$_config;
     }
