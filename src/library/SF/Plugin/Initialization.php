@@ -66,6 +66,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
         $this->_initModules();
+        $this->_initConfig();
         $this->_configure();
         $this->_initView();
         $this->_initDb();
@@ -221,9 +222,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      * @return Zend_Config_Ini
      */
     protected function _initConfig()
-    {
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-        
+    {       
         $this->_config = new Zend_Config_Ini($this->_root . '/application/config/store.ini', $this->_env, true);
         Zend_Registry::set('config', $this->_config);
         
