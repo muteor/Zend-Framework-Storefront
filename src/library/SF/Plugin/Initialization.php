@@ -65,6 +65,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
+        $this->_initLogging();
         $this->_initModules();
         $this->_initConfig();
         $this->_configure();
@@ -133,6 +134,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _initModules()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         $this->_front->getDispatcher()->setParam('prefixDefaultModule', true);
         $this->_front->addModuleDirectory($this->_root . '/application/modules');
         $this->_front->setDefaultModule('storefront');
@@ -148,6 +151,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _configure()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         if($this->_env == 'development' || $this->_env == 'test') {
             $this->_front->throwExceptions(true);
         }
@@ -162,6 +167,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _initView()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         $viewRenderer->init();
         
@@ -203,6 +210,8 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _initDb()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
         $config = $this->_config;
         if (!isset($config->db)) {
             return $this;
@@ -213,18 +222,51 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         Zend_Db_Table_Abstract::setDefaultAdapter($db);
         Zend_Registry::set('db', $db);                     
         
+        if ($this->_env == 'development') {
+            $profiler = new Zend_Db_Profiler_Firebug('All DB Queries');
+            $profiler->setEnabled(true);
+            $db->setProfiler($profiler);
+        }
+        
         return $this;
     }
     
     /**
      * Get the config
      * 
-     * @return Zend_Config_Ini
+     * @return SF_Plugin_Initialization This instance for chaining calls
      */
     protected function _initConfig()
-    {       
+    {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+               
         $this->_config = new Zend_Config_Ini($this->_root . '/application/config/store.ini', $this->_env, true);
         Zend_Registry::set('config', $this->_config);
+        
+        return $this;
+    }
+    
+    /**
+     * Init the logger
+     * 
+     * @return SF_Plugin_Initialization This instance for chaining calls
+     */
+    protected function _initLogging()
+    {
+        $logger = new Zend_Log();
+        
+        $writer = 'production' == $this->_env ? 
+            new Zend_Log_Writer_Stream($this->_root . '/data/logs/app.log') : 
+            new Zend_Log_Writer_Firebug();
+        $logger->addWriter($writer);
+        
+        if ('production' == $this->_env) {
+            $filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
+            $logger->addFilter($filter);
+        }
+        
+        $this->_logger = $logger;
+        Zend_Registry::set('log', $logger);
         
         return $this;
     }
