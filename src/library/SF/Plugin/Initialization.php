@@ -36,7 +36,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
     /**
      * @var Zend_Config
      */
-    protected static $_config;
+    protected $_config;
     
     /**
      * Constructor
@@ -202,7 +202,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     protected function _initDb()
     {
-        $config = $this->_getConfig();
+        $config = $this->_config;
         if (!isset($config->db)) {
             return $this;
         }
@@ -220,17 +220,13 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      * 
      * @return Zend_Config_Ini
      */
-    protected function _getConfig()
+    protected function _initConfig()
     {
-        if (null === self::$_config) {
-            self::$_config = new Zend_Config_Ini(
-                $this->_root .
-                    '/application/config/store.ini', 
-                $this->_env, 
-                true
-            );
-            self::$_config->root = $this->_root;
-        }
-        return self::$_config;
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
+        $this->_config = new Zend_Config_Ini($this->_root . '/application/config/store.ini', $this->_env, true);
+        Zend_Registry::set('config', $this->_config);
+        
+        return $this;
     }
 }
