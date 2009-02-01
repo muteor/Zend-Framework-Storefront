@@ -36,7 +36,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
     /**
      * @var Zend_Config
      */
-    protected static $_config;
+    protected $_config;
     
     /**
      * @var Zend_Log
@@ -70,8 +70,9 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
-    	$this->_initModules();
+        $this->_initModules();
     	$this->_initLogging();
+    	$this->_initConfig();
     	$this->_setLocale();
         $this->_initHelpers();
         $this->_configure();
@@ -173,16 +174,14 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
      * 
      * @return Zend_Config_Ini
      */
-    protected function _getConfig()
+    protected function _initConfig()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
         
-        if (null === self::$_config) {
-            self::$_config = new Zend_Config_Ini($this->_root . '/application/config/store.ini', $this->_env, true);
-            self::$_config->root = $this->_root;
-            Zend_Registry::set('config', self::$_config);
-        }
-        return self::$_config;
+        $this->_config = new Zend_Config_Ini($this->_root . '/application/config/store.ini', $this->_env, true);
+        Zend_Registry::set('config', $this->_config);
+        
+        return $this;
     }
     
     /**
@@ -194,7 +193,7 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
         
-        $config = $this->_getConfig();
+        $config = $this->_config;
         if (!isset($config->db)) {
             return $this;
         }
