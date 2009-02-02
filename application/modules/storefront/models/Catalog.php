@@ -18,11 +18,11 @@ class Storefront_Model_Catalog extends Storefront_Model
      * @param int $parentID The parentId
      * @return Zend_Db_Table_Rowset
      */
-    public function getCategories($parentID)
+    public function getCategoriesByParentId($parentID)
     {
         $parentID = (int) $parentID;
         
-        return $this->getResource('Category')->getCategories($parentID);
+        return $this->getResource('Category')->getCategoriesByParentId($parentID);
     }
     
     /**
@@ -96,7 +96,7 @@ class Storefront_Model_Catalog extends Storefront_Model
      */
     public function getCategoryChildrenIds($categoryId, $recursive = false)
     {
-        $categories = $this->getCategories($categoryId);
+        $categories = $this->getCategoriesByParentId($categoryId);
         $cats = array();
                
         foreach ($categories as $category) {

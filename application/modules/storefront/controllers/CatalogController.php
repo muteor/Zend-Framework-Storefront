@@ -24,7 +24,7 @@ class Storefront_CatalogController extends Zend_Controller_Action
             throw new SF_Exception_404('Unknown category ' . $this->_getParam('categoryIdent'));
         }
         
-        $subs = $this->_catalogModel->getCategories($category->categoryId);
+        $subs = $this->_catalogModel->getCategoriesByParentId($category->categoryId);
         $this->getBreadcrumb($category);
 
         $this->view->assign(array(

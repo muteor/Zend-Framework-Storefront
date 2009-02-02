@@ -24,7 +24,7 @@ class Storefront_Resource_Category extends SF_Model_Resource_Db_Table_Abstract i
         )
     );
     
-    public function getCategories($parentId)
+    public function getCategoriesByParentId($parentId)
     {
         $select = $this->select()
                         ->where('parentId = ?', $parentId)
