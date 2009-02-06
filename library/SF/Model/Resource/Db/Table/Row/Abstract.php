@@ -101,7 +101,7 @@ abstract class SF_Model_Resource_Db_Table_Row_Abstract
         }
         
         if (is_object($rowClass)) {
-            $this->_row = new $rowClass($config);
+            $this->_row = $rowClass;
             return;
         }
         
