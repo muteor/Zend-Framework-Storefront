@@ -43,13 +43,24 @@ abstract class SF_Model_Resource_Db_Table_Row_Abstract
         return $this->_row;
     }
     
-    public function setRow(array $config = array(), $rowClass = null)
+    public function setRow(array $config = array())
     {
-        if (null === $rowClass) {
-            $rowClass = 'Zend_Db_Table_Row';
+        $rowClass = 'Zend_Db_Table_Row';  
+        if (isset($config['rowClass'])) {
+            $rowClass = $config['rowClass'];
         }
         
-        $this->_row = new $rowClass($config);
+        if (is_string($rowClass)) {
+            $this->_row = new $rowClass($config);
+            return;
+        }
+        
+        if (is_object($rowClass)) {
+            $this->_row = new $rowClass($config);
+            return;
+        }
+        
+        throw new SF_Model_Exception('Could not set rowClass in ' . __CLASS__);
     }
     
     public function __call($method, array $arguments)
