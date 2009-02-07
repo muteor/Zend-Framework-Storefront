@@ -30,7 +30,8 @@ CREATE TABLE  `product` (
   `deliveryMethod` enum('Mail','Download') NOT NULL,
   `stockStatus` enum('InStock','PreOrder','Discontinued','Unavailable') NOT NULL,
   PRIMARY KEY  (`productId`),
-  KEY `category` (`categoryId`)
+  KEY `category` (`categoryId`),
+  UNIQUE KEY `ident` (`ident`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
@@ -45,5 +46,6 @@ CREATE TABLE  `productImage` (
   `full` varchar(200) NOT NULL,
   `isDefault` enum('Yes', 'No') NOT NULL,
   PRIMARY KEY  (`imageId`),
-  KEY `productId` (`productId`)
+  KEY `productId` (`productId`),
+  CONSTRAINT `fk_product` FOREIGN KEY (`productId`) REFERENCES `product` (`productId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
