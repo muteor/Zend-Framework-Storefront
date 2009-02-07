@@ -48,7 +48,8 @@ CREATE TABLE  `storefront`.`productImage` (
   `full` varchar(200) NOT NULL,
   `isDefault` enum('Yes', 'No') NOT NULL,
   PRIMARY KEY  (`imageId`),
-  KEY `productId` (`productId`)
+  KEY `productId` (`productId`),
+  CONSTRAINT `fk_product` FOREIGN KEY (`productId`) REFERENCES `product` (`productId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
