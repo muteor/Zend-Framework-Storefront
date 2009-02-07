@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . '/Product/Item.php';
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract implements Storefront_Resource_Product_Interface 
+class Storefront_Resource_Product extends Zend_Db_Table_Abstract implements Storefront_Resource_Product_Interface 
 {
     protected $_name    = 'product';
     protected $_primary  = 'productId';

@@ -10,7 +10,7 @@ require_once dirname(__FILE__) . '/Category/Item.php';
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Resource_Category extends SF_Model_Resource_Db_Table_Abstract implements Storefront_Resource_Category_Interface 
+class Storefront_Resource_Category extends Zend_Db_Table_Abstract implements Storefront_Resource_Category_Interface 
 {
     protected $_name = 'category';
     protected $_primary = 'categoryId';

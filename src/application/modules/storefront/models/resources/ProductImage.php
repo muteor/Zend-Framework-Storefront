@@ -13,7 +13,7 @@ require_once dirname(__FILE__) . '/Product.php';
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Resource_ProductImage extends Zend_Db_Table_Abstract
+class Storefront_Resource_ProductImage extends Zend_Db_Table_Abstract implements Storefront_Resource_ProductImage_Interface 
 {
     protected $_name = 'productImage';
     protected $_primary = 'imageId';
