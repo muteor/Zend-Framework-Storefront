@@ -16,6 +16,14 @@ class Storefront_Resource_Category extends Zend_Db_Table_Abstract implements Sto
     protected $_primary = 'categoryId';
     protected $_rowClass = 'Storefront_Resource_Category_Item';
     
+    protected $_referenceMap = array(
+        'SubCategory' => array(
+            'columns' => 'parentId',
+            'refTableClass' => 'Storefront_Resource_Category',
+            'refColumns' => 'categoryId',
+        )
+    );
+    
     public function getCategoriesByParentId($parentId)
     {
         $select = $this->select()
