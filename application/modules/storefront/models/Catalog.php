@@ -115,7 +115,7 @@ class Storefront_Model_Catalog extends Storefront_Model_Storefront
             return $cats;
         }
         
-        $parent = $this->getParentCategory($category);
+        $parent = $category->getParentCategory();
         $cats[] = $parent;
         
         if (0 != $parent->parentId) {
@@ -125,11 +125,11 @@ class Storefront_Model_Catalog extends Storefront_Model_Storefront
         return $cats;
     }
     
-    public function getParentCategory(Storefront_Resource_Category_Item_Interface $category)
-    {
-        if (0 == $category->parentId) {
-            return null;
-        }
-        return $this->getResource('Category')->getParentCategory($category);
-    }
+//    public function getParentCategory(Storefront_Resource_Category_Item_Interface $category)
+//    {
+//        if (0 == $category->parentId) {
+//            return null;
+//        }
+//        return $this->getResource('Category')->getParentCategory($category);
+//    }
 }

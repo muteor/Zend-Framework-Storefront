@@ -9,5 +9,5 @@
  */
 interface Storefront_Resource_Category_Item_Interface
 {
-    public function hasChildren();
+    public function getParentCategory();
 }
