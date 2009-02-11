@@ -8,4 +8,6 @@
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 interface Storefront_Resource_Category_Item_Interface
-{}
+{
+    public function getParentCategory();
+}

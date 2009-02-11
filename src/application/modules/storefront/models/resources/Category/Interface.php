@@ -12,5 +12,4 @@ interface Storefront_Resource_Category_Interface
     public function getCategoriesByParentId($parentId);
     public function getCategoryByIdent($ident);
     public function getCategoryById($id);
-    public function getParentCategory(Storefront_Resource_Category_Item_Interface $category);
 }

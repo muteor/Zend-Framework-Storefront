@@ -48,9 +48,4 @@ class Storefront_Resource_Category extends Zend_Db_Table_Abstract implements Sto
                        
         return $this->fetchRow($select);
     }
-    
-    public function getParentCategory(Storefront_Resource_Category_Item_Interface $category)
-    {
-        return $category->findParentRow('Storefront_Resource_Category');
-    }
 }

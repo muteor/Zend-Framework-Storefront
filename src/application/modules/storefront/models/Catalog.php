@@ -107,6 +107,13 @@ class Storefront_Model_Catalog
         return $cats;
     }
 
+    /**
+     * Get all the parent categories for a category recursively so
+     * we get the whole branch from the leaf.
+     * 
+     * @param Storefront_Model_Resource_Category_Item $category
+     * @return array 
+     */
     public function getParentCategories($category)
     {
         $cats = array($category);
@@ -115,7 +122,7 @@ class Storefront_Model_Catalog
             return $cats;
         }
 
-        $parent = $this->getParentCategory($category);
+        $parent = $category->getParentCategory();
         $cats[] = $parent;
 
         if (0 != $parent->parentId) {
@@ -123,13 +130,5 @@ class Storefront_Model_Catalog
         }
 
         return $cats;
-    }
-
-    public function getParentCategory(Storefront_Resource_Category_Item_Interface $category)
-    {
-        if (0 == $category->parentId) {
-            return null;
-        }
-        return $this->getResource('Category')->getParentCategory($category);
     }
 }
