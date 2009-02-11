@@ -13,6 +13,8 @@
 </div>
 <? endforeach; ?>
 
+<? if($this->products instanceof Zend_Paginator): ?>
 <?= $this->paginationControl($this->products,
                              'Sliding',
                              'catalog/_paginator.phtml'); ?>
+<? endif ?>

@@ -15,7 +15,8 @@ class Storefront_CatalogController extends Zend_Controller_Action
     {       
         $products = $this->_catalogModel->getProductsByCategory(
             $this->_getParam('categoryIdent', 0),
-			$this->_getParam('page', 1)
+			$this->_getParam('page', 1),
+            array('name')
         );
 
         $category = $this->_catalogModel->getCategoryByIdent($this->_getParam('categoryIdent', ''));

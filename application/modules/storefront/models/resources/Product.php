@@ -59,7 +59,7 @@ class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract im
             $select->order($order);
         }
 		
-		if (false !== $paged) {
+		if (null !== $paged) {
 			$adapter = new Zend_Paginator_Adapter_DbTableSelect($select);
 			$count = clone $select;
 			$count->reset(Zend_Db_Select::COLUMNS);
@@ -72,8 +72,7 @@ class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract im
 		          	  ->setCurrentPageNumber((int) $paged);
 			return $paginator;
 		}
-               
-        return $this->fetchAll($select, array('catIds' => $categoryId));
+        return $this->fetchAll($select);
     } 
     
     public function saveProduct($info)
