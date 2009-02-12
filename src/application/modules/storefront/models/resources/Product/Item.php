@@ -15,7 +15,7 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
     /**
      * Product images
      *
-     * @var array
+     * @var Zend_Db_Table_Rowset
      */
     protected $_images;
     
@@ -34,7 +34,7 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
         $this->_images = $this->findDependentRowset('Storefront_Resource_ProductImage', 
             'Image', 
             $select
-        )->toArray();
+        );
         
         return $this->_images;
     }
