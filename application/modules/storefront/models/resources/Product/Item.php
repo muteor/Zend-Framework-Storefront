@@ -11,14 +11,7 @@ require_once dirname(__FILE__) . '/Item/Interface.php';
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Abstract implements Storefront_Resource_Product_Item_Interface
-{
-    /**
-     * Product images
-     *
-     * @var array
-     */
-    protected $_images;
-    
+{   
     /**
      * Get product images
      *
@@ -31,12 +24,10 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
         if (false === $includeDefault) {
             $select->where('isDefault != ?', 'Yes');
         }
-        $this->_images = $this->findDependentRowset('Storefront_Resource_ProductImage', 
+        return $this->findDependentRowset('Storefront_Resource_ProductImage',
             'Image', 
             $select
-        )->toArray();
-        
-        return $this->_images;
+        );
     }
     
     /**

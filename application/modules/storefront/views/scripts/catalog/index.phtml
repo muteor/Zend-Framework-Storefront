@@ -4,7 +4,7 @@
 </p>
 <? foreach($this->products as $product):  ?>
 <div class="productitem clearfix">
-    <?=$this->productImage($product->getDefaultImage(), array('class' => 'right'))->thumbnail(); ?>
+    <?=$this->productImage($product->defaultImage, array('class' => 'right'))->thumbnail(); ?>
     <h4><a href="<?=$this->url(array('productIdent' => $product->ident, 
                                'categoryIdent' => $this->category->ident),
                                'catalog_category_product'); ?>"><?=$this->Escape($product->name); ?></a></h4>
