@@ -28,4 +28,14 @@ class Storefront_Resource_ProductImage_Item extends SF_Model_Resource_Db_Table_R
     {
         return $this->full;
     }
+
+    /**
+     * Is this a default image
+     *
+     * @return boolean
+     */
+    public function isDefault()
+    {
+        return 'Yes' === $this->getRow()->isDefault ? true : false;
+    }
 }

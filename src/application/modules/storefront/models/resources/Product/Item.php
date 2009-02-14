@@ -4,7 +4,7 @@ require_once dirname(__FILE__) . '/Item/Interface.php';
 
 /**
  * Storefront_Resource_Product_Item
- * 
+ *
  * @category   Storefront
  * @package    Storefront_Model_Resource
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
@@ -12,13 +12,6 @@ require_once dirname(__FILE__) . '/Item/Interface.php';
  */
 class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Abstract implements Storefront_Resource_Product_Item_Interface
 {
-    /**
-     * Product images
-     *
-     * @var Zend_Db_Table_Rowset
-     */
-    protected $_images;
-    
     /**
      * Get product images
      *
@@ -31,14 +24,12 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
         if (false === $includeDefault) {
             $select->where('isDefault != ?', 'Yes');
         }
-        $this->_images = $this->findDependentRowset('Storefront_Resource_ProductImage', 
-            'Image', 
+        return $this->findDependentRowset('Storefront_Resource_ProductImage',
+            'Image',
             $select
         );
-        
-        return $this->_images;
     }
-    
+
     /**
      * Get the default image
      *
@@ -46,16 +37,16 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
      */
     public function getDefaultImage()
     {
-        $row = $this->findDependentRowset('Storefront_Resource_ProductImage', 
-            'Image', 
+        $row = $this->findDependentRowset('Storefront_Resource_ProductImage',
+            'Image',
             $this->select()
                  ->where('isDefault = ?', 'Yes')
                  ->limit(1)
         )->current();
-        
+
         return $row;
     }
-    
+
     /**
      * Get the price
      *
@@ -77,7 +68,7 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
         }
         return $price;
     }
-    
+
     /**
      * Is this product discounted ?
      *
@@ -87,7 +78,7 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
     {
         return 0 == $this->getRow()->discountPercent ? false : true;
     }
-    
+
     /**
      * Is this product taxable?
      *
