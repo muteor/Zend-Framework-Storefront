@@ -18,15 +18,10 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
      * @param  boolean $includeDefault Whether to include the default
      * @return array Containing Storefront_Resource_ProductImage_Item
      */
-    public function getImages($includeDefault=false)
+    public function getImages()
     {
-        $select = $this->select();
-        if (false === $includeDefault) {
-            $select->where('isDefault != ?', 'Yes');
-        }
         return $this->findDependentRowset('Storefront_Resource_ProductImage',
-            'Image',
-            $select
+            'Image'
         );
     }
 
