@@ -96,6 +96,12 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
      */
     public function init()
     {}
+
+    /**
+     * Used to initialize defaults for a Model,
+     * this has to be implemented by the Module specific class
+     */
+    abstract public function initDefaults();
     
     /**
      * Set the resource class path

@@ -14,9 +14,9 @@ class Storefront_Resource_ProductImage_Item extends SF_Model_Resource_Db_Table_R
      *
      * @return string
      */
-    public function thumbnail()
+    public function getThumbnail()
     {
-        return $this->thumbnail;
+        return $this->getRow()->thumbnail;
     }
     
     /**
@@ -24,9 +24,9 @@ class Storefront_Resource_ProductImage_Item extends SF_Model_Resource_Db_Table_R
      *
      * @return string
      */
-    public function full()
+    public function getFull()
     {
-        return $this->full;
+        return $this->getRow()->full;
     }
 
     /**

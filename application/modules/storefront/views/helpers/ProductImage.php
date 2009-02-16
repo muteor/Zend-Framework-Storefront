@@ -43,7 +43,7 @@ class Zend_View_Helper_ProductImage extends Zend_View_Helper_HtmlElement
     public function thumbnail()
     {
         if (null !== $this->_image) {
-            return $this->_createImgTag($this->_image->thumbnail());
+            return $this->_createImgTag($this->_image->thumbnail);
         }
     }
     
@@ -55,7 +55,7 @@ class Zend_View_Helper_ProductImage extends Zend_View_Helper_HtmlElement
     public function full()
     {
         if (null !== $this->_image) {
-            return $this->_createImgTag($this->_image->full());
+            return $this->_createImgTag($this->_image->full);
         }
     }
     
