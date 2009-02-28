@@ -68,9 +68,12 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         $this->_initLogging();
         $this->_initModules();
         $this->_initConfig();
+        $this->_initHelpers();
         $this->_configure();
         $this->_initView();
         $this->_initDb();
+        $this->_registerFrontPlugins();
+        $this->_initRoutes();
     }
     
     /**
@@ -269,5 +272,86 @@ class SF_Plugin_Initialization extends Zend_Controller_Plugin_Abstract
         Zend_Registry::set('log', $logger);
         
         return $this;
+    }
+
+    /**
+     * Add the global action helpers
+     * @return SF_Plugin_Initialization This instance for chaining calls
+     */
+    protected function _initHelpers()
+    {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+
+        Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_ResourceLoader());
+        return $this;
+    }
+
+    /**
+     * Register additional plugins, only ones that use
+     * hooks after routeStartup though!
+     */
+    protected function _registerFrontPlugins()
+    {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+
+        $this->_front->registerPlugin( new SF_Plugin_Action());
+    }
+
+    /**
+     * Add required routes to the router
+     */
+    protected function _initRoutes()
+    {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+
+        $router = $this->_front->getRouter();
+
+        // Admin context route
+        $route = new Zend_Controller_Router_Route(
+            'admin/:module/:controller/:action',
+            array(
+                'action'     => 'index',
+                'controller' => 'admin',
+                'module'     => 'storefront',
+                'isAdmin'    => true
+            )
+        );
+
+        $router->addRoute('admin', $route);
+
+        // catalog category product route
+        $route = new Zend_Controller_Router_Route(
+            'catalog/:categoryIdent/:productIdent',
+            array(
+                'action'        => 'view',
+                'controller'    => 'catalog',
+                'module'        => 'storefront',
+                'categoryIdent' => '',
+            ),
+            array(
+                'categoryIdent' => '[a-zA-Z-_0-9]+',
+                'productIdent'  => '[a-zA-Z-_0-9]+'
+            )
+        );
+
+        $router->addRoute('catalog_category_product', $route);
+
+        // catalog category route
+        $route = new Zend_Controller_Router_Route(
+            'catalog/:categoryIdent/:page',
+            array(
+                'action'        => 'index',
+                'controller'    => 'catalog',
+                'module'        => 'storefront',
+                'categoryIdent' => '',
+                'page'          => 1
+            ),
+            array(
+                'categoryIdent' => '[a-zA-Z-_0-9]+',
+                'page'          => '\d+'
+            )
+        );
+
+        $router->addRoute('catalog_category', $route);
     }
 }
