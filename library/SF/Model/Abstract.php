@@ -96,12 +96,6 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
      */
     public function init()
     {}
-
-    /**
-     * Used to initialize defaults for a Model,
-     * this has to be implemented by the Module specific class
-     */
-    abstract public function initDefaults();
     
     /**
      * Set the resource class path
@@ -156,40 +150,10 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
 	 * @return SF_Model_Resource_Interface 
 	 */
 	public function getResource($name) 
-	{    
-	    return $this->_loadResource($name);
-	}
-	
-	/**
-	 * Loads the resource
-	 *
-	 * @param string $name
-	 * @return SF_Model_Resource_Interface
-	 */
-	protected function _loadResource($name)
-	{        
-        if(array_key_exists($name, $this->_instances)) {
-            return $this->_instances[$name];
-        }
-        
-        $class = $this->getPluginLoader()->load($name);
-        $this->_instances[$name] = new $class;
-        
-        return $this->_instances[$name];
-	}
-	
-	/**
-	 * Get the plugin loader
-	 *
-	 * @return Zend_Loader_PluginLoader
-	 */
-	public function getPluginLoader()
 	{
-	    if (null === $this->_loader) {
-	        $this->_loader = new Zend_Loader_PluginLoader();
-            $this->_loader->addPrefixPath($this->getResourcePrefix(), $this->getResourcePath());
-	    }
-	    
-	    return $this->_loader;
+        $current = explode('_', get_class($this));
+        $class = join('_', array($current[0], 'Resource', ucfirst($name)));
+        $inst = new $class();
+	    return $inst;
 	}
 }

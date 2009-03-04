@@ -7,7 +7,7 @@ require_once dirname(__FILE__) . '/../../TestHelper.php';
 /**
  * Catalog Model
  */
-require_once 'modules/storefront/models/Catalog.php';
+//require_once 'modules/storefront/models/Catalog.php';
 
 /**
  * Test case for Storefront_Catalog
@@ -24,17 +24,31 @@ class CatalogTest extends PHPUnit_Framework_TestCase
      * @var SF_Model_Interface
      */
     protected $_model;
-    
-    protected function setUp()
-    {        
-        /**
-         * Setup model and path for model resources
-         */
-        $this->_model = new Storefront_Model_Catalog(array(
-            'path'   => dirname(__FILE__) . '/TestResources' ,
-            'prefix' => 'Test'
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // configure the resource loader atuo load models
+        $loader = new Zend_Loader_Autoloader_Resource(array(
+            'basePath' => APPLICATION_PATH . '/modules/storefront',
+            'namespace' => 'Storefront'
             )
         );
+        $loader->addResourceType('Model', 'models', 'Model');
+
+        // configure another loader so we can replace Model Resources
+        $loader = new Zend_Loader_Autoloader_Resource(array(
+            'basePath' => dirname(__FILE__),
+            'namespace' => 'Storefront'
+            )
+        );
+        $loader->addResourceType('ModelResource', 'TestResources', 'Resource');
+    }
+    
+    protected function setUp()
+    {      
+        $this->_model = new Storefront_Model_Catalog();
     }
     
     protected function tearDown()
@@ -70,7 +84,7 @@ class CatalogTest extends PHPUnit_Framework_TestCase
     
     public function test_Catalog_Can_Get_Categories_By_parentId()
     {
-        $cats= $this->_model->getCategories(0);
+        $cats= $this->_model->getCategoriesByParentId(0);
         
         $this->assertType('Zend_Db_Table_Rowset', $cats);
         $this->assertEquals(6, count($cats));
@@ -87,15 +101,9 @@ class CatalogTest extends PHPUnit_Framework_TestCase
     public function test_Catalog_Can_Get_Category_Parent()
     {
         $category = $this->_model->getCategoryByIdent('Category-8');
-        $parent   = $this->_model->getParentCategory($category);
+        $parent   = $category->getParentCategory();
 
         $this->assertType('Storefront_Resource_Category_Item_Interface', $parent);
-        $this->assertEquals(7, $parent->categoryId);
-        
-        $category = $this->_model->getCategoryByIdent('Category-1');
-        $parent   = $this->_model->getParentCategory($category);
-        
-        $this->assertNull($parent);
-        
+        $this->assertEquals(8, $parent->categoryId);        
     }
 }
