@@ -8,7 +8,7 @@ class Storefront_CatalogController extends Zend_Controller_Action
     
     public function init()
     {
-        $this->_catalogModel = $this->_helper->resourceLoader->getModel('Catalog');
+        $this->_catalogModel = new Storefront_Model_Catalog();
     }
 
     public function indexAction()

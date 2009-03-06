@@ -11,12 +11,5 @@
  */
 interface SF_Model_Interface
 {
-
-    public function __construct($options = null);
-
-    public function setOptions(array $options);
-
-    public function setConfig(Zend_Config $config);
-
-    public function init();
+    public function getResource($name);
 }

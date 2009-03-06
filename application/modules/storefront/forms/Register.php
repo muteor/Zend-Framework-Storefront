@@ -16,7 +16,7 @@ class Storefront_Form_Register extends Zend_Form
         // add path to custom validators
         $this->addElementPrefixPath(
             'Storefront_Validate', 
-            Zend_Registry::get('root') . '/application/modules/storefront/models/validate/', 
+            APPLICATION_PATH . '/modules/storefront/models/validate/',
             'validate'
         );
         

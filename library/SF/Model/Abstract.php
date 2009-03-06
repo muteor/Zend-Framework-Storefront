@@ -5,12 +5,10 @@ require_once 'SF/Model/Interface.php';
 /**
  * SF_Model_Abstract
  * 
- * Base model class that all our models will inherit from, modules
- * need to make their own base class so they can apply module specific 
- * settings.
+ * Base model class that all our models will inherit from.
  * 
  * The main purpose of the base model is to provide models with a way
- * of handling their resources and class loading functionality.
+ * of handling their resources.
  * 
  * @category   Storefront
  * @package    SF_Model
@@ -18,130 +16,11 @@ require_once 'SF/Model/Interface.php';
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 abstract class SF_Model_Abstract implements SF_Model_Interface 
-{   
-    /**
-     * @var Zend_Loader_PluginLoader
-     */
-    protected $_loader;
-    
+{      
     /**
      * @var array Model resource instances
      */
     protected $_instances = array();
-    
-    /**
-     * @var string The path to the model resources
-     */
-    protected $_resourcePath;
-    
-    /**
-     * @var string The prefix of the model resources
-     */
-    protected $_resourcePrefix;
-    
-    /**
-     * Construct
-     *
-     * @param array $options Optional options array
-     */
-    public function __construct($options = null)
-    {
-        // inits the module specific defaults (can be overwritten for testing)
-        $this->initDefaults();
-        
-        if (is_array($options)) {
-            $this->setOptions($options);
-        } elseif ($options instanceof Zend_Config) {
-            $this->setConfig($options);
-        }
-        
-        // extensions
-        $this->init();
-    }
-    
-    /**
-     * Set the options
-     *
-     * @param array $options
-     * @return SF_Model_Abstract
-     */
-    public function setOptions(array $options)
-    {
-        if (isset($options['prefix'])) {
-            $this->setResourcePrefix($options['prefix']);
-            unset($options['prefix']);
-        }
-        
-        if (isset($options['path'])) {
-            $this->setResourcePath($options['path']);
-            unset($options['path']);
-        }
-        
-        return $this;
-    }
-    
-    /**
-     * Set options via Zend_Config
-     *
-     * @param Zend_Config $config
-     * @return SF_Model_Abstract
-     */
-    public function setConfig(Zend_Config $config)
-    {
-        return $this->setOptions($config->toArray());
-    }
-    
-    /**
-     * Used by extending classes
-     */
-    public function init()
-    {}
-    
-    /**
-     * Set the resource class path
-     *
-     * @param string $path
-     * @return SF_Model_Abstract
-     */
-    public function setResourcePath($path)
-    {
-        $this->_resourcePath = $path;
-        
-        return $this;
-    }
-    
-    /**
-     * Set the prefix (used in setOptions)
-     *
-     * @param string $prefix
-     * @return SF_Model_Abstract
-     */
-    public function setResourcePrefix($prefix)
-    {
-        $this->_resourcePrefix = $prefix;
-        
-        return $this;
-    }
-    
-    /**
-     * Get the class path for the resources
-     *
-     * @return string|null
-     */
-    public function getResourcePath()
-    {
-        return $this->_resourcePath;
-    }
-    
-    /**
-     * Get the class prefix to use when loading resources
-     *
-     * @return string|null
-     */
-    public function getResourcePrefix()
-    {
-        return $this->_resourcePrefix;
-    }
 	
 	/**
 	 * Get a resource
@@ -151,9 +30,11 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
 	 */
 	public function getResource($name) 
 	{
-        $current = explode('_', get_class($this));
-        $class = join('_', array($current[0], 'Resource', ucfirst($name)));
-        $inst = new $class();
-	    return $inst;
+        if (!isset($this->_instances[$name])) {
+            $current = explode('_', get_class($this));
+            $class = join('_', array($current[0], 'Resource', ucfirst($name)));
+            $this->_instances[$name] = new $class();
+        }
+	    return $this->_instances[$name];
 	}
 }

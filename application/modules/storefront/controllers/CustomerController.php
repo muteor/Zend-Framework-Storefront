@@ -13,10 +13,10 @@ class Storefront_CustomerController extends Zend_Controller_Action
     protected $_forms = array();
     protected $_authAdapter;
     
-    public function preDispatch()
+    public function init()
     {
         // get the default model
-        $this->_model = $this->_helper->resourceLoader->getModel('User');
+        $this->_model = new Storefront_Model_User();
         
         // add forms
         $this->view->registerForm = $this->getRegistrationForm();
@@ -74,7 +74,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
             return $this->render('login');
         }
         
-        $authService = $this->_helper->getService('authentication');
+        $authService = new Storefront_Service_Authentication();
         if (false === $authService->authenticate($form->getValues())) {
             $form->setDescription('Login failed, please try again.');
             return $this->render('login');
@@ -85,7 +85,8 @@ class Storefront_CustomerController extends Zend_Controller_Action
 	
 	public function logoutAction()
     {
-        $this->_helper->getService('authentication')->clear();
+        $authService = new Storefront_Service_Authentication();
+        $authService->clear();
         $this->_helper->redirector('index');
     }
     
@@ -93,7 +94,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
     {
         $urlHelper = $this->_helper->getHelper('url');
         
-        $this->_forms['register'] = $this->_helper->resourceLoader->getForm('register');
+        $this->_forms['register'] = new Storefront_Form_Register();
         $this->_forms['register']->setAction($urlHelper->url(array(
             'controller' => 'customer' , 
             'action' => 'post'
@@ -109,7 +110,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
     {
         $urlHelper = $this->_helper->getHelper('url');
         
-        $this->_forms['login'] = $this->_helper->resourceLoader->GetForm('login');
+        $this->_forms['login'] = new Storefront_Form_Login();
         $this->_forms['login']->setAction($urlHelper->url(array(
             'controller' => 'customer',
             'action'     => 'authenticate',

@@ -9,6 +9,12 @@ class Storefront_Bootstrap extends Zend_Application_Module_Bootstrap
                     'models/resources',
                     'Resource'
                );
+         $this->getResourceLoader()
+               ->addResourceType(
+                    'service',
+                    'services',
+                    'Service'
+               );
     }
 
     public function run(){}
