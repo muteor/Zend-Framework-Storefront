@@ -1,5 +1,5 @@
 <?php
-class Storefront_Model_User extends Storefront_Model_Storefront
+class Storefront_Model_User extends SF_Model_Abstract
 {   
     public function getUserById($id)
     {
@@ -7,14 +7,14 @@ class Storefront_Model_User extends Storefront_Model_Storefront
         return $this->getResource('User')->getUserById($id);
     }
 
-    public function getUserByEmail($email)
+    public function getUserByEmail($email, $ignoreUser=null)
     {
-        return $this->getResource('User')->getUserByEmail($email);
+        return $this->getResource('User')->getUserByEmail($email, $ignoreUser);
     }
     
-    public function getUsers()
+    public function getUsers($paged=false, $order=null)
     {
-        return $this->getResource('User')->getUsers();
+        return $this->getResource('User')->getUsers($paged, $order);
     }
     
     public function saveUser($info)

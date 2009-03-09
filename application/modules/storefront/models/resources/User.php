@@ -21,9 +21,16 @@ class Storefront_Resource_User extends SF_Model_Resource_Db_Table_Abstract imple
         return $this->find($id)->current();
     }
     
-    public function getUserByEmail($email)
+    public function getUserByEmail($email, $ignoreUser=null)
     {
-        return $this->fetchRow($this->select()->where('email = ?', $email));
+        $select = $this->select();
+        $select->where('email = ?', $email);
+
+        if (null !== $ignoreUser) {
+            $select->where('email != ?', $ignoreUser->email);
+        }
+
+        return $this->fetchRow($select);
     }
     
     public function getUsers()
