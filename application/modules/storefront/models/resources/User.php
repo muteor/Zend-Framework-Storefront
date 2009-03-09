@@ -18,7 +18,7 @@ class Storefront_Resource_User extends SF_Model_Resource_Db_Table_Abstract imple
 
     public function getUserById($id)
     {
-        return $this->find($id);
+        return $this->find($id)->current();
     }
     
     public function getUserByEmail($email)

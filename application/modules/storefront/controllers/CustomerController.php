@@ -10,8 +10,6 @@
 class Storefront_CustomerController extends Zend_Controller_Action 
 {
     protected $_model;
-    protected $_forms = array();
-    protected $_authAdapter;
     
     public function init()
     {
@@ -24,13 +22,10 @@ class Storefront_CustomerController extends Zend_Controller_Action
     }
     
 	public function indexAction() 
-	{
-	}
+	{}
 
 	public function registerAction()
-	{ 
-        
-	}
+	{}
 	
     public function postAction()
     {
@@ -40,15 +35,9 @@ class Storefront_CustomerController extends Zend_Controller_Action
             return $this->_helper->redirector('register');
         }
 
-        // validate form
-        $form = $this->_forms['register'];
-        if (!$form->isValid($request->getPost())) {
+        if (false === ($id = $this->_model->saveUser($request->getPost()))) {
             return $this->render('register');
         }
-        
-	    // Valid form
-        $id = $this->_model->saveUser($form->getValues());
-        
 	}
 	
 	public function listAction()
@@ -61,7 +50,6 @@ class Storefront_CustomerController extends Zend_Controller_Action
 	
 	public function authenticateAction()
 	{
-		$this->view->showQueries = true;
         $request = $this->getRequest();
 
         if (!$request->isPost()) {
@@ -94,7 +82,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
     {
         $urlHelper = $this->_helper->getHelper('url');
         
-        $this->_forms['register'] = new Storefront_Form_Register();
+        $this->_forms['register'] = $this->_model->getForm('register');
         $this->_forms['register']->setAction($urlHelper->url(array(
             'controller' => 'customer' , 
             'action' => 'post'
@@ -110,7 +98,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
     {
         $urlHelper = $this->_helper->getHelper('url');
         
-        $this->_forms['login'] = new Storefront_Form_Login();
+        $this->_forms['login'] = $this->_model->getForm('login');
         $this->_forms['login']->setAction($urlHelper->url(array(
             'controller' => 'customer',
             'action'     => 'authenticate',

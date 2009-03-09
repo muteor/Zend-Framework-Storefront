@@ -20,7 +20,12 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
     /**
      * @var array Model resource instances
      */
-    protected $_instances = array();
+    protected $_resources = array();
+
+    /**
+     * @var array Form instances
+     */
+    protected $_forms = array();
 	
 	/**
 	 * Get a resource
@@ -30,11 +35,27 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
 	 */
 	public function getResource($name) 
 	{
-        if (!isset($this->_instances[$name])) {
+        if (!isset($this->_resources[$name])) {
             $current = explode('_', get_class($this));
             $class = join('_', array($current[0], 'Resource', ucfirst($name)));
-            $this->_instances[$name] = new $class();
+            $this->_resources[$name] = new $class();
         }
-	    return $this->_instances[$name];
+	    return $this->_resources[$name];
 	}
+
+    /**
+     * Get a Form
+     * 
+     * @param string $name
+     * @return Zend_Form 
+     */
+    public function getForm($name)
+    {
+        if (!isset($this->_forms[$name])) {
+            $current = explode('_', get_class($this));
+            $class = join('_', array($current[0], 'Form', ucfirst($name)));
+            $this->_forms[$name] = new $class();
+        }
+	    return $this->_forms[$name];
+    }
 }
