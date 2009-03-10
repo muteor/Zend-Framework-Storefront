@@ -16,8 +16,12 @@ class Storefront_Model_User extends SF_Model_Abstract
     {
         return $this->getResource('User')->getUsers($paged, $order);
     }
+
+    public function registerUser(){}
+
+    public function saveUser();
     
-    public function saveUser($info)
+    public function save($info)
     {
         $user = array_key_exists('userId', $info) ?
             $this->getResource('User')->getUserById($info['userId']) : null;
@@ -37,9 +41,7 @@ class Storefront_Model_User extends SF_Model_Abstract
             $info['passwd'] = sha1($info['passwd'] . $info['salt']);
         }
         // default role
-        if (!array_key_exists('role', $info)) {
-            $info['role'] = 'Customer';
-        }      
+        $info['role'] = 'Customer';    
         
         return $this->getResource('User')->saveRow($info, $user);        
     }
