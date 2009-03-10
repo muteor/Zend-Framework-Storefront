@@ -15,12 +15,9 @@ class Storefront_Validate_UniqueEmail extends Zend_Validate_Abstract
     public function isValid($value, $context = null)
     {
         $this->_setValue($value);
-
-        if (isset($context['userId'])) {
-            $currentUser = $this->_model->getUserById($context['userId']);
-        }
-
+        $currentUser = isset($context['userId']) ? $this->_model->getUserById($context['userId']) : null;
         $user = $this->_model->getUserByEmail($value, $currentUser);
+        
         if (null === $user) {
             return true;
         }
