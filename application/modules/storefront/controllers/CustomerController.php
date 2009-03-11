@@ -21,11 +21,27 @@ class Storefront_CustomerController extends Zend_Controller_Action
         // add forms
         $this->view->registerForm = $this->getRegistrationForm();
         $this->view->loginForm = $this->getLoginForm();
+        $this->view->userForm = $this->getUserForm();
     }
     
 	public function indexAction() 
 	{
+        $userID = 1; //will be from session
+        $this->view->user = $this->_model->getUserById($userID);
+        $this->view->userForm = $this->getUserForm()->populate($this->view->user->toArray());
+    }
 
+    public function saveAction()
+    {
+        $request = $this->getRequest();
+
+        if (!$request->isPost()) {
+            return $this->_helper->redirector('index');
+        }
+
+        if (false === ($id = $this->_model->saveUser($request->getPost()))) {
+            return $this->render('index');
+        }
     }
 
 	public function registerAction()
@@ -94,6 +110,22 @@ class Storefront_CustomerController extends Zend_Controller_Action
         $this->_forms['register']->setMethod('post');
         
         return $this->_forms['register'];
+    }
+
+    public function getUserForm()
+    {
+        $urlHelper = $this->_helper->getHelper('url');
+
+        $this->_forms['userEdit'] = $this->_model->getForm('userEdit');
+        $this->_forms['userEdit']->setAction($urlHelper->url(array(
+            'controller' => 'customer' ,
+            'action' => 'save'
+            ),
+            'default'
+        ));
+        $this->_forms['userEdit']->setMethod('post');
+
+        return $this->_forms['userEdit'];
     }
     
     public function getLoginForm()

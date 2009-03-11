@@ -13,6 +13,7 @@ class Storefront_Form_User_Register extends Zend_Form
 {
     public function init()
     {
+        Zend_Registry::get('log')->debug('parent');
         // add path to custom validators
         $this->addElementPrefixPath(
             'Storefront_Validate', 
@@ -24,13 +25,6 @@ class Storefront_Form_User_Register extends Zend_Form
             'required'   => true,
             'label'      => 'Title',
             'multiOptions' => array('Mr' => 'Mr','Ms' => 'Ms','Miss' => 'Miss','Mrs' => 'Mrs'),
-            'decorators' => array(
-                    'ViewHelper',
-                    'Errors',
-                    'Label',
-                    array('HtmlTag', array('tag' => 'div')),
-
-            )
         ));
 
         $this->addElement('text', 'firstname', array(
@@ -86,6 +80,7 @@ class Storefront_Form_User_Register extends Zend_Form
             'required' => false,
             'ignore'   => true,
             'label'    => 'Register',
+            'decorators' => array('ViewHelper',array('HtmlTag', array('tag' => 'dd', 'id' => 'form-submit')))
         ));
     }
 }
