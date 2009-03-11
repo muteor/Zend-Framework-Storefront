@@ -16,7 +16,12 @@ require_once 'SF/Model/Interface.php';
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 abstract class SF_Model_Abstract implements SF_Model_Interface 
-{      
+{
+    /**
+    * @var array Class methods
+    */
+    protected $_classMethods;
+    
     /**
      * @var array Model resource instances
      */
@@ -26,7 +31,44 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
      * @var array Form instances
      */
     protected $_forms = array();
-	
+
+   /**
+    * Constructor
+    *
+    * @param array|Zend_Config|null $options
+    * @return void
+    */
+    public function __construct($options = null)
+    {
+        if ($options instanceof Zend_Config) {
+            $options = $options->toArray();
+        }
+
+        if (is_array($options)) {
+            $this->setOptions($options);
+        }
+    }
+
+   /**
+    * Set options using setter methods
+    *
+    * @param array $options
+    * @return SF_Model_Abstract 
+    */
+    public function setOptions(array $options)
+    {
+        if (null === $this->_classMethods) {
+            $this->_classMethods = get_class_methods($this);
+        }
+        foreach ($options as $key => $value) {
+            $method = 'set' . ucfirst($key);
+            if (in_array($method, $this->_classMethods)) {
+                $this->$method($value);
+            }
+        }
+        return $this;
+    }
+
 	/**
 	 * Get a resource
 	 *

@@ -12,4 +12,5 @@
 interface SF_Model_Interface
 {
     public function getResource($name);
+    public function getForm($name);
 }
