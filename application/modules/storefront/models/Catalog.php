@@ -124,12 +124,4 @@ class Storefront_Model_Catalog extends SF_Model_Abstract
         
         return $cats;
     }
-    
-//    public function getParentCategory(Storefront_Resource_Category_Item_Interface $category)
-//    {
-//        if (0 == $category->parentId) {
-//            return null;
-//        }
-//        return $this->getResource('Category')->getParentCategory($category);
-//    }
 }

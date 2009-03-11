@@ -19,14 +19,14 @@ class Storefront_Model_User extends SF_Model_Abstract
 
     public function registerUser($post)
     {
-        $form = $this->getForm('user_register');
-        $this->save($form, $post);
+        $form = $this->getForm('userRegister');
+        return $this->save($form, $post);
     }
 
     public function saveUser($post)
     {
         $form = $this->getForm('user');
-        $this->save($form, $post);
+        return $this->save($form, $post);
     }
     
     protected function save($form, $info)

@@ -31,7 +31,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
 	public function registerAction()
 	{}
 	
-    public function postAction()
+    public function completeRegistrationAction()
     {
         $request = $this->getRequest();
 
@@ -39,7 +39,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
             return $this->_helper->redirector('register');
         }
 
-        if (false === ($id = $this->_model->saveUser($request->getPost()))) {
+        if (false === ($id = $this->_model->registerUser($request->getPost()))) {
             return $this->render('register');
         }
 	}
@@ -76,8 +76,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
 	
 	public function logoutAction()
     {
-        $authService = new Storefront_Service_Authentication();
-        $authService->clear();
+        $this->_authService->clear();
         $this->_helper->redirector('index');
     }
     
@@ -88,7 +87,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
         $this->_forms['register'] = $this->_model->getForm('userRegister');
         $this->_forms['register']->setAction($urlHelper->url(array(
             'controller' => 'customer' , 
-            'action' => 'post'
+            'action' => 'complete-registration'
             ), 
             'default'
         ));
