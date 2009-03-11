@@ -17,33 +17,42 @@ class Storefront_Model_User extends SF_Model_Abstract
         return $this->getResource('User')->getUsers($paged, $order);
     }
 
-    public function registerUser(){}
-
-    public function saveUser();
-    
-    public function save($info)
+    public function registerUser($post)
     {
-        $user = array_key_exists('userId', $info) ?
-            $this->getResource('User')->getUserById($info['userId']) : null;
+        $form = $this->getForm('user_register');
+        $this->save($form, $post);
+    }
 
-        $form = $this->getForm('register');
-        if (null !== $user) {
-            $form = $this->getForm('editUser');
-        }
-        
+    public function saveUser($post)
+    {
+        $form = $this->getForm('user');
+        $this->save($form, $post);
+    }
+    
+    protected function save($form, $info)
+    {       
         if (!$form->isValid($info)) {
             return false;
         }
 
+        // get filtered values
+        $data = $form->getValues();
+
         // password hashing
-        if (array_key_exists('passwd', $info) && '' != $info['passwd']) {
-            $info['salt'] = md5($this->createSalt());
-            $info['passwd'] = sha1($info['passwd'] . $info['salt']);
+        if (array_key_exists('passwd', $data) && '' != $data['passwd']) {
+            $data['salt'] = md5($this->createSalt());
+            $data['passwd'] = sha1($data['passwd'] . $data['salt']);
         }
+
         // default role
-        $info['role'] = 'Customer';    
+        if (!array_key_exists('role', $data)) {
+            $data['role'] = 'Customer';
+        }
+
+        $user = array_key_exists('userId', $data) ?
+            $this->getResource('User')->getUserById($data['userId']) : null;
         
-        return $this->getResource('User')->saveRow($info, $user);        
+        return $this->getResource('User')->saveRow($data, $user);
     }
     
     private function createSalt()

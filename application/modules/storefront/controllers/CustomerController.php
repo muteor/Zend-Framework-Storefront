@@ -10,19 +10,23 @@
 class Storefront_CustomerController extends Zend_Controller_Action 
 {
     protected $_model;
+    protected $_authService;
     
     public function init()
     {
         // get the default model
         $this->_model = new Storefront_Model_User();
-        
+        $this->_authService = new Storefront_Service_Authentication();
+
         // add forms
         $this->view->registerForm = $this->getRegistrationForm();
         $this->view->loginForm = $this->getLoginForm();
     }
     
 	public function indexAction() 
-	{}
+	{
+
+    }
 
 	public function registerAction()
 	{}
@@ -62,8 +66,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
             return $this->render('login');
         }
         
-        $authService = new Storefront_Service_Authentication();
-        if (false === $authService->authenticate($form->getValues())) {
+        if (false === $this->_authService->authenticate($form->getValues())) {
             $form->setDescription('Login failed, please try again.');
             return $this->render('login');
         }
@@ -82,7 +85,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
     {
         $urlHelper = $this->_helper->getHelper('url');
         
-        $this->_forms['register'] = $this->_model->getForm('register');
+        $this->_forms['register'] = $this->_model->getForm('userRegister');
         $this->_forms['register']->setAction($urlHelper->url(array(
             'controller' => 'customer' , 
             'action' => 'post'

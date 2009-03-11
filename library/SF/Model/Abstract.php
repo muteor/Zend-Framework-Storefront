@@ -36,8 +36,11 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
 	public function getResource($name) 
 	{
         if (!isset($this->_resources[$name])) {
-            $current = explode('_', get_class($this));
-            $class = join('_', array($current[0], 'Resource', ucfirst($name)));
+            $class = join('_', array(
+                    $this->_getNamespace(),
+                    'Resource',
+                    $this->_getInflected($name)
+            ));
             $this->_resources[$name] = new $class();
         }
 	    return $this->_resources[$name];
@@ -52,10 +55,42 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
     public function getForm($name)
     {
         if (!isset($this->_forms[$name])) {
-            $current = explode('_', get_class($this));
-            $class = join('_', array($current[0], 'Form', ucfirst($name)));
+            $class = join('_', array(
+                    $this->_getNamespace(),
+                    'Form',
+                    $this->_getInflected($name)
+            ));
             $this->_forms[$name] = new $class();
         }
 	    return $this->_forms[$name];
+    }
+
+    /**
+     * Classes are named spaced using their module name
+     * this returns that module name or the first class name segment.
+     * 
+     * @return string This class namespace 
+     */
+    private function _getNamespace()
+    {
+        $ns = explode('_', get_class($this));
+        return $ns[0];
+    }
+
+    /**
+     * Inflect the name using the inflector filter
+     * 
+     * Changes camelCaseWord to Camel_Case_Word
+     * 
+     * @param string $name The name to inflect
+     * @return string The inflected string 
+     */
+    private function _getInflected($name)
+    {
+        $inflector = new Zend_Filter_Inflector(':class');
+        $inflector->setRules(array(
+            ':class'  => array('Word_CamelCaseToUnderscore')
+        ));
+        return ucfirst($inflector->filter(array('class' => $name)));
     }
 }
