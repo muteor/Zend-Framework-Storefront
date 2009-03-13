@@ -25,6 +25,8 @@ class Storefront_Model_User extends SF_Model_Abstract
 
     public function saveUser($post)
     {
+        //check user role here so that we can lock customers
+        //to their userId only maybe use the auth or acl?
         $form = $this->getForm('userEdit');
         return $this->save($form, $post);
     }
