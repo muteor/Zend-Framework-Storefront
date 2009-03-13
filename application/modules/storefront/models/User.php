@@ -20,7 +20,7 @@ class Storefront_Model_User extends SF_Model_Abstract
     public function registerUser($post)
     {
         $form = $this->getForm('userRegister');
-        return $this->save($form, $post, null);
+        return $this->save($form, $post, array('role' => 'Customer'));
     }
 
     public function saveUser($post)
@@ -29,7 +29,7 @@ class Storefront_Model_User extends SF_Model_Abstract
         return $this->save($form, $post);
     }
     
-    protected function save($form, $info)
+    protected function save($form, $info, $defaults=array())
     {       
         if (!$form->isValid($info)) {
             return false;
@@ -37,9 +37,6 @@ class Storefront_Model_User extends SF_Model_Abstract
 
         // get filtered values
         $data = $form->getValues();
-
-        $user = array_key_exists('userId', $data) ?
-            $this->getResource('User')->getUserById($data['userId']) : null;
 
         // password hashing
         if (array_key_exists('passwd', $data) && '' != $data['passwd']) {
@@ -49,11 +46,14 @@ class Storefront_Model_User extends SF_Model_Abstract
             unset($data['passwd']);
         }
 
-        // default role
-        if (!array_key_exists('role', $data) && null === $user && '' == $user->role) {
-                $data['role'] = 'Customer';
+        // apply any defaults
+        foreach ($defaults as $col => $value) {
+            $data[$col] = $value;
         }
-        
+
+        $user = array_key_exists('userId', $data) ?
+            $this->getResource('User')->getUserById($data['userId']) : null;
+
         return $this->getResource('User')->saveRow($data, $user);
     }
     

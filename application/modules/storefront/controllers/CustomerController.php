@@ -132,7 +132,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
     {
         $urlHelper = $this->_helper->getHelper('url');
         
-        $this->_forms['login'] = $this->_model->getForm('login');
+        $this->_forms['login'] = $this->_model->getForm('userLogin');
         $this->_forms['login']->setAction($urlHelper->url(array(
             'controller' => 'customer',
             'action'     => 'authenticate',
