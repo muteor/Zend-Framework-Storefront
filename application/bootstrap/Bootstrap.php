@@ -1,25 +1,40 @@
-<?
+<?php
 class Bootstrap extends Zend_Application_Bootstrap_Base
 {
     protected $_logger;
     protected $_front;
     protected $_config;
+    protected $_resourceLoader;
+    /**
+     *
+     * @var Zend_Controller_Front
+     */
     public $frontController;
 
-    public function _initFrontController()
+    protected function _initDefaultAutoloader()
     {
-        $this->bootstrapLogging();
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-        
-        $this->_front = Zend_Controller_Front::getInstance();
-        $this->frontController = $this->_front;
-        if ('development' === $this->getEnvironment()) {
-            $this->_front->throwExceptions(true);
+        if (null === $this->_resourceLoader) {
+            $this->_resourceLoader = new Zend_Application_Module_Autoloader(array(
+                'namespace' => 'Storefront',
+                'basePath'  => APPLICATION_PATH . '/modules/storefront',
+            ));
+            $this->_resourceLoader
+               ->addResourceType(
+                    'modelResource',
+                    'models/resources',
+                    'Resource'
+               );
+             $this->_resourceLoader
+                   ->addResourceType(
+                        'service',
+                        'services',
+                        'Service'
+                   );
         }
-        return $this;
+        return $this->_resourceLoader;
     }
 
-    public function _initLogging()
+    protected function _initLogging()
     {
         $logger = new Zend_Log();
 
@@ -90,17 +105,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
         return $this;
     }
 
-    public function _initControllers()
+    protected function _initControllers()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
-        
-        $this->bootstrapFrontController();
-        $this->_front->getDispatcher()->setParam('prefixDefaultModule', true);
-        $this->_front->addModuleDirectory(APPLICATION_PATH . '/modules');
-        $this->_front->setDefaultModule('storefront');
+        $this->bootstrap('frontController');
+        $this->frontController->getDispatcher()->setParam('prefixDefaultModule', true);
+        $this->frontController->setDefaultModule('storefront');
+        if ('development' === $this->getEnvironment()) {
+            $this->frontController->throwExceptions(true);
+        }
     }
 
-    public function _initView()
+    protected function _initView()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
 
@@ -142,13 +158,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
      * Register additional plugins, only ones that use
      * hooks after routeStartup though!
      */
-    public function _initFrontPlugins()
+    protected function _initFrontPlugins()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
 
-        $this->bootstrapFrontController();
-        $this->_front->registerPlugin( new SF_Plugin_Action());
-        $this->_front->registerPlugin( new SF_Plugin_AdminContext());
+        $this->bootstrap('frontController');
+        $this->frontController->registerPlugin( new SF_Plugin_Action());
+        $this->frontController->registerPlugin( new SF_Plugin_AdminContext());
 
         return $this;
     }
@@ -156,12 +172,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
     /**
      * Add required routes to the router
      */
-    public function _initRoutes()
+    protected function _initRoutes()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
-        $this->bootstrapFrontController();
+        $this->bootstrap('frontController');
 
-        $router = $this->_front->getRouter();
+        $router = $this->frontController->getRouter();
 
         // Admin context route
         $route = new Zend_Controller_Router_Route(
@@ -214,6 +230,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
 
     public function run()
     {
-        $this->_front->dispatch();
+        $this->frontController->dispatch();
     }
 }
