@@ -78,5 +78,5 @@ Zend_Registry::set('root', $root);
 /**
  * Ignore folders from code coverage etc
  */
-//PHPUnit_Util_Filter::addDirectoryToFilter($tests);
-//PHPUnit_Util_Filter::addDirectoryToFilter("$lib/Zend");
+PHPUnit_Util_Filter::addDirectoryToFilter("$root/tests");
+PHPUnit_Util_Filter::addDirectoryToFilter("$root/library/Zend");

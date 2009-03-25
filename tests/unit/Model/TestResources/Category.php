@@ -45,10 +45,11 @@ class Storefront_Resource_Category extends PHPUnit_Framework_TestCase implements
             $mock->parentId = $i > 5 ? ($i-1) : 0; 
             $mock->ident = 'Category-' . $i;
 
+            if($i > 0) {
             $mock->expects($this->any())
                       ->method('getParentCategory')
-                      ->will($this->returnValue($mock));
-            
+                      ->will($this->returnValue($data[$i-1]));
+            }
             $data[] = $mock;
         }
         
@@ -65,7 +66,7 @@ class Storefront_Resource_Category extends PHPUnit_Framework_TestCase implements
                 $found[] = $cat;
             }
         }
-        return new Zend_Db_Table_Rowset(array('data' => $found));
+        return $found;
     }
     
     public function getCategoryById ($id)

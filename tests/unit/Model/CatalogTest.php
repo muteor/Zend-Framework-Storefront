@@ -5,11 +5,6 @@
 require_once dirname(__FILE__) . '/../../TestHelper.php';
 
 /**
- * Catalog Model
- */
-//require_once 'modules/storefront/models/Catalog.php';
-
-/**
  * Test case for Storefront_Catalog
  * 
  * This test simply tests the interface between the model
@@ -43,7 +38,7 @@ class CatalogTest extends PHPUnit_Framework_TestCase
             'namespace' => 'Storefront'
             )
         );
-        $loader->addResourceType('ModelResource', 'TestResources', 'Resource');
+        $loader->addResourceType('modelResource', 'TestResources', 'Resource');
     }
     
     protected function setUp()
@@ -86,7 +81,6 @@ class CatalogTest extends PHPUnit_Framework_TestCase
     {
         $cats= $this->_model->getCategoriesByParentId(0);
         
-        $this->assertType('Zend_Db_Table_Rowset', $cats);
         $this->assertEquals(6, count($cats));
     }
     
@@ -104,6 +98,35 @@ class CatalogTest extends PHPUnit_Framework_TestCase
         $parent   = $category->getParentCategory();
 
         $this->assertType('Storefront_Resource_Category_Item_Interface', $parent);
-        $this->assertEquals(8, $parent->categoryId);        
+        $this->assertEquals(7, $parent->categoryId);
+    }
+
+    public function test_Catalog_Can_Get_Products_By_CategoryId()
+    {
+        $products = $this->_model->getProductsByCategory(1, false, null, true);
+        $this->assertEquals(1, $products[0]->categoryId);
+    }
+
+    public function test_Catalog_Can_Get_Products_By_CategoryIdent()
+    {
+        $products = $this->_model->getProductsByCategory('Category-1', false, null, true);
+        $this->assertEquals(1, $products[0]->categoryId);
+    }
+
+    public function test_Catalog_Can_Get_Category_Children_Ids()
+    {
+        $ids =$this->_model->getCategoryChildrenIds(6, true);
+        $this->assertEquals(3, count($ids));
+    }
+
+    public function test_Catalog_Can_Get_Category_Parents()
+    {
+        $category = $this->_model->getCategoryByIdent('Category-8');
+        $cats =$this->_model->getParentCategories($category);
+        $this->assertEquals(6, count($cats));
+
+        $category = $this->_model->getCategoryByIdent('Category-1');
+        $cats =$this->_model->getParentCategories($category);
+        $this->assertEquals(1, count($cats));
     }
 }
