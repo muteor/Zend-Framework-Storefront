@@ -2,7 +2,7 @@
 require_once 'modules/storefront/models/resources/User/Interface.php';
 require_once 'modules/storefront/models/resources/User/Item/Interface.php';
 
-class Test_User extends PHPUnit_Framework_TestCase implements Storefront_Resource_User_Interface 
+class Storefront_Resource_User extends PHPUnit_Framework_TestCase implements Storefront_Resource_User_Interface
 {
     protected $_rowset = null;
     
@@ -36,7 +36,7 @@ class Test_User extends PHPUnit_Framework_TestCase implements Storefront_Resourc
         return null;
     }
     
-    public function getUserByEmail($email)
+    public function getUserByEmail($email, $ignoreUser=null)
     {
         foreach ($this->_rowset as $user) {
             if($email === $user->email) {
@@ -45,6 +45,9 @@ class Test_User extends PHPUnit_Framework_TestCase implements Storefront_Resourc
         }
         return null;
     }
+    
+    public function getUsers($paged=false, $order=null)
+    {}
     
     public function info($key = null)
     {
@@ -55,12 +58,12 @@ class Test_User extends PHPUnit_Framework_TestCase implements Storefront_Resourc
     
     public function createRow(array $data = array(), $defaultSource = null)
     {
-        $mock = $this->getMock('Storefront_Resource_User_Item_Interface', array('save'));
+        $mock = $this->getMock('Storefront_Resource_User_Item_Interface', array('getFullname', 'save'));
         $mock->expects($this->any())
              ->method('save')
              ->will($this->returnValue(10));
        
-        $this->_rowset[] = $mock;
+        $this->_rowset[10] = $mock;
         
         return $mock;
     }
@@ -70,12 +73,14 @@ class Test_User extends PHPUnit_Framework_TestCase implements Storefront_Resourc
 		if (null === $row) {
             $row = $this->createRow();
         }
-        
+
         $columns = $this->info('cols');
         foreach ($columns as $column) {
             if (array_key_exists($column, $info)) {
                 $row->$column = $info[$column];
             }
         }
+
+        return $row->save();
 	}
 }
