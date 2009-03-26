@@ -47,7 +47,15 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
         if (is_array($options)) {
             $this->setOptions($options);
         }
+
+        $this->init();
     }
+
+    /**
+     * Constructor extensions
+     */
+    public function init()
+    {}
 
    /**
     * Set options using setter methods

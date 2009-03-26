@@ -39,12 +39,7 @@ class CartTest extends PHPUnit_Framework_TestCase
         $this->_model = null;
     }
 
-    public function test_Cart_Is_Countable()
-    {
-        $this->assertEquals(0, count($this->_model));
-    }
-
-    public function test_Cart_Can_Add_An_Item()
+    protected function getProductMock()
     {
         $product = $this->getMock('Storefront_Resource_Product_Item_Interface');
         $product->productId = 1;
@@ -59,10 +54,56 @@ class CartTest extends PHPUnit_Framework_TestCase
         $product->deliveryMethod = 'Mail';
         $product->stockStatus = 'InStock';
 
-        $cartItem = $this->_model->addItem($product, 10);
-        $cartItem = $this->_model->addItem($product, 10);
-        $cartItem = $this->_model->addItem($product, 10);
+        return $product;
+    }
 
+    public function test_Cart_Is_Countable()
+    {
+        $this->assertEquals(0, count($this->_model));
+    }
+
+    public function test_Cart_Can_Add_An_Item()
+    {
+        $product = $this->getProductMock();
+
+        $product2 = clone $product;
+        $product2->productId = 2;
+
+        $product3 = clone $product;
+        $product3->productId = 3;
+
+        $cartItem = $this->_model->addItem($product, 10);
+        $cartItem = $this->_model->addItem($product, 5);
+        $cartItem = $this->_model->addItem($product2, 10);
+        $cartItem = $this->_model->addItem($product3, 10);
+
+        // check return type and amount of items
         $this->assertType('Storefront_Resource_Cart_Item', $cartItem);
+        $this->assertEquals(3, count($this->_model));
+        
+        // have items been corretly added
+        $this->assertEquals(1, $this->_model[1]->productId);
+        $this->assertEquals(2, $this->_model[2]->productId);
+        $this->assertEquals(3, $this->_model[3]->productId);
+
+        // adding same should update item
+        $this->assertEquals(5, $this->_model[1]->qty);
+    }
+
+    public function test_Cart_Can_Remove_Item()
+    {
+        $product = $this->getProductMock();
+
+        //remove using int
+        $this->_model->addItem($product, 10);
+        $this->assertEquals(1, count($this->_model));
+        $this->_model->removeItem(1);
+        $this->assertEquals(0, count($this->_model));
+
+        //remove using object
+        $this->_model->addItem($product, 10);
+        $this->assertEquals(1, count($this->_model));
+        $this->_model->removeItem($product);
+        $this->assertEquals(0, count($this->_model));
     }
 }

@@ -9,185 +9,164 @@
  */
 class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterator, Countable, ArrayAccess
 {
-    /**
+   /**
      * The cart item objects
-     * 
-     * @var array 
+     *
+     * @var array
      */
     protected $_items = array();
-    
+
     /**
-     * Iterator pointer.
+     * Adds or updates an item contained with the shopping cart
      *
-     * @var integer
+     * @param Storefront_Resource_Product_Item_Interface $product
+     * @param int $qty
+     * @return Storefront_Resource_Cart_Item
      */
-    protected $_pointer = 0;
-
-    /**
-     * How many cart items there are.
-     *
-     * @var integer
-     */
-    protected $_count;
-
-    /**
-     * Initialize the model
-     */
-    public function init()
-    {
-        parent::init();
-
-        $this->_count = count($this->_items);
-    }
-
     public function addItem(Storefront_Resource_Product_Item_Interface $product, $qty)
     {
-        ++$this->_count;
-        $item = new Storefront_Resource_Cart_Item($product, $qty);
-        $this->_items[] = $item;
+        $item = new Storefront_Resource_Cart_Item($product, $qty);   
+        $this->_items[$item->productId] = $item;
         return $item;
-    }
-    
-    /**
-     * Rewind the Iterator to the first element.
-     * Similar to the reset() function for arrays in PHP.
-     * Required by interface Iterator.
-     *
-     * @return Storefront_Model_Cart Fluent interface.
-     */
-    public function rewind()
-    {
-        $this->_pointer = 0;
-        return $this;
     }
 
     /**
-     * Return the current element.
-     * Similar to the current() function for arrays in PHP
-     * Required by interface Iterator.
+     * Remove an item for the shopping cart
+     * 
+     * @param int|Storefront_Resource_Product_Item_Interface $product
+     */
+    public function removeItem($product)
+    {
+        if (is_int($product)) {
+            unset($this->_items[$product]);
+        }
+
+        if ($product instanceof Storefront_Resource_Product_Item_Interface) {
+            unset($this->_items[$product->productId]);
+        }
+    }
+
+    /**
+     * Does the given offset exist?
      *
-     * @return Storefront_Model_Cart current element from the collection
+     * @param string|int $key key
+     * @return boolean offset exists?
+     */
+    public function offsetExists($key)
+    {
+        return isset($this->_items[$key]);
+    }
+
+    /**
+     * Returns the given offset.
+     *
+     * @param string|int $key key
+     * @return mixed
+     */
+    public function offsetGet($key)
+    {
+        return $this->_items[$key];
+    }
+
+    /**
+     * Sets the value for the given offset.
+     *
+     * @param string|int $key
+     * @param mixed $value
+     */
+    public function offsetSet($key, $value)
+    {
+        return $this->_items[$key] = $value;
+    }
+
+    /**
+     * Unset the given element.
+     *
+     * @param string|int $key
+     */
+    public function offsetUnset($key)
+    {
+        unset($this->_items[$key]);
+    }
+
+    /**
+     * Returns the current row.
+     *
+     * @return array|boolean current row 
      */
     public function current()
     {
-        if ($this->valid() === false) {
-            return null;
-        }
-        // return the row object
-        return $this->_items[$this->_pointer];
+        return current($this->_items);
     }
 
     /**
-     * Return the identifying key of the current element.
-     * Similar to the key() function for arrays in PHP.
-     * Required by interface Iterator.
+     * Returns the current key.
      *
-     * @return int
+     * @return array|boolean current key
      */
     public function key()
-    {
-        return $this->_pointer;
+    {;
+        return key($this->_items);
     }
 
     /**
-     * Move forward to next element.
-     * Similar to the next() function for arrays in PHP.
-     * Required by interface Iterator.
+     * Moves the internal pointer to the next item and
+     * returns the new current item or false.
      *
-     * @return void
+     * @return array|boolean next item
      */
     public function next()
     {
-        ++$this->_pointer;
+        return next($this->_items);
     }
 
     /**
-     * Check if there is a current element after calls to rewind() or next().
-     * Used to check if we've iterated to the end of the collection.
-     * Required by interface Iterator.
+     * Reset to the first item and return.
      *
-     * @return bool False if there's nothing more to iterate over
+     * @return array|boolean first item or false
+     */
+    public function rewind()
+    {
+        return reset($this->_items);
+    }
+
+    /**
+     * Is the pointer set to a valid item?
+     *
+     * @return boolean valid item?
      */
     public function valid()
     {
-        return $this->_pointer < $this->_count;
+        return current($this->_items) !== false;
     }
 
     /**
-     * Returns the number of elements in the collection.
+     * Seek to the given index.
      *
-     * Implements Countable::count()
+     * @param int $index seek index
+     */
+    public function seek($index)
+    {
+        $this->rewind();
+        $position = 0;
+
+        while ($position < $index && $this->valid()) {
+            $this->next();
+            $position++;
+        }
+
+        if (!$this->valid()) {
+            throw new SF_Model_Exception('Invalid seek position');
+        }
+    }
+
+    /**
+     * Count the cart items
      *
-     * @return int
+     * @return int row count
      */
     public function count()
     {
-        return $this->_count;
-    }
-
-    /**
-     * Take the Iterator to position $position
-     * Required by interface SeekableIterator.
-     *
-     * @param int $position the position to seek to
-     * @return Storefront_Resource_Cart_Item
-     * @throws  SF_Model_Exception
-     */
-    public function seek($position)
-    {
-        $position = (int) $position;
-        if ($position < 0 || $position > $this->_count) {
-            throw new SF_Model_Exception("Illegal index $position");
-        }
-        $this->_pointer = $position;
-        return $this;
-    }
-
-    /**
-     * Check if an offset exists
-     * Required by the ArrayAccess implementation
-     *
-     * @param string $offset
-     * @return boolean
-     */
-    public function offsetExists($offset)
-    {
-        return isset($this->_items[(int) $offset]);
-    }
-
-    /**
-     * Get the row for the given offset
-     * Required by the ArrayAccess implementation
-     *
-     * @param string $offset
-     * @return Zend_Db_Table_Row_Abstract
-     */
-    public function offsetGet($offset)
-    {
-        $this->_pointer = (int) $offset;
-
-        return $this->current();
-    }
-
-    /**
-     * Does nothing
-     * Required by the ArrayAccess implementation
-     *
-     * @param string $offset
-     * @param mixed $value
-     */
-    public function offsetSet($offset, $value)
-    {
-    }
-
-    /**
-     * Does nothing
-     * Required by the ArrayAccess implementation
-     *
-     * @param string $offset
-     */
-    public function offsetUnset($offset)
-    {
-        unset($this->_items[$offset]);
+        return count($this->_items);
     }
 }

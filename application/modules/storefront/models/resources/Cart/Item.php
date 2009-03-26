@@ -20,11 +20,11 @@ class Storefront_Resource_Cart_Item
 
     public function __construct(Storefront_Resource_Product_Item_Interface$product, $qty)
     {
-        $this->productId           = $product->productId;
+        $this->productId           = (int) $product->productId;
         $this->name                 = $product->name;
         $this->price                 = $product->price;
         $this->taxable              = $product->taxable;
         $this->discountPercent  = $product->discountPercent;
-        $this->qty                    = $qty;
+        $this->qty                    = (int) $qty;
     }
 }
