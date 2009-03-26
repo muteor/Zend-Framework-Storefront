@@ -17,6 +17,13 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
     protected $_items = array();
 
     /**
+     * ZNS for Persistance
+     * 
+     * @var Zend_Session_Namespace
+     */
+    protected $_sessionNs;
+
+    /**
      * Adds or updates an item contained with the shopping cart
      *
      * @param Storefront_Resource_Product_Item_Interface $product
@@ -27,6 +34,7 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
     {
         $item = new Storefront_Resource_Cart_Item($product, $qty);   
         $this->_items[$item->productId] = $item;
+        $this->persist();
         return $item;
     }
 
@@ -44,6 +52,39 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
         if ($product instanceof Storefront_Resource_Product_Item_Interface) {
             unset($this->_items[$product->productId]);
         }
+        
+        $this->persist();
+    }
+
+    /**
+     * Setter for the session namespace
+     * 
+     * @param Zend_Session_Namespace $ns 
+     */
+    public function setSessionNs(Zend_Session_Namespace $ns)
+    {
+        $this->_sessionNs = $ns;
+    }
+    
+    /**
+     * Getter for session namespace
+     * 
+     * @return  Zend_Session_Namespace
+     */
+    public function getSessionNs()
+    {
+        if (null === $this->_sessionNs) {
+            $this->setSessionNs(new Zend_Session_Namespace(__CLASS__));
+        }
+        return $this->_sessionNs;
+    }
+
+    /**
+     * Persist the cart data in the session
+     */
+    public function persist()
+    {
+        $this->getSessionNs()->items = $this->_items;
     }
 
     /**

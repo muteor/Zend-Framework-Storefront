@@ -20,6 +20,7 @@ class CartTest extends PHPUnit_Framework_TestCase
     {
         _SF_Autloader_SetUp();
 
+        Zend_Loader::loadClass('Zend_Session_Namespace');
         // configure the resource loader atuo load models
         $loader = new Zend_Loader_Autoloader_Resource(array(
             'basePath' => APPLICATION_PATH . '/modules/storefront',
@@ -30,7 +31,10 @@ class CartTest extends PHPUnit_Framework_TestCase
         $loader->addResourceType('ModelResource', 'models/resources', 'Resource');
         $loader->addResourceType('Form', 'forms', 'Form');
 
-        $this->_model = new Storefront_Model_Cart();
+        $mockNS = $this->getMock('Zend_Session_Namespace');
+        $this->_model = new Storefront_Model_Cart(
+            array('sessionNs' => $mockNS)
+        );
     }
     
     protected function tearDown()
@@ -105,5 +109,34 @@ class CartTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($this->_model));
         $this->_model->removeItem($product);
         $this->assertEquals(0, count($this->_model));
+    }
+
+    public function test_Cart_Returns_The_Correct_Session_Namespace()
+    {
+        $this->_model = new Storefront_Model_Cart();
+        $ns = $this->_model->getSessionNs();
+        $this->assertType('Zend_Session_Namespace', $ns);
+        $this->assertEquals('Storefront_Model_Cart', $this->readAttribute($ns, '_namespace'));
+    }
+
+    public function test_Cart_Saves_Data_To_Session()
+    {
+        $product = $this->getProductMock();
+
+        $mockNS = $this->getMock('Zend_Session_Namespace');
+        $mockNS->expects($this->exactly(2))
+                     ->method('__set')
+                     ->will($this->returnValue(true));
+        $mockNS->expects($this->once())
+                     ->method('__get')
+                     ->will($this->returnValue(array(1 => $product)));
+
+        $this->_model = new Storefront_Model_Cart(
+            array('sessionNs' => $mockNS)
+        );
+
+        $this->_model->addItem($product, 10);
+        $this->assertType('array', $this->_model->getSessionNs()->items);
+        $this->_model->removeItem($product);
     }
 }
