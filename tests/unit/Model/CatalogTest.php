@@ -19,10 +19,10 @@ class CatalogTest extends PHPUnit_Framework_TestCase
      * @var SF_Model_Interface
      */
     protected $_model;
-
-    public function __construct()
+    
+    protected function setUp()
     {
-        parent::__construct();
+        _SF_Autloader_SetUp();
 
         // configure the resource loader atuo load models
         $loader = new Zend_Loader_Autoloader_Resource(array(
@@ -39,15 +39,14 @@ class CatalogTest extends PHPUnit_Framework_TestCase
             )
         );
         $loader->addResourceType('modelResource', 'TestResources', 'Resource');
-    }
-    
-    protected function setUp()
-    {      
+        
         $this->_model = new Storefront_Model_Catalog();
     }
     
     protected function tearDown()
-    {}
+    {
+        _SF_Autloader_TearDown();
+    }
     
     public function test_Catalog_Get_Product_By_Id_Returns_Product_Item()
     {

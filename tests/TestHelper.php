@@ -59,11 +59,24 @@ defined('APPLICATION_PATH')
     or define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 
 /**
- * Register the autoload
+ * Autoloader helpers
  */
-require_once 'Zend/Loader/Autoloader.php';
-$loader = Zend_Loader_Autoloader::getInstance();
-$loader->registerNamespace('SF');
+function _SF_Autloader_SetUp() {
+    require_once 'Zend/Loader/Autoloader.php';
+    $loader = Zend_Loader_Autoloader::getInstance();
+    $loader->registerNamespace('SF_');
+}
+
+function _SF_Autloader_TearDown() {
+    Zend_Loader_Autoloader::resetInstance();
+    $loader = Zend_Loader_Autoloader::getInstance();
+    $loader->registerNamespace('SF_');
+}
+
+/**
+ * Init autoloader
+ */
+_SF_Autloader_SetUp();
 
 /**
  * Start session now!
