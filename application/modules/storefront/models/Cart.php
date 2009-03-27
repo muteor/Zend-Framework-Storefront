@@ -29,11 +29,25 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
     protected $_total = 0;
 
     /**
+     * The shipping cost
+     * @var decimal
+     */
+    protected $_shipping = 0;
+
+    /**
      * ZNS for Persistance
      * 
      * @var Zend_Session_Namespace
      */
     protected $_sessionNs;
+
+    /**
+     * Called from the __construct defined by model abstract
+     */
+    public function init()
+    {
+        $this->loadSession();
+    }
 
     /**
      * Adds or updates an item contained with the shopping cart
@@ -100,29 +114,71 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
     }
 
     /**
-     * Getter
-     * 
-     * @param string $prop
-     * @return mixed
+     * Load any presisted data
      */
-    public function __get($prop)
+    public function loadSession()
     {
-        return $this->$prop;
+        if (isset($this->getSessionNs()->items)) {
+            $this->_items = $this->getSessionNs()->items;
+        }
     }
 
     /**
-     * Setter (does not set private/protected)
-     * 
-     * @param string $prop
-     * @param mixed $val
-     * @return void
+     * Calculate the totals
      */
-    public function __set($prop, $val)
+    public function CalculateTotals()
     {
-        if ('_' != substr($prop, 0, 1)) {
-            $this->$prop = $val;
-            return;
+        $sub = 0;
+        foreach ($this as $item) {
+            $sub = $sub + $item->getLineCost();
         }
+
+        $this->_subTotal = $sub;
+        $this->_total = $this->_subTotal + $this->_shipping;
+    }
+
+    /**
+     * Set the shipping cost
+     *
+     * @param float $cost
+     */
+    public function setShippingCost($cost)
+    {
+        $this->_shipping = $cost;
+        $this->CalculateTotals();
+    }
+
+    /**
+     * Get the shipping cost
+     * 
+     * @return float 
+     */
+    public function getShippingCost()
+    {
+        $this->CalculateTotals();
+        return $this->_shipping;
+    }
+
+    /**
+     * Get the sub total
+     * 
+     * @return float 
+     */
+    public function getSubTotal()
+    {
+        $this->CalculateTotals();
+        return $this->_subTotal;
+    }
+
+    /**
+     * Get the basket total
+     * 
+     * @return float
+     */
+    public function getTotal()
+    {
+        $this->CalculateTotals();
+        return $this->_total;
     }
 
     /**

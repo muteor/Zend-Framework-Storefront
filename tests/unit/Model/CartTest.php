@@ -143,17 +143,8 @@ class CartTest extends PHPUnit_Framework_TestCase
 
     public function test_Cart_Totals_Should_Be_Zero_On_New()
     {
-        $this->assertEquals(0, $this->_model->_subTotal);
-        $this->assertEquals(0, $this->_model->_total);
-    }
-
-    public function test_Cart_Can_Not_Set_Protected()
-    {
-        $this->_model->_total = 5;
-        $this->_model->_subTotal = 5;
-        
-        $this->assertEquals(0, $this->_model->_subTotal);
-        $this->assertEquals(0, $this->_model->_total);
+        $this->assertEquals(0, $this->_model->getSubTotal());
+        $this->assertEquals(0, $this->_model->getTotal());
     }
 
     public function test_Cart_Line_Item_Calculations()
@@ -185,6 +176,41 @@ class CartTest extends PHPUnit_Framework_TestCase
 
     public function test_Cart_Total_Calculations()
     {
-        
+        $product = $this->getProductMock();
+
+        $product2 = clone $product;
+        $product2->productId = 2;
+        $product2->price = 20.00;
+        $product2->discountPercent = 50;
+
+        $product3 = clone $product;
+        $product3->productId = 3;
+        $product3->taxable = 'No';
+
+        $cartItem = $this->_model->addItem($product, 2);
+        $cartItem = $this->_model->addItem($product2, 1);
+        $cartItem = $this->_model->addItem($product3, 1);
+
+        $this->assertEquals((11.50*2) + 11.50 + 10, $this->_model->getSubTotal());
+        $this->assertEquals((11.50*2) + 11.50 + 10, $this->_model->getTotal());
+
+        $this->_model->setShippingCost(20.00);
+        $this->assertEquals((11.50*2) + 11.50 + 10 + 20, $this->_model->getTotal());
+    }
+
+    public function test_Cart_Should_Query_Session_On_Instantiation()
+    {
+        $mockNS = $this->getMock('Zend_Session_Namespace');
+        $mockNS->expects($this->once())
+                     ->method('__isset')
+                     ->will($this->returnValue(true));
+        $mockNS->expects($this->once())
+                     ->method('__get')
+                     ->with('items')
+                     ->will($this->returnValue(array()));
+
+        $this->_model = new Storefront_Model_Cart(
+            array('sessionNs' => $mockNS)
+        );
     }
 }
