@@ -15,6 +15,18 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
      * @var array
      */
     protected $_items = array();
+    
+    /**
+     * Total before shipping
+     * @var decimal
+     */
+    protected $_subTotal = 0;
+
+    /**
+     * Total with shipping
+     * @var decimal
+     */
+    protected $_total = 0;
 
     /**
      * ZNS for Persistance
@@ -85,6 +97,32 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
     public function persist()
     {
         $this->getSessionNs()->items = $this->_items;
+    }
+
+    /**
+     * Getter
+     * 
+     * @param string $prop
+     * @return mixed
+     */
+    public function __get($prop)
+    {
+        return $this->$prop;
+    }
+
+    /**
+     * Setter (does not set private/protected)
+     * 
+     * @param string $prop
+     * @param mixed $val
+     * @return void
+     */
+    public function __set($prop, $val)
+    {
+        if ('_' != substr($prop, 0, 1)) {
+            $this->$prop = $val;
+            return;
+        }
     }
 
     /**

@@ -30,6 +30,7 @@ class CartTest extends PHPUnit_Framework_TestCase
         $loader->addResourceType('Model', 'models', 'Model');
         $loader->addResourceType('ModelResource', 'models/resources', 'Resource');
         $loader->addResourceType('Form', 'forms', 'Form');
+        $loader->addResourceType('Service', 'services', 'Service');
 
         $mockNS = $this->getMock('Zend_Session_Namespace');
         $this->_model = new Storefront_Model_Cart(
@@ -52,7 +53,7 @@ class CartTest extends PHPUnit_Framework_TestCase
         $product->name = 'Product 1';
         $product->description = str_repeat('Product 1 is great..', 10);
         $product->shortDescription = 'Product 1 is great..';
-        $product->price = '10.99';
+        $product->price = '10.00';
         $product->discountPercent = 0;
         $product->taxable = 'Yes';
         $product->deliveryMethod = 'Mail';
@@ -138,5 +139,52 @@ class CartTest extends PHPUnit_Framework_TestCase
         $this->_model->addItem($product, 10);
         $this->assertType('array', $this->_model->getSessionNs()->items);
         $this->_model->removeItem($product);
+    }
+
+    public function test_Cart_Totals_Should_Be_Zero_On_New()
+    {
+        $this->assertEquals(0, $this->_model->_subTotal);
+        $this->assertEquals(0, $this->_model->_total);
+    }
+
+    public function test_Cart_Can_Not_Set_Protected()
+    {
+        $this->_model->_total = 5;
+        $this->_model->_subTotal = 5;
+        
+        $this->assertEquals(0, $this->_model->_subTotal);
+        $this->assertEquals(0, $this->_model->_total);
+    }
+
+    public function test_Cart_Line_Item_Calculations()
+    {
+        $product = $this->getProductMock();
+
+        $product2 = clone $product;
+        $product2->productId = 2;
+        $product2->price = 20.00;
+        $product2->discountPercent = 50;
+
+        $product3 = clone $product;
+        $product3->productId = 3;
+        $product3->taxable = 'No';
+
+        $cartItem = $this->_model->addItem($product, 2);
+        $cartItem = $this->_model->addItem($product2, 1);
+        $cartItem = $this->_model->addItem($product3, 1);
+
+        // tax and qty
+        $this->assertEquals((11.50*2), $this->_model[1]->getLineCost());
+        
+        // tax and 50% discount
+        $this->assertEquals((11.50), $this->_model[2]->getLineCost());
+        
+        // no tax no discount
+        $this->assertEquals(10, $this->_model[3]->getLineCost());
+    }
+
+    public function test_Cart_Total_Calculations()
+    {
+        
     }
 }
