@@ -46,8 +46,6 @@ date_default_timezone_set('Europe/London');
 $root  = realpath(dirname(__FILE__) . '/../');
 $paths = array(
     get_include_path(),
-    "$root/library/library",
-    "$root/library/Incu",
     "$root/library/Zapp",
     "$root/library",
     "$root/tests",
@@ -82,11 +80,6 @@ _SF_Autloader_SetUp();
  * Start session now!
  */
 Zend_Session::start();
-
-/**
- * Set root
- */
-Zend_Registry::set('root', $root);
 
 /**
  * Ignore folders from code coverage etc
