@@ -22,7 +22,7 @@ class Storefront_Resource_Cart_Item implements Storefront_Resource_Cart_Item_Int
     {
         $this->productId           = (int) $product->productId;
         $this->name                 = $product->name;
-        $this->price                 = (float) $product->price;
+        $this->price                 = (float) $product->getPrice(false,false);
         $this->taxable              = $product->taxable;
         $this->discountPercent  = (int) $product->discountPercent;
         $this->qty                    = (int) $qty;
