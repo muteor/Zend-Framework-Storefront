@@ -86,6 +86,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
     }
 
     /**
+     * Setup locale
+     */
+    protected function _initLocale()
+    {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
+        $locale = new Zend_Locale('en_GB');
+        Zend_Registry::set('Zend_Locale', $locale);
+    }
+
+    /**
      * Setup the database profiling
      */
     protected function _initDbProfiler()
