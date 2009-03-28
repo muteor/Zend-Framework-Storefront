@@ -1,41 +1,47 @@
 <?php
+/**
+ * The application bootstrap used by Zend_Application
+ *
+ * @category   Bootstrap
+ * @package    Bootstrap
+ * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
+ * @license    http://www.thepopeisdead.com/license.txt     New BSD License
+ */
 class Bootstrap extends Zend_Application_Bootstrap_Base
 {
-    protected $_logger;
-    protected $_front;
-    protected $_config;
-    protected $_resourceLoader;
     /**
-     *
+     * @var Zend_Log
+     */
+    protected $_logger;
+
+    /**
+     * @var Zend_Application_Module_Autoloader
+     */
+    protected $_resourceLoader;
+
+    /**
      * @var Zend_Controller_Front
      */
     public $frontController;
 
-    protected function _initDefaultAutoloader()
+    /**
+     * Setup request and response so we can use Firebug for logging
+     * also make the dispatcher prefix the default module
+     */
+    protected function _initFrontControllerSettings()
     {
-        if (null === $this->_resourceLoader) {
-            $this->_resourceLoader = new Zend_Application_Module_Autoloader(array(
-                'namespace' => 'Storefront',
-                'basePath'  => APPLICATION_PATH . '/modules/storefront',
-            ));
-            $this->_resourceLoader
-               ->addResourceType(
-                    'modelResource',
-                    'models/resources',
-                    'Resource'
-               );
-             $this->_resourceLoader
-                   ->addResourceType(
-                        'service',
-                        'services',
-                        'Service'
-                   );
-        }
-        return $this->_resourceLoader;
+        $this->bootstrap('frontController');
+        $this->frontController->getDispatcher()->setParam('prefixDefaultModule', true);
+        $this->frontController->setResponse(new Zend_Controller_Response_Http());
+        $this->frontController->setRequest(new Zend_Controller_Request_Http());
     }
 
+    /**
+     * Setup the logging
+     */
     protected function _initLogging()
     {
+        $this->bootstrap('frontController');
         $logger = new Zend_Log();
 
         $writer = 'production' == $this->getEnvironment() ?
@@ -50,72 +56,62 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
 
         $this->_logger = $logger;
         Zend_Registry::set('log', $logger);
-
-        return $this;
     }
 
+    /**
+     * Configure the default modules autoloading, here we first create
+     * a new module autoloader specifiying the base path and namespace
+     * for our default module. This will automatically add the default
+     * resource types for us. We also add two custom resources for Services
+     * and Model Resources.
+     */
+    protected function _initDefaultModuleAutoloader()
+    {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
+        $this->_resourceLoader = new Zend_Application_Module_Autoloader(array(
+            'namespace' => 'Storefront',
+            'basePath'  => APPLICATION_PATH . '/modules/storefront',
+        ));
+        $this->_resourceLoader->addResourceTypes(array(
+            'modelResource' => array(
+              'path'      => 'models/resources',
+              'namespace' => 'Resource',
+            ),
+            'service' => array(
+              'path'      => 'services',
+              'namespace' => 'Service',
+            ),
+        ));
+    }
+
+    /**
+     * Setup the database profiling
+     */
+    protected function _initDbProfiler()
+    {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+        
+        if ('production' !== $this->getEnvironment()) {
+            $this->bootstrap('db');
+            $profiler = new Zend_Db_Profiler_Firebug('All DB Queries');
+            $profiler->setEnabled(true);
+            $this->getPluginResource('db')->getDb()->setProfiler($profiler);
+        }
+    }
+    
+    /**
+     * Add the config to the registry
+     */
     protected function _initConfig()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
-
-        $this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/config/store.ini', $this->getEnvironment(), true);
-        Zend_Registry::set('config', $this->_config);
-
-        return $this;
+        Zend_Registry::set('config', $this->getOptions());
     }
 
-    protected function _initDb()
-    {
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-
-        $config = $this->_config;
-        if (!isset($config->db)) {
-            return $this;
-        }
-
-        $db = Zend_Db::factory($config->db);
-
-        if ($this->getEnvironment() == 'development') {
-            $profiler = new Zend_Db_Profiler_Firebug('All DB Queries');
-            $profiler->setEnabled(true);
-            $db->setProfiler($profiler);
-        }
-
-        Zend_Db_Table_Abstract::setDefaultAdapter($db);
-        Zend_Registry::set('db', $db);
-
-        // Setup metadata cache
-//        $frontendOptions = array(
-//            'automatic_serialization' => true
-//        );
-//
-//        $backendOptions  = array(
-//            'cache_dir' => APPLICATION_PATH . '/../data/cache/meta'
-//        );
-//
-//        $cache = Zend_Cache::factory('Core',
-//                                     'File',
-//                                     $frontendOptions,
-//                                     $backendOptions);
-//
-//        if ('production' === $this->getEnvironment()) {
-//            Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
-//        }
-
-        return $this;
-    }
-
-    protected function _initControllers()
-    {
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-        $this->bootstrap('frontController');
-        $this->frontController->getDispatcher()->setParam('prefixDefaultModule', true);
-        $this->frontController->setDefaultModule('storefront');
-        if ('development' === $this->getEnvironment()) {
-            $this->frontController->throwExceptions(true);
-        }
-    }
-
+    /**
+     * Setup the view
+     */
     protected function _initView()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
@@ -150,23 +146,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
             'layoutPath' => APPLICATION_PATH . '/layouts/scripts'
             )
         );
-
-        return $this;
     }
 
     /**
-     * Register additional plugins, only ones that use
-     * hooks after routeStartup though!
+     * Register front controller plugins
      */
     protected function _initFrontPlugins()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
-
         $this->bootstrap('frontController');
+
         $this->frontController->registerPlugin( new SF_Plugin_Action());
         $this->frontController->registerPlugin( new SF_Plugin_AdminContext());
-
-        return $this;
     }
 
     /**

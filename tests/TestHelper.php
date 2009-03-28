@@ -46,7 +46,7 @@ date_default_timezone_set('Europe/London');
 $root  = realpath(dirname(__FILE__) . '/../');
 $paths = array(
     get_include_path(),
-    "$root/library/Zapp",
+    "$root/library/Incu",
     "$root/library",
     "$root/tests",
     "$root/application"
