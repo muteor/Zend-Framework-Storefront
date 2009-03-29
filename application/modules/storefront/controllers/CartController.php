@@ -33,4 +33,11 @@ class Storefront_CartController extends Zend_Controller_Action
         $redirector = $this->getHelper('redirector');
         $redirector->gotoUrl($return);
     }
+
+    public function viewAction()
+    {
+        $this->view->cartModel = $this->_cartModel;
+    }
+
+    public function removeAction(){}
 }

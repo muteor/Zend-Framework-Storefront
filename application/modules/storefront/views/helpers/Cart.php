@@ -62,4 +62,10 @@ class Zend_View_Helper_Cart extends Zend_View_Helper_Abstract
         ));
         return $form;
     }
+
+    public function formatAmount($amount)
+    {
+        $currency = new Zend_Currency();
+        return $currency->toCurrency($amount);
+    }
 }

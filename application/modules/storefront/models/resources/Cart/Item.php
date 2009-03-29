@@ -41,7 +41,7 @@ class Storefront_Resource_Cart_Item implements Storefront_Resource_Cart_Item_Int
             $taxService = new Storefront_Service_Taxation();
             $price = $taxService->addTax($price);
         }
-        
+       
         return $price * $this->qty;
     }
 }
