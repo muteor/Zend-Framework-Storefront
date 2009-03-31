@@ -31,7 +31,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
     protected function _initFrontControllerSettings()
     {
         $this->bootstrap('frontController');
-        $this->frontController->getDispatcher()->setParam('prefixDefaultModule', true);
         $this->frontController->setResponse(new Zend_Controller_Response_Http());
         $this->frontController->setRequest(new Zend_Controller_Request_Http());
     }
