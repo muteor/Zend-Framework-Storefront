@@ -13,7 +13,7 @@ interface SF_Model_Resource_Db_Interface extends SF_Model_Resource_Interface
 {
 	/** ZF methods */
     public function info($key = null);
-    public function createRow(array $data = array(), $defaultSource = null);
+    public function createRow(array $data = array());
 	
 	/** SF methods */
 	public function saveRow($info, $row = null);

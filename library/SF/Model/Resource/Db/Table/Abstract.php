@@ -10,7 +10,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-abstract class SF_Model_Resource_Db_Table_Abstract extends Zend_Db_Table_Abstract
+abstract class SF_Model_Resource_Db_Table_Abstract extends Zend_Db_Table_Abstract implements SF_Model_Resource_Db_Interface
 {
 	/**
      * Save a row to the database
