@@ -1,0 +1,19 @@
+<?=$this->productImage($this->product->defaultImage, array('class' => 'right'))->full(); ?>
+<h3><?=$this->Escape($this->product->name); ?></h3>
+<p>
+    <?= $this->breadcrumb($this->product); ?>
+</p>
+
+<div>
+    <p><?=$this->product->description; ?></p>
+    <p><?=$this->productPrice($this->product); ?></p>
+    <?=$this->Cart()->addForm($this->product); ?>
+</div>
+
+<div class="clearfix">
+    <? foreach ($this->product->images as $image): ?>
+        <? if (!$image->isDefault()): ?>
+            <?=$this->productImage($image, array('class' => 'left'))->thumbnail(); ?>
+        <? endif; ?>
+    <? endforeach; ?>
+</div>

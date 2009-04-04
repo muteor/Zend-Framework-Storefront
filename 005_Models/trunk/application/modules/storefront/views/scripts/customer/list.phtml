@@ -1,0 +1,20 @@
+<table class="datatable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+<? foreach ($this->users as $user): ?>
+        <tr>
+            <td><?=$user->fullname; ?></td>
+            <td><?=$user->email; ?></td>
+            <td><?=$user->role; ?></td>
+            <td>Edit / Delete</td>
+        </tr>
+<? endforeach; ?>
+    </tbody>
+</table>
