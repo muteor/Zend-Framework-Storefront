@@ -167,7 +167,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
         $this->bootstrap('frontController');
 
         $this->frontController->registerPlugin( new SF_Plugin_Action());
-        $this->frontController->registerPlugin( new SF_Plugin_AdminContext());
     }
 
     /**
@@ -179,19 +178,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
         $this->bootstrap('frontController');
 
         $router = $this->frontController->getRouter();
-
-        // Admin context route
-        $route = new Zend_Controller_Router_Route(
-            'admin/:module/:controller/:action',
-            array(
-                'action'     => 'index',
-                'controller' => 'admin',
-                'module'     => 'storefront',
-                'isAdmin'    => true
-            )
-        );
-
-        $router->addRoute('admin', $route);
 
         // catalog category product route
         $route = new Zend_Controller_Router_Route(
