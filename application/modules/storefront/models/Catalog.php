@@ -7,7 +7,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Model_Catalog extends Storefront_Model_Storefront
+class Storefront_Model_Catalog extends SF_Model_Abstract
 {    
     /**
      * Get categories
@@ -124,12 +124,4 @@ class Storefront_Model_Catalog extends Storefront_Model_Storefront
         
         return $cats;
     }
-    
-//    public function getParentCategory(Storefront_Resource_Category_Item_Interface $category)
-//    {
-//        if (0 == $category->parentId) {
-//            return null;
-//        }
-//        return $this->getResource('Category')->getParentCategory($category);
-//    }
 }

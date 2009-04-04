@@ -40,6 +40,10 @@
                 </ul>
             </div> 
             <? endif; ?>
+            <div>
+                <h3>in your <span>cart</span></h3>
+                <?= $this->Cart()->getSummary(); ?>
+            </div>
         </div>
         <div class="content left">
             <?= $this->layout()->content ?> 

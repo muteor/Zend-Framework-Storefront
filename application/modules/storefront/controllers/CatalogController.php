@@ -2,13 +2,19 @@
 class Storefront_CatalogController extends Zend_Controller_Action
 {
     /**
-     * @var Storefront_Catalog
+     * @var Storefront_Model_Catalog
      */
     protected $_catalogModel;
+
+    /**
+     * @var Storefront_Model_Cart
+     */
+    protected $_cartModel;
     
     public function init()
     {
-        $this->_catalogModel = $this->_helper->resourceLoader->getModel('Catalog');
+        $this->_catalogModel = new Storefront_Model_Catalog();
+        $this->_cartModel = new Storefront_Model_Cart();
     }
 
     public function indexAction()
@@ -31,7 +37,8 @@ class Storefront_CatalogController extends Zend_Controller_Action
         $this->view->assign(array(
             'category' => $category,
             'subCategories' => $subs,
-            'products' => $products
+            'products' => $products,
+            'cartModel' => $this->_cartModel
             )
         );
     }

@@ -26,7 +26,7 @@
 
 	<target name="test" depends="getProps">
 	   <exec dir="${basedir}/tests" executable="phpunit${script-suffix}" failonerror="true">
-	      <arg line="--report ${basedir}/build/report
+	      <arg line="--colors --report ${basedir}/build/report
 	         --log-xml ${basedir}/build/logs/phpunit.xml 
              --log-pmd ${basedir}/build/logs/phpunit.pmd.xml
              --log-metrics ${basedir}/build/logs/phpunit.metrics.xml
@@ -36,9 +36,9 @@
 	</target>
 	
 	<target name="configure" depends="getProps">
-	   <copy file="${basedir}/application/bootstrap.php.dist" 
-	         tofile="${basedir}/application/bootstrap.php" overwrite="true" />
-	   <replace file="${basedir}/application/bootstrap.php" token="@ENVIRONMENT@" value="${environment}" />
+	   <copy file="${basedir}/application/application.php.dist"
+	         tofile="${basedir}/application/application.php" overwrite="true" />
+	   <replace file="${basedir}/application/application.php" token="@ENVIRONMENT@" value="${environment}" />
 	</target>
 	
 	<target name="buildPreparation">

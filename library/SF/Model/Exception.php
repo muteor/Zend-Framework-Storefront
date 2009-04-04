@@ -1,7 +1,4 @@
 <?php
-/** SF_Exception */
-require_once ('SF/Exception.php');
-
 /** 
  * SF_Model_Exception 
  * 

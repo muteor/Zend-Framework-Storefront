@@ -1,8 +1,9 @@
 <?php
 require_once 'modules/storefront/models/resources/Category/Interface.php';
+require_once 'modules/storefront/models/resources/Category/Item/Interface.php';
 require_once 'modules/storefront/models/resources/Product/Item/Interface.php';
 
-class Test_Category extends PHPUnit_Framework_TestCase implements Storefront_Resource_Category_Interface
+class Storefront_Resource_Category extends PHPUnit_Framework_TestCase implements Storefront_Resource_Category_Interface
 {
     protected $_products = null;
     protected $_categories = null;
@@ -43,14 +44,19 @@ class Test_Category extends PHPUnit_Framework_TestCase implements Storefront_Res
             $mock->name = 'Category ' . $i;
             $mock->parentId = $i > 5 ? ($i-1) : 0; 
             $mock->ident = 'Category-' . $i;
-            
+
+            if($i > 0) {
+            $mock->expects($this->any())
+                      ->method('getParentCategory')
+                      ->will($this->returnValue($data[$i-1]));
+            }
             $data[] = $mock;
         }
         
         $this->_categories = $data;
     }
     
-    public function getCategories ($parentId)
+    public function getCategoriesByParentId($parentId)
     {
         $this->assertType('int', $parentId, 'Assertion failed in ' . __CLASS__ . ' ' . __METHOD__);
         
@@ -60,7 +66,7 @@ class Test_Category extends PHPUnit_Framework_TestCase implements Storefront_Res
                 $found[] = $cat;
             }
         }
-        return new Zend_Db_Table_Rowset(array('data' => $found));
+        return $found;
     }
     
     public function getCategoryById ($id)
@@ -72,16 +78,6 @@ class Test_Category extends PHPUnit_Framework_TestCase implements Storefront_Res
         
         foreach ($this->_categories as $cat) {
             if ($ident === $cat->ident) {
-               return $cat;
-            }
-        }
-        return null;
-    }
-    
-    public function getParentCategory (Storefront_Resource_Category_Item_Interface $category)
-    {       
-        foreach ($this->_categories as $cat) {
-            if ($category->parentId === $cat->categoryId) {
                return $cat;
             }
         }

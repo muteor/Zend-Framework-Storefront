@@ -18,18 +18,36 @@ class UserTest extends PHPUnit_Framework_TestCase
      * @var SF_Model_Interface
      */
     protected $_model;
-    
+
     protected function setUp()
     {
-        $this->_model = new Storefront_Model_User(array(
-            'path'   => dirname(__FILE__) . '/TestResources',
-            'prefix' => 'Test',
+        _SF_Autloader_SetUp();
+
+        // configure the resource loader atuo load models
+        $loader = new Zend_Loader_Autoloader_Resource(array(
+            'basePath' => APPLICATION_PATH . '/modules/storefront',
+            'namespace' => 'Storefront'
             )
         );
+        $loader->addResourceType('Model', 'models', 'Model');
+        $loader->addResourceType('Form', 'forms', 'Form');
+
+        // configure another loader so we can replace Model Resources, forms
+        $loader = new Zend_Loader_Autoloader_Resource(array(
+            'basePath' => dirname(__FILE__),
+            'namespace' => 'Storefront'
+            )
+        );
+        $loader->addResourceType('modelResource', 'TestResources', 'Resource');
+
+        $this->_model = new Storefront_Model_User();
     }
-    
+
     protected function tearDown()
-    {}
+    {
+        _SF_Autloader_TearDown();
+        $this->_model = null;
+    }
     
     public function test_User_Get_User_By_Id_Returns_User_Row()
     {
@@ -46,77 +64,72 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertType('Storefront_Resource_User_Item_Interface', $user);
         $this->assertEquals(5, $user->userId);
     }
-    
-    public function test_User_Save_User_Throws_On_Invalid_Data()
+
+    public function test_User_Can_Register()
     {
-        try {
-            $this->_model->saveUser(array());
-            $this->fail('SF_Model_Exception expected - no data');
-        } catch(SF_Model_Exception $e) {}
-        
-        try {
-            $this->_model->saveUser(array(
-                    'title'     => 'Mr',
-                    'lastname'  => 'Pope',
-                    'email'     => 'keith@noemail.com',
-                    'passwd'    => '123456',
-                )
-            );
-            $this->fail('SF_Model_Exception expected - no firstname');
-        } catch(SF_Model_Exception $e) {}
-        
-        try {
-            $this->_model->saveUser(array(
-                    'title'     => 'Mr',
-                    'firstname' => 'Pope',
-                    'email'     => 'keith@noemail.com',
-                    'passwd'    => '123456',
-                )
-            );
-            $this->fail('SF_Model_Exception expected - no lastname');
-        } catch(SF_Model_Exception $e) {}
-        
-        try {
-            $this->_model->saveUser(array(
-                    'firstname' => 'Pope',
-                    'lastname'  => 'Pope',
-                    'email'     => 'keith@noemail.com',
-                    'passwd'    => '123456',
-                )
-            );
-            $this->fail('SF_Model_Exception expected - no title');
-        } catch(SF_Model_Exception $e) {}
-        
-        try {
-            $this->_model->saveUser(array(
-                    'title'     => 'Mr',
-                    'firstname' => 'Pope',
-                    'lastname'  => 'Pope',
-                    'email'     => 'jd1@noemail.com',
-                    'passwd'    => '123456',
-                )
-            );
-            $this->fail('SF_Model_Exception expected - email exists');
-        } catch(SF_Model_Exception $e) {}
-    }
-    
-    public function test_User_Save_User_Creates_New_User_If_Not_Exists()
-    {
-        $row = $this->_model->saveUser(array(
-                'title'     => 'Mr',
-                'firstname' => 'Keith',
-                'lastname'  => 'Pope',
-                'email'     => 'keith@noemail.com',
-                'passwd'    => '123456',
-            )
+        $post = array(
+            'title'         => 'Mr',
+            'firstname' => 'keith',
+            'lastname' => 'pope',
+            'email'      => 'me@me.com',
+            'passwd'   => '123456',
+            'passwdVerify' => '123456'
         );
-        
-        $user = $this->_model->getUserByEmail('keith@noemail.com');
-        $this->assertEquals('keith@noemail.com', $user->email);
-        $this->assertEquals('Mr', $user->title);
-        $this->assertEquals('Keith', $user->firstname);
-        $this->assertEquals('Pope', $user->lastname);
-        $this->assertEquals(40,strlen($user->passwd));
-        $this->assertEquals(32,strlen($user->salt));
+        $register = $this->_model->registerUser($post);
+
+        $this->assertEquals(10, $register);
+    }
+
+    public function test_User_Register_Fails_On_Invalid_Input()
+    {
+        $post = array(
+            'email'      => 'com',
+            'passwd'   => '',
+            'passwdVerify' => '123456233'
+        );
+        $register = $this->_model->registerUser($post);
+        $form = $this->_model->getForm('userRegister');
+
+        $this->assertFalse($register);
+        foreach ($form->getErrors() as $field => $errors) {
+            if ('submit' != $field) {
+                if (0 == count($errors)) {
+                    $this->fail($field . ' is expected to contain errors');
+                }
+            }
+        }
+    }
+
+    public function test_User_Register_Can_Not_Set_Role()
+    {
+        $post = array(
+            'title'         => 'Mr',
+            'firstname' => 'keith',
+            'lastname' => 'pope',
+            'email'      => 'me@me.com',
+            'passwd'   => '123456',
+            'passwdVerify' => '123456',
+            'role'        => 'admin'
+        );
+        $register = $this->_model->registerUser($post);
+
+        $this->assertEquals(10, $register);
+        $rs = $this->_model->getResource('User');
+        $inserted = $this->readAttribute($rs, '_rowset');
+        $this->assertEquals('Customer', $inserted[10]->role);
+    }
+
+    public function test_User_Can_Be_Edited()
+    {
+        $post = array(
+            'userId'     => 10,
+            'title'         => 'Mr',
+            'firstname' => 'keith',
+            'lastname' => 'pope',
+            'email'      => 'me@me.com'
+        );
+        $edit = $this->_model->saveUser($post);
+
+        $this->assertEquals(10, $edit);
     }
 }

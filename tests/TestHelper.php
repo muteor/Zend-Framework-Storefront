@@ -44,24 +44,37 @@ date_default_timezone_set('Europe/London');
  * Set the include path
  */
 $root  = realpath(dirname(__FILE__) . '/../');
-$tests = "$root/tests";
-$app   = "$root/application";
-$lib   = "$root/library"; 
+$paths = array(
+    get_include_path(),
+    "$root/library/Incu",
+    "$root/library",
+    "$root/tests",
+    "$root/application"
+);
+set_include_path(implode(PATH_SEPARATOR, $paths));
 
-$path = array(
-    $root,
-    $tests,
-    $app,
-    $lib,
-    get_include_path()
-    );
-set_include_path(implode(PATH_SEPARATOR, $path));
+defined('APPLICATION_PATH')
+    or define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 
 /**
- * Register the autoload
+ * Autoloader helpers
  */
-require_once 'Zend/Loader.php';
-Zend_Loader::registerAutoload();
+function _SF_Autloader_SetUp() {
+    require_once 'Zend/Loader/Autoloader.php';
+    $loader = Zend_Loader_Autoloader::getInstance();
+    $loader->registerNamespace('SF_');
+}
+
+function _SF_Autloader_TearDown() {
+    Zend_Loader_Autoloader::resetInstance();
+    $loader = Zend_Loader_Autoloader::getInstance();
+    $loader->registerNamespace('SF_');
+}
+
+/**
+ * Init autoloader
+ */
+_SF_Autloader_SetUp();
 
 /**
  * Start session now!
@@ -69,12 +82,7 @@ Zend_Loader::registerAutoload();
 Zend_Session::start();
 
 /**
- * Set root
- */
-Zend_Registry::set('root', $root);
-
-/**
  * Ignore folders from code coverage etc
  */
-PHPUnit_Util_Filter::addDirectoryToFilter($tests);
-PHPUnit_Util_Filter::addDirectoryToFilter("$lib/Zend");
+PHPUnit_Util_Filter::addDirectoryToFilter("$root/tests");
+PHPUnit_Util_Filter::addDirectoryToFilter("$root/library/Zend");

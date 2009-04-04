@@ -11,25 +11,8 @@
  */
 interface SF_Model_Interface
 {
-	public function __construct($options = null);
-
-	public function setOptions(array $options);
-	
-	public function setConfig(Zend_Config $config);
-	
-	public function init();
-	
-	public function initDefaults();
-	
-	public function setResourcePath($path);
-	
-	public function setResourcePrefix($prefix);
-	
-	public function getResourcePath();
-	
-	public function getResourcePrefix();
-	
-	public function getResource($name);
-	
-	public function getPluginLoader();
+    public function __construct($options = null);
+    public function getResource($name);
+    public function getForm($name);
+    public function init();
 }

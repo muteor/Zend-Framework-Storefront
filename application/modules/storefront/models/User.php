@@ -1,5 +1,5 @@
 <?php
-class Storefront_Model_User extends Storefront_Model_Storefront
+class Storefront_Model_User extends SF_Model_Abstract
 {   
     public function getUserById($id)
     {
@@ -7,51 +7,56 @@ class Storefront_Model_User extends Storefront_Model_Storefront
         return $this->getResource('User')->getUserById($id);
     }
 
-    public function getUserByEmail($email)
+    public function getUserByEmail($email, $ignoreUser=null)
     {
-        return $this->getResource('User')->getUserByEmail($email);
+        return $this->getResource('User')->getUserByEmail($email, $ignoreUser);
     }
     
-    public function getUsers()
+    public function getUsers($paged=false, $order=null)
     {
-        return $this->getResource('User')->getUsers();
+        return $this->getResource('User')->getUsers($paged, $order);
+    }
+
+    public function registerUser($post)
+    {
+        $form = $this->getForm('userRegister');
+        return $this->save($form, $post, array('role' => 'Customer'));
+    }
+
+    public function saveUser($post)
+    {
+        //check user role here so that we can lock customers
+        //to their userId only maybe use the auth or acl?
+        $form = $this->getForm('userEdit');
+        return $this->save($form, $post);
     }
     
-    public function saveUser($info)
-    {
-        // validate data
-        if (!array_key_exists('userId', $info)) {
-            if (!array_key_exists('email', $info)) {
-                throw new SF_Model_Exception('Email address is required');
-            }
-            if (!array_key_exists('firstname', $info)) {
-                throw new SF_Model_Exception('Firstname is required');
-            }
-            if (!array_key_exists('lastname', $info)) {
-                throw new SF_Model_Exception('Lastname is required');
-            }
-            if (!array_key_exists('title', $info)) {
-                throw new SF_Model_Exception('Title is required');
-            }
-            if (null !== $this->getResource('User')->getUserByEmail($info['email'])) {
-                throw new SF_Model_Exception('Email address already registered');
-            }
+    protected function save($form, $info, $defaults=array())
+    {       
+        if (!$form->isValid($info)) {
+            return false;
         }
 
+        // get filtered values
+        $data = $form->getValues();
+
         // password hashing
-        if (array_key_exists('passwd', $info)) {
-            $info['salt'] = md5($this->createSalt());
-            $info['passwd'] = sha1($info['passwd'] . $info['salt']);
+        if (array_key_exists('passwd', $data) && '' != $data['passwd']) {
+            $data['salt'] = md5($this->createSalt());
+            $data['passwd'] = sha1($data['passwd'] . $data['salt']);
+        } else {
+            unset($data['passwd']);
         }
-        
-        if (!array_key_exists('role', $info)) {
-            $info['role'] = 'Customer';
+
+        // apply any defaults
+        foreach ($defaults as $col => $value) {
+            $data[$col] = $value;
         }
-        
-        $user = array_key_exists('userId', $info) ? 
-            $this->getResource('User')->getUserById($info['userId']) : null;
-        
-        return $this->getResource('User')->saveRow($info, $user);        
+
+        $user = array_key_exists('userId', $data) ?
+            $this->getResource('User')->getUserById($data['userId']) : null;
+
+        return $this->getResource('User')->saveRow($data, $user);
     }
     
     private function createSalt()

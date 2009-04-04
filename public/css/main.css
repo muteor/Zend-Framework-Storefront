@@ -330,3 +330,30 @@ div.codeparser li {
 }
 
 /* @end */
+
+/* @group tables */
+td {
+	font-size: 1.2em;
+	color: #424242;
+	padding: 5px 5px;
+	text-align: left;
+	border-bottom: 0px;
+	border-top: 0px;
+	border: 1px solid #d9d9d9;
+}
+
+th {
+	font-size: 1.2em;
+	font-weight: normal;
+	color: #424242;
+	text-align: left;
+	padding: 5px;
+	border: 1px solid #d9d9d9;
+}
+
+table .odd {
+    background: #f6f6f6;
+}
+
+
+/* @end */
