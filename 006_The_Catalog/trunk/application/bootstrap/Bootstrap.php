@@ -167,7 +167,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
         $this->bootstrap('frontController');
 
         $this->frontController->registerPlugin( new SF_Plugin_Action());
-        $this->frontController->registerPlugin( new SF_Plugin_AdminContext());
     }
 
     /**
