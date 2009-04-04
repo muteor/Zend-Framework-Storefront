@@ -29,21 +29,7 @@
     
     <div id="contentWrap" class="clearfix">
         <div class="left categorylist">
-            <?= $this->layout()->categoryMain; ?>
-            <? if (0 < count($this->subCategories)):?>
-            <div class="sub-nav">
-            <h3>in this <span>category</span></h3>
-                <ul>
-                    <? foreach ($this->subCategories as $category): ?>
-                    <li><a href="<?=$this->url(array('categoryIdent' => $category->ident), 'catalog_category', true );?>"><?=$category->name; ?></a></li>
-                    <? endforeach; ?>
-                </ul>
-            </div> 
-            <? endif; ?>
-            <div>
-                <h3>in your <span>cart</span></h3>
-                <?= $this->Cart()->getSummary(); ?>
-            </div>
+            Category List
         </div>
         <div class="content left">
             <?= $this->layout()->content ?> 

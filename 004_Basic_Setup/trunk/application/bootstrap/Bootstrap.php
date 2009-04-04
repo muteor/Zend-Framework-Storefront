@@ -15,11 +15,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
     protected $_logger;
 
     /**
-     * @var Zend_Application_Module_Autoloader
-     */
-    protected $_resourceLoader;
-
-    /**
      * @var Zend_Controller_Front
      */
     public $frontController;
@@ -58,33 +53,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
     }
 
     /**
-     * Configure the default modules autoloading, here we first create
-     * a new module autoloader specifiying the base path and namespace
-     * for our default module. This will automatically add the default
-     * resource types for us. We also add two custom resources for Services
-     * and Model Resources.
-     */
-    protected function _initDefaultModuleAutoloader()
-    {
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-        
-        $this->_resourceLoader = new Zend_Application_Module_Autoloader(array(
-            'namespace' => 'Storefront',
-            'basePath'  => APPLICATION_PATH . '/modules/storefront',
-        ));
-        $this->_resourceLoader->addResourceTypes(array(
-            'modelResource' => array(
-              'path'      => 'models/resources',
-              'namespace' => 'Resource',
-            ),
-            'service' => array(
-              'path'      => 'services',
-              'namespace' => 'Service',
-            ),
-        ));
-    }
-
-    /**
      * Setup locale
      */
     protected function _initLocale()
@@ -108,15 +76,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
             $profiler->setEnabled(true);
             $this->getPluginResource('db')->getDb()->setProfiler($profiler);
         }
-    }
-    
-    /**
-     * Add the config to the registry
-     */
-    protected function _initConfig()
-    {
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-        Zend_Registry::set('config', $this->getOptions());
     }
 
     /**
@@ -156,77 +115,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
             'layoutPath' => APPLICATION_PATH . '/layouts/scripts'
             )
         );
-    }
-
-    /**
-     * Register front controller plugins
-     */
-    protected function _initFrontPlugins()
-    {
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-        $this->bootstrap('frontController');
-
-        $this->frontController->registerPlugin( new SF_Plugin_Action());
-        $this->frontController->registerPlugin( new SF_Plugin_AdminContext());
-    }
-
-    /**
-     * Add required routes to the router
-     */
-    protected function _initRoutes()
-    {
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-        $this->bootstrap('frontController');
-
-        $router = $this->frontController->getRouter();
-
-        // Admin context route
-        $route = new Zend_Controller_Router_Route(
-            'admin/:module/:controller/:action',
-            array(
-                'action'     => 'index',
-                'controller' => 'admin',
-                'module'     => 'storefront',
-                'isAdmin'    => true
-            )
-        );
-
-        $router->addRoute('admin', $route);
-
-        // catalog category product route
-        $route = new Zend_Controller_Router_Route(
-            'catalog/:categoryIdent/:productIdent',
-            array(
-                'action'        => 'view',
-                'controller'    => 'catalog',
-                'module'        => 'storefront',
-                'categoryIdent' => '',
-            ),
-            array(
-                'categoryIdent' => '[a-zA-Z-_0-9]+',
-                'productIdent'  => '[a-zA-Z-_0-9]+'
-            )
-        );
-
-        $router->addRoute('catalog_category_product', $route);
-
-        // catalog category route
-        $route = new Zend_Controller_Router_Route(
-            'catalog/:categoryIdent/:page',
-            array(
-                'action'        => 'index',
-                'controller'    => 'catalog',
-                'module'        => 'storefront',
-                'categoryIdent' => '',
-                'page'          => 1
-            ),
-            array(
-                'categoryIdent' => '[a-zA-Z-_0-9]+',
-                'page'          => '\d+'
-            )
-        );
-
-        $router->addRoute('catalog_category', $route);
     }
 
     public function run()

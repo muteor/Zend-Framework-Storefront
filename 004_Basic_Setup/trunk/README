@@ -9,12 +9,32 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
 INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
+REQUIRED SOFTWARE
+
+PHPUnit (http://phpunit.de)
+Xdebug (http://xdebug.org)
+Apache ANT (http://ant.apache.org)
+
+
 INSTALLATION
 
-Install the storefront database using structure and data sql files.
+Install the storefront database using structure and data sql files found in the sql directory.
 Point your webserver to the public folder
-Run the Ant build
+Run the Ant build, change into the build directory and run:
 
-Done...
+ant
 
-Enjoy :)
+You can change the environment using:
+
+ant -Denvironment=production
+
+or
+
+ant -Denvironment=development
+
+or 
+
+ant -Denvironment=test
+
+You should now be able to load the storefront in your browser at the location you configured your webserver, e.g. http://localhost:8081
+

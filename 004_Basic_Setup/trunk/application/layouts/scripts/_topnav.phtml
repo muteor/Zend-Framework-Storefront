@@ -12,7 +12,6 @@
                  ?>" 
                title="Homepage">Store</a>
         </li>
-        <? if ($this->AuthInfo()->isLoggedIn()): ?>
         <li>
             <a href="
                 <?= $this->url(array(
@@ -24,7 +23,6 @@
                  ?>"
                title="logout">Logout</a>
         </li>
-        <?else: ?>
         <li>
             <a href="
                 <?= $this->url(array(
@@ -36,8 +34,6 @@
                  ?>"
                title="login">Login</a>
         </li>
-        <? endif; ?>
-		<? if (!$this->AuthInfo()->isLoggedIn()): ?>
         <li>
             <a href="
                 <?= $this->url(array(
@@ -49,7 +45,6 @@
                  ?>"
                title="register">Register</a>
         </li>
-		<? endif; ?>
         <li>
             <a href="
                 <?= $this->url(array(
