@@ -31,7 +31,8 @@ class Storefront_CartController extends Zend_Controller_Action
         $return = rtrim($this->getRequest()->getBaseUrl(), '/') .
             $this->_getParam('returnto');
         $redirector = $this->getHelper('redirector');
-        $redirector->gotoUrl($return);
+
+        return $redirector->gotoUrl($return);
     }
 
     public function viewAction()

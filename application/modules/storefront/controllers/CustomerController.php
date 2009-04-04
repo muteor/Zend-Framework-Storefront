@@ -87,13 +87,13 @@ class Storefront_CustomerController extends Zend_Controller_Action
             return $this->render('login');
         }
         
-        $this->_helper->redirector('index');
+        return $this->_helper->redirector('index');
 	}
 	
 	public function logoutAction()
     {
         $this->_authService->clear();
-        $this->_helper->redirector('index');
+        return $this->_helper->redirector('index');
     }
     
     public function getRegistrationForm()
