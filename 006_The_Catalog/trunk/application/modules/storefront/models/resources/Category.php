@@ -1,6 +1,8 @@
 <?php
 /** Storefront_Resource_Category_Item */
-require_once dirname(__FILE__) . '/Category/Item.php';
+if (!class_exists('Storefront_Resource_Category_Item')) {
+    require_once dirname(__FILE__) . '/Category/Item.php';
+}
 
 /**
  * Storefront_Resource_Category
