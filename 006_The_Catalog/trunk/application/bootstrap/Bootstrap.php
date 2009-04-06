@@ -106,7 +106,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
             $this->bootstrap('db');
             $profiler = new Zend_Db_Profiler_Firebug('All DB Queries');
             $profiler->setEnabled(true);
-            $this->getPluginResource('db')->getDb()->setProfiler($profiler);
+            $this->getPluginResource('db')->getDbAdapter()->setProfiler($profiler);
         }
     }
     
@@ -156,17 +156,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
             'layoutPath' => APPLICATION_PATH . '/layouts/scripts'
             )
         );
-    }
-
-    /**
-     * Register front controller plugins
-     */
-    protected function _initFrontPlugins()
-    {
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-        $this->bootstrap('frontController');
-
-        $this->frontController->registerPlugin( new SF_Plugin_Action());
     }
 
     /**
