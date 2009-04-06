@@ -1,9 +1,13 @@
 <?php
 /** Storefront_Resource_ProductImage_Item */
-require_once dirname(__FILE__) . '/ProductImage/Item.php';
+if (!class_exists('Storefront_Resource_ProductImage_Item')) {
+    require_once dirname(__FILE__) . '/ProductImage/Item.php';
+}
 
 /** Storefront_Resource_Product */
-require_once dirname(__FILE__) . '/Product.php';
+if (!class_exists('Storefront_Resource_Product')) {
+    require_once dirname(__FILE__) . '/Product.php';
+}
 
 /**
  * Storefront_Resource_ProductImage
