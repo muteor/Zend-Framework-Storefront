@@ -53,11 +53,14 @@ class CartTest extends PHPUnit_Framework_TestCase
         $product->name = 'Product 1';
         $product->description = str_repeat('Product 1 is great..', 10);
         $product->shortDescription = 'Product 1 is great..';
-        $product->price = '10.00';
         $product->discountPercent = 0;
         $product->taxable = 'Yes';
         $product->deliveryMethod = 'Mail';
         $product->stockStatus = 'InStock';
+
+        $product->expects($this->any())
+                     ->method('getPrice')
+                     ->will($this->returnValue(10.00));
 
         return $product;
     }
@@ -153,7 +156,6 @@ class CartTest extends PHPUnit_Framework_TestCase
 
         $product2 = clone $product;
         $product2->productId = 2;
-        $product2->price = 20.00;
         $product2->discountPercent = 50;
 
         $product3 = clone $product;
@@ -164,11 +166,11 @@ class CartTest extends PHPUnit_Framework_TestCase
         $cartItem = $this->_model->addItem($product2, 1);
         $cartItem = $this->_model->addItem($product3, 1);
 
-        // tax and qty
+        // tax 15% and qty
         $this->assertEquals((11.50*2), $this->_model[1]->getLineCost());
         
-        // tax and 50% discount
-        $this->assertEquals((11.50), $this->_model[2]->getLineCost());
+        // tax 15% and 50% discount
+        $this->assertEquals((11.50 / 2), $this->_model[2]->getLineCost());
         
         // no tax no discount
         $this->assertEquals(10, $this->_model[3]->getLineCost());
@@ -180,7 +182,6 @@ class CartTest extends PHPUnit_Framework_TestCase
 
         $product2 = clone $product;
         $product2->productId = 2;
-        $product2->price = 20.00;
         $product2->discountPercent = 50;
 
         $product3 = clone $product;
@@ -191,11 +192,11 @@ class CartTest extends PHPUnit_Framework_TestCase
         $cartItem = $this->_model->addItem($product2, 1);
         $cartItem = $this->_model->addItem($product3, 1);
 
-        $this->assertEquals((11.50*2) + 11.50 + 10, $this->_model->getSubTotal());
-        $this->assertEquals((11.50*2) + 11.50 + 10, $this->_model->getTotal());
+        $this->assertEquals((11.50*2) + (11.50/2) + 10, $this->_model->getSubTotal());
+        $this->assertEquals((11.50*2) + (11.50/2) + 10, $this->_model->getTotal());
 
         $this->_model->setShippingCost(20.00);
-        $this->assertEquals((11.50*2) + 11.50 + 10 + 20, $this->_model->getTotal());
+        $this->assertEquals((11.50*2) + (11.50/2) + 10 + 20, $this->_model->getTotal());
     }
 
     public function test_Cart_Should_Query_Session_On_Instantiation()
