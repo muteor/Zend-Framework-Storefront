@@ -1,7 +1,6 @@
 <?php
 $paths = array(
     get_include_path(),
-    '../library/Incu',
      '../library',
 );
 set_include_path(implode(PATH_SEPARATOR, $paths));
