@@ -1,26 +1,22 @@
-CREATE DATABASE IF NOT EXISTS storefront;
-USE storefront;
-
 --
 -- Definition of table `storefront`.`category`
 --
 
-DROP TABLE IF EXISTS `storefront`.`category`;
-CREATE TABLE  `storefront`.`category` (
+CREATE TABLE  `category` (
   `categoryId` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(200) NOT NULL,
   `parentId` int(10) unsigned NOT NULL,
   `ident` varchar(200) NOT NULL,
   PRIMARY KEY  (`categoryId`),
-  UNIQUE KEY `ident` (`ident`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `ident` (`ident`),
+  KEY `parent` (`parentId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8
 
 --
 -- Definition of table `storefront`.`product`
 --
 
-DROP TABLE IF EXISTS `storefront`.`product`;
-CREATE TABLE  `storefront`.`product` (
+CREATE TABLE  `product` (
   `productId` int(10) unsigned NOT NULL auto_increment,
   `categoryId` int(10) unsigned NOT NULL,
   `ident` varchar(56) NOT NULL,
@@ -30,34 +26,31 @@ CREATE TABLE  `storefront`.`product` (
   `price` decimal(10,2) NOT NULL,
   `discountPercent` int(3) NOT NULL,
   `taxable` enum('Yes','No') NOT NULL,
-  `deliveryMethod` enum('Mail','Download') NOT NULL,
-  `stockStatus` enum('InStock','PreOrder','Discontinued','Unavailable') NOT NULL,
   PRIMARY KEY  (`productId`),
+  UNIQUE KEY `ident` (`ident`),
   KEY `category` (`categoryId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `storefront`.`productImage`
 --
 
-DROP TABLE IF EXISTS `storefront`.`productImage`;
-CREATE TABLE  `storefront`.`productImage` (
+CREATE TABLE  `productImage` (
   `imageId` int(10) unsigned NOT NULL auto_increment,
   `productId` int(10) unsigned NOT NULL,
   `thumbnail` varchar(200) NOT NULL,
   `full` varchar(200) NOT NULL,
-  `isDefault` enum('Yes', 'No') NOT NULL,
+  `isDefault` enum('Yes','No') NOT NULL default 'No',
   PRIMARY KEY  (`imageId`),
   KEY `productId` (`productId`),
   CONSTRAINT `fk_product` FOREIGN KEY (`productId`) REFERENCES `product` (`productId`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `storefront`.`user`
 --
 
-DROP TABLE IF EXISTS `storefront`.`user`;
-CREATE TABLE  `storefront`.`user` (
+CREATE TABLE  `user` (
   `userId` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(10) NOT NULL,
   `firstname` varchar(128) NOT NULL,
@@ -69,4 +62,4 @@ CREATE TABLE  `storefront`.`user` (
   PRIMARY KEY  (`userId`),
   KEY `email_pass` (`email`,`passwd`),
   KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
