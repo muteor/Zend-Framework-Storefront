@@ -1,26 +1,2 @@
 <h3>shopping <span>cart</span></h3>
-<? foreach($this->cartModel as $item): ?>
-<div class="clearfix">
-    <p class="left">
-        <?=$item->name ?> x <?=$item->qty; ?>
-    </p>
-    <p class="right">
-        <?=$this->Cart()->formatAmount($item->getLineCost()); ?>
-    </p>
-</div>
-<? endforeach;?>
-<div class="clearfix">
-    <p class="right">
-        Subtotal: <?=$this->Cart()->formatAmount($this->cartModel->getSubTotal()); ?>
-    </p>
-</div>
-<div class="clearfix">
-    <p class="right">
-        Shipping:
-    </p>
-</div>
-<div class="clearfix">
-    <p class="right">
-        Total: <?=$this->Cart()->formatAmount($this->cartModel->getTotal()); ?>
-    </p>
-</div>
+<?=$this->Cart()->cartTable();?>

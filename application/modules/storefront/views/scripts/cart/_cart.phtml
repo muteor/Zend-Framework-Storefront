@@ -1,0 +1,26 @@
+<div style="padding: 8px;">
+    <table>
+        <tbody>
+            <? foreach($this->cartModel as $item): ?>
+            <tr>
+                <td><?=$this->Escape($item->name); ?></td>
+                <td><?=$this->cartTable->qtys->getElement($item->productId); ?></td>
+                <td><?=$this->Cart()->formatAmount($item->getLineCost()); ?></td>
+            </tr>
+            <? endforeach;?>
+            <tr>
+                <td colspan="2">SubTotal:</td>
+                <td><?=$this->Cart()->formatAmount($this->cartModel->getSubTotal()); ?></td>
+            </tr>
+            <tr>
+                <td colspan="2">Shipping:</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2">Total:</td>
+                <td><?=$this->Cart()->formatAmount($this->cartModel->getTotal()); ?></td>
+            </tr>
+        </tbody>
+    </table>
+    <?=$this->cartTable->getElement('update-cart'); ?>
+</div>

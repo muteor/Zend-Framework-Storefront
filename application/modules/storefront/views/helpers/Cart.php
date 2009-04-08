@@ -63,6 +63,32 @@ class Zend_View_Helper_Cart extends Zend_View_Helper_Abstract
         return $form;
     }
 
+    public function cartTable()
+    {
+        $this->view->cartTable = $this->cartModel->getForm('cartTable');
+
+        // add qty elements, use subform so we can easily get them later
+        $qtys = new Zend_Form_SubForm();
+
+        foreach($this->cartModel as $item) {
+            $qtys->addElement('text', (string) $item->productId,
+                array(
+                    'value' => $item->qty,
+                    'belongsTo' => 'quantity',
+                    'style' => 'width: 20px;',
+                    'decorators' => array(
+                        'ViewHelper'
+                    ),
+                )
+            );
+        }
+        $this->view->cartTable->addSubForm($qtys, 'qtys');
+
+        return $this->view->cartTable->renderForm(
+            $this->view->render('cart/_cart.phtml')
+        );
+    }
+
     public function formatAmount($amount)
     {
         $currency = new Zend_Currency();
