@@ -58,6 +58,15 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
      */
     public function addItem(Storefront_Resource_Product_Item_Interface $product, $qty)
     {
+        if (0 > $qty) {
+            return false;
+        }
+
+        if (0 == $qty) {
+            $this->removeItem($product);
+            return false;
+        }
+        
         $item = new Storefront_Resource_Cart_Item($product, $qty);   
         $this->_items[$item->productId] = $item;
         $this->persist();

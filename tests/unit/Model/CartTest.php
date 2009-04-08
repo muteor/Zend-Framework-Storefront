@@ -214,4 +214,22 @@ class CartTest extends PHPUnit_Framework_TestCase
             array('sessionNs' => $mockNS)
         );
     }
+
+    public function test_Cart_Should_Not_Accept_Negative_Qty()
+    {
+        $product = $this->getProductMock();
+        $cartItem = $this->_model->addItem($product, -10);
+        $cartItem = $this->_model->addItem($product, 0);
+
+        $this->assertEquals(0, count($this->_model));
+    }
+
+    public function test_Cart_Should_Remove_Item_If_Added_With_Zero_Qty()
+    {
+        $product = $this->getProductMock();
+        $cartItem = $this->_model->addItem($product, 1);
+        $cartItem = $this->_model->addItem($product, 0);
+
+        $this->assertEquals(0, count($this->_model));
+    }
 }
