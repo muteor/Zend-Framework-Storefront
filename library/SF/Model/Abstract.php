@@ -107,7 +107,7 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
                     'Form',
                     $this->_getInflected($name)
             ));
-            $this->_forms[$name] = new $class();
+            $this->_forms[$name] = new $class(array('model' => $this));
         }
 	    return $this->_forms[$name];
     }

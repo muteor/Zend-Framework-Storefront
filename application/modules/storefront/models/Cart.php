@@ -120,6 +120,7 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
     public function persist()
     {
         $this->getSessionNs()->items = $this->_items;
+        $this->getSessionNs()->shipping = $this->getShippingCost();
     }
 
     /**
@@ -129,6 +130,9 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
     {
         if (isset($this->getSessionNs()->items)) {
             $this->_items = $this->getSessionNs()->items;
+        }
+        if (isset($this->getSessionNs()->shipping)) {
+            $this->setShippingCost($this->getSessionNs()->shipping);
         }
     }
 
@@ -155,6 +159,7 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
     {
         $this->_shipping = $cost;
         $this->CalculateTotals();
+        $this->persist();
     }
 
     /**

@@ -355,5 +355,12 @@ table .odd {
     background: #f6f6f6;
 }
 
+table .rt {
+    text-align: right;
+}
+
+table .colRight {
+    width: 100px;
+}
 
 /* @end */

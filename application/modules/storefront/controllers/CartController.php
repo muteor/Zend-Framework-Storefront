@@ -43,9 +43,13 @@ class Storefront_CartController extends Zend_Controller_Action
     public function updateAction()
     {
         foreach($this->_getParam('quantity') as $id => $value) {
-            echo 'ID: ' . $id . ' V: ' . $value . "\n";
+            $product = $this->_catalogModel->getProductById($id);
+            $this->_cartModel->addItem($product, $value);
         }
-        die();
+
+        $this->_cartModel->setShippingCost($this->_getParam('shipping'));
+
+        return $this->_helper->redirector('view');
     }
 
     public function removeAction(){}

@@ -1,8 +1,8 @@
 <?php
 /**
- * Zend_View_Helper_ProductImage
+ * Zend_View_Helper_Cart
  *
- * Helper for displaying product images
+ * Helper for all shopping cart
  *
  * @category   Storefront
  * @package    Storefront_View_Helper
@@ -65,7 +65,13 @@ class Zend_View_Helper_Cart extends Zend_View_Helper_Abstract
 
     public function cartTable()
     {
-        $this->view->cartTable = $this->cartModel->getForm('cartTable');
+        $cartTable = $this->cartModel->getForm('cartTable');
+        $cartTable->setAction($this->view->url(array(
+            'controller' => 'cart' ,
+            'action' => 'update'
+            ),
+            'default'
+        ));
 
         // add qty elements, use subform so we can easily get them later
         $qtys = new Zend_Form_SubForm();
@@ -82,16 +88,37 @@ class Zend_View_Helper_Cart extends Zend_View_Helper_Abstract
                 )
             );
         }
-        $this->view->cartTable->addSubForm($qtys, 'qtys');
+        $cartTable->addSubForm($qtys, 'qtys');
 
-        return $this->view->cartTable->renderForm(
-            $this->view->render('cart/_cart.phtml')
-        );
+        // add shipping options
+        $cartTable->addElement('select', 'shipping', array(
+            'decorators' => array(
+                'ViewHelper'
+            ),
+            'MultiOptions' => $this->_getShippingMultiOptions(),
+            'onChange' => 'this.form.submit();',
+            'value' => $this->cartModel->getShippingCost()
+        ));
+
+        return $cartTable->render();
     }
 
     public function formatAmount($amount)
     {
         $currency = new Zend_Currency();
         return $currency->toCurrency($amount);
+    }
+
+    private function _getShippingMultiOptions()
+    {
+        $currency = new Zend_Currency();
+        $shipping = new Storefront_Model_Shipping();
+        $options = array(0 => 'Please Select');
+
+        foreach($shipping->getShippingOptions() as $key => $value) {
+            $options["$value"] = $key . ' - ' . $currency->toCurrency($value);
+        }
+
+        return $options;
     }
 }
