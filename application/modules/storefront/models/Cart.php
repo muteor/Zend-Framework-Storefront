@@ -147,7 +147,7 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
         }
 
         $this->_subTotal = $sub;
-        $this->_total = $this->_subTotal + $this->_shipping;
+        $this->_total = $this->_subTotal + (float) $this->_shipping;
     }
 
     /**

@@ -128,10 +128,10 @@ class CartTest extends PHPUnit_Framework_TestCase
         $product = $this->getProductMock();
 
         $mockNS = $this->getMock('Zend_Session_Namespace');
-        $mockNS->expects($this->exactly(2))
+        $mockNS->expects($this->any())
                      ->method('__set')
                      ->will($this->returnValue(true));
-        $mockNS->expects($this->once())
+        $mockNS->expects($this->any())
                      ->method('__get')
                      ->will($this->returnValue(array(1 => $product)));
 
@@ -202,12 +202,11 @@ class CartTest extends PHPUnit_Framework_TestCase
     public function test_Cart_Should_Query_Session_On_Instantiation()
     {
         $mockNS = $this->getMock('Zend_Session_Namespace');
-        $mockNS->expects($this->once())
+        $mockNS->expects($this->exactly(2))
                      ->method('__isset')
                      ->will($this->returnValue(true));
-        $mockNS->expects($this->once())
+        $mockNS->expects($this->any())
                      ->method('__get')
-                     ->with('items')
                      ->will($this->returnValue(array()));
 
         $this->_model = new Storefront_Model_Cart(
