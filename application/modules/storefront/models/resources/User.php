@@ -35,6 +35,8 @@ class Storefront_Resource_User extends SF_Model_Resource_Db_Table_Abstract imple
     
     public function getUsers($paged=false, $order=null)
     {
+        $select = $this->select();
+        
         if (true === is_array($order)) {
             $select->order($order);
         }

@@ -170,7 +170,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
 
         // Admin context route
         $route = new Zend_Controller_Router_Route(
-            'admin/:module/:controller/:action',
+            'admin/:module/:controller/:action/*',
             array(
                 'action'     => 'index',
                 'controller' => 'admin',

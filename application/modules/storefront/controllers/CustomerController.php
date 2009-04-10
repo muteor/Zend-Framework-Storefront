@@ -1,5 +1,5 @@
 <?php
-/**
+/**sadf
  * CustomerController
  * 
  * @category   Storefront
@@ -26,22 +26,54 @@ class Storefront_CustomerController extends Zend_Controller_Action
     
 	public function indexAction() 
 	{
-        $userID = 1; //will be from session
-        $this->view->user = $this->_model->getUserById($userID);
+        if (!$this->_model->checkAcl('updateUser')) {
+            return $this->render('login');
+        }
+        
+        $this->view->user = $this->_model->getUserById($this->_authService->getIdentity()->userId);
+
+        if (null === $this->view->user) {
+            throw new SF_Exception('Unknown user');
+        }
+
         $this->view->userForm = $this->getUserForm()->populate($this->view->user->toArray());
     }
 
     public function saveAction()
     {
         $request = $this->getRequest();
+        $redirector = $this->_helper->getHelper('Redirector');
 
-        if (!$request->isPost()) {
-            return $this->_helper->redirector('index');
+        $validator = 'edit';
+        $onFail = 'edit';
+        $onSuccess = array(
+            'urlOptions' => array(
+                'controller' => 'customer',
+                'action' => 'index'
+            ),
+            'route' => 'default'
+        );
+
+        if ($this->_getParam('isAdmin')) {
+            $this->view->user = $this->_model->getUserById($this->_getParam('id'));
+            $this->view->userForm = $this->getUserAdminForm();
+
+            $validator = 'admin';
+            $onFail = 'edit';
+            $onSuccess = array(
+                'urlOptions' => array(
+                    'controller' => 'customer',
+                    'action' => 'list'
+                ),
+                'route' => 'admin'
+            );
         }
 
-        if (false === ($id = $this->_model->saveUser($request->getPost()))) {
-            return $this->render('index');
+        if (false === $this->_model->saveUser($request->getPost(), $validator)) {
+            return $this->render($onFail);
         }
+
+        return $redirector->gotoRoute($onSuccess['urlOptions'], $onSuccess['route']);
     }
 
 	public function registerAction()
@@ -55,7 +87,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
             return $this->_helper->redirector('register');
         }
 
-        if (false === ($id = $this->_model->registerUser($request->getPost()))) {
+        if (false === $this->_model->registerUser($request->getPost())) {
             return $this->render('register');
         }
 	}
@@ -64,6 +96,13 @@ class Storefront_CustomerController extends Zend_Controller_Action
 	{
 	    $this->view->users = $this->_model->getUsers();
 	}
+
+    public function editAction()
+    {
+        $this->view->userForm = $this->getUserAdminForm();
+        $this->view->user = $this->_model->getUserById($this->_getParam('id'));
+        $this->view->userForm->populate($this->view->user->toArray());
+    }
 	
 	public function loginAction()
 	{}
@@ -126,6 +165,22 @@ class Storefront_CustomerController extends Zend_Controller_Action
         $this->_forms['userEdit']->setMethod('post');
 
         return $this->_forms['userEdit'];
+    }
+
+    public function getUserAdminForm()
+    {
+        $urlHelper = $this->_helper->getHelper('url');
+
+        $this->_forms['userAdmin'] = $this->_model->getForm('userAdmin');
+        $this->_forms['userAdmin']->setAction($urlHelper->url(array(
+            'controller' => 'customer' ,
+            'action' => 'save'
+            ),
+            'admin'
+        ));
+        $this->_forms['userAdmin']->setMethod('post');
+
+        return $this->_forms['userAdmin'];
     }
     
     public function getLoginForm()

@@ -16,7 +16,22 @@ class Storefront_Service_Authentication
      * @var Zend_Auth_Adapter_DbTable
      */
     protected $_authAdapter;
-    
+
+    /**
+     * @var Storefront_Model_User
+     */
+    protected $_userModel;
+
+    /**
+     * Construct 
+     * 
+     * @param null|Storefront_Model_User $userModel 
+     */
+    public function __construct(Storefront_Model_User $userModel = null)
+    {
+        $this->_userModel = null === $userModel ? new Storefront_Model_User() : $userModel;
+    }
+
     /**
      * Authenticate a user
      *
@@ -28,16 +43,25 @@ class Storefront_Service_Authentication
         $adapter = $this->getAuthAdapter($credentials);
         $auth    = Zend_Auth::getInstance();
         $result  = $auth->authenticate($adapter);
-        
+
         if (!$result->isValid()) {
             return false;
         }
-        
-        $auth->getStorage()->write($adapter->getResultRowObject(array('userId',
-            'email', 'role', 'firstname', 'lastname'
-        )));
+
+        $user = $this->_userModel->getUserByEmail($credentials['email']);
+
+        $auth->getStorage()->write($user);
         
         return true;
+    }
+
+    public function getIdentity()
+    {
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            return $auth->getIdentity();
+        }
+        return false;
     }
     
     /**

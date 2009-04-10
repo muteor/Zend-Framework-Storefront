@@ -107,6 +107,12 @@ class Storefront_Model_Catalog extends SF_Model_Abstract
         return $cats;
     }
     
+    /**
+     * Get a categories parents
+     * 
+     * @param Storefront_Resource_Category_Item $category
+     * @return array
+     */
     public function getParentCategories($category)
     {
         $cats = array($category);

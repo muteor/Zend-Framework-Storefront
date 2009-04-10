@@ -99,7 +99,13 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
     {
         $ident = new stdClass();
         $ident->userId = 1;
-        
+
+        $mockUser = $this->getMock('Storefront_Model_User');
+        $mockUser
+            ->expects($this->once())
+            ->method('getUserByEmail')
+            ->will($this->returnValue(true));
+            
         $mockAdapter = $this->getMock('Zend_Auth_Adapter_DbTable', array(), array(), '', false);
         $mockAdapter
             ->expects($this->once())
@@ -109,17 +115,13 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
                     new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, new stdClass())
                 )
             );
-        $mockAdapter
-            ->expects($this->once())
-            ->method('getResultRowObject')
-            ->will($this->returnValue($ident));
             
+        $this->_service = new Storefront_Service_Authentication($mockUser);
         $this->_service->setAuthAdapter($mockAdapter);
         $this->assertTrue($this->_service->authenticate(array('email' => 'test@test.com', 'passwd' => 'moo')));
         
         $auth = Zend_Auth::getInstance();
-        
-        $this->assertEquals(1, $auth->getIdentity()->userId);
+        $this->assertEquals(true, $auth->getIdentity());
     }
     
     public function test_Authenticate_Can_Clear_Identity()
@@ -127,6 +129,12 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         $ident = new stdClass();
         $ident->userId = 1;
         
+        $mockUser = $this->getMock('Storefront_Model_User');
+        $mockUser
+            ->expects($this->once())
+            ->method('getUserByEmail')
+            ->will($this->returnValue(true));
+
         $mockAdapter = $this->getMock('Zend_Auth_Adapter_DbTable', array(), array(), '', false);
         $mockAdapter
             ->expects($this->once())
@@ -136,17 +144,14 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
                     new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, new stdClass())
                 )
             );
-        $mockAdapter
-            ->expects($this->once())
-            ->method('getResultRowObject')
-            ->will($this->returnValue($ident));
             
+        $this->_service = new Storefront_Service_Authentication($mockUser);
         $this->_service->setAuthAdapter($mockAdapter);
         $this->assertTrue($this->_service->authenticate(array('email' => 'test@test.com', 'passwd' => 'moo')));
         
         $auth = Zend_Auth::getInstance();
         
-        $this->assertEquals(1, $auth->getIdentity()->userId);
+        $this->assertEquals(true, $auth->getIdentity());
         
         $this->_service->clear();
         

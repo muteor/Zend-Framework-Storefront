@@ -73,6 +73,12 @@ class Storefront_Form_User_Base extends SF_Form_Abstract
             'label'      => 'Confirm Password',
         ));
 
+        $this->addElement('select', 'role', array(
+            'required'   => true,
+            'label'      => 'Role',
+            'multiOptions' => array('Customer' => 'Customer', 'Admin' => 'Admin'),
+        ));
+
         $this->addElement('submit', 'submit', array(
             'required' => false,
             'ignore'   => true,
