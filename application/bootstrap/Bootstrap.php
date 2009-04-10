@@ -7,12 +7,17 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Bootstrap extends Zend_Application_Module_Bootstrap
+class Bootstrap extends Zend_Application_Bootstrap_Base
 {
     /**
      * @var Zend_Log
      */
     protected $_logger;
+
+    /**
+     * @var Zend_Application_Module_Autoloader
+     */
+    protected $_resourceLoader;
 
     /**
      * @var Zend_Controller_Front
@@ -28,7 +33,6 @@ class Storefront_Bootstrap extends Zend_Application_Module_Bootstrap
         $this->bootstrap('frontController');
         $this->frontController->setResponse(new Zend_Controller_Response_Http());
         $this->frontController->setRequest(new Zend_Controller_Request_Http());
-        $this->frontController->throwExceptions(true);
     }
 
     /**
@@ -60,11 +64,15 @@ class Storefront_Bootstrap extends Zend_Application_Module_Bootstrap
      * resource types for us. We also add two custom resources for Services
      * and Model Resources.
      */
-    protected function _initModuleAutoloader()
+    protected function _initDefaultModuleAutoloader()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
-
-        $this->getResourceLoader()->addResourceTypes(array(
+        
+        $this->_resourceLoader = new Zend_Application_Module_Autoloader(array(
+            'namespace' => 'Storefront',
+            'basePath'  => APPLICATION_PATH . '/modules/storefront',
+        ));
+        $this->_resourceLoader->addResourceTypes(array(
             'modelResource' => array(
               'path'      => 'models/resources',
               'namespace' => 'Resource',
