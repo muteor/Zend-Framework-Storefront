@@ -74,6 +74,7 @@
                  ?>"
                title="Contact">Contact</a>
         </li>
+        <? if ('Admin' === $this->AuthInfo('role')): ?>
         <li>
             <a href="
                 <?= $this->url(array(
@@ -86,5 +87,6 @@
                  ?>"
                title="administration area">Admin</a>
         </li>
+        <? endif; ?>
     </ul>
 </div>

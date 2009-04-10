@@ -21,5 +21,9 @@ class Storefront_Model_Acl_Storefront extends Zend_Acl implements SF_Acl_Interfa
 
         // Deny privileges by default; i.e., create a whitelist
         $this->deny();
+
+        // Add permission for non Model access restrictions
+        $this->add(new Storefront_Model_Acl_Resource_Admin)
+             ->allow('Admin');
     }
 }

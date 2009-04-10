@@ -70,9 +70,14 @@ class Storefront_Model_User extends SF_Model_Abstract implements Zend_Acl_Resour
      */
     public function saveUser($post, $validator = null)
     {
+        if (!$this->checkAcl('saveUser')) {
+            throw new SF_Acl_Exception("Insufficient rights");
+        }
+
         if (null === $validator) {
             $validator = 'edit';
         }
+
         $form = $this->getForm('user' . ucfirst($validator));
 
         return $this->save($form, $post);
@@ -141,7 +146,7 @@ class Storefront_Model_User extends SF_Model_Abstract implements Zend_Acl_Resour
         if (!$acl->has($this->getResourceId())) {
             $acl->add($this)
                 ->allow('Guest', $this, array('register'))
-                ->allow('Customer', $this, array('updateUser'))
+                ->allow('Customer', $this, array('saveUser'))
                 ->allow('Admin', $this);
         }
         $this->_acl = $acl;
