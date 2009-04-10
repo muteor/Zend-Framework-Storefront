@@ -14,23 +14,8 @@ class Storefront_AdminController extends Zend_Controller_Action
 	 */
 	public function indexAction() 
 	{
-
-        if ($this->_helper->acl('Guest', 'Admin')) {
-            echo 'Yes';
-        } else {
-            echo 'No';
-        }
-
-        if ($this->_helper->acl('Customer', 'Admin')) {
-            echo 'Yes';
-        } else {
-            echo 'No';
-        }
-
-        if ($this->_helper->acl('Admin', 'Admin', null)) {
-            echo 'Yes';
-        } else {
-            echo 'No';
+        if (!$this->_helper->acl('Admin')) {
+            throw new SF_Acl_Exception('Access Denied');
         }
 	}
 }

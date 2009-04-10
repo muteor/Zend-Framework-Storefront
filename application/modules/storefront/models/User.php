@@ -120,6 +120,34 @@ class Storefront_Model_User extends SF_Model_Abstract implements Zend_Acl_Resour
     }
 
     /**
+     * Delete a user
+     *
+     * @param int|Storefront_Resource_User_Item_Interface $user
+     * @return boolean
+     */
+    public function deleteUser($user)
+    {
+        if (!$this->checkAcl('deleteUser')) {
+            throw new SF_Acl_Exception("Insufficient rights");
+        }
+
+        if ($user instanceof Storefront_Resource_User_Item_Interface) {
+            $userId = (int) $user->userId;
+        } else {
+            $userId = (int) $user;
+        }
+        
+        $user = $this->getUserById($userId);
+
+        if (null !== $user) {
+            $user->delete();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Implement the Zend_Acl_Resource_Interface, make this model
      * an acl resource
      * 

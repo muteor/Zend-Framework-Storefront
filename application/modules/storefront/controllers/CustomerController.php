@@ -94,14 +94,31 @@ class Storefront_CustomerController extends Zend_Controller_Action
 	
 	public function listAction()
 	{
+        if (!$this->_helper->acl('Admin')) {
+            return $this->render('login');
+        }
+        
 	    $this->view->users = $this->_model->getUsers();
 	}
 
     public function editAction()
     {
+        if (!$this->_helper->acl('Admin')) {
+            return $this->render('login');
+        }
+        
         $this->view->userForm = $this->getUserAdminForm();
         $this->view->user = $this->_model->getUserById($this->_getParam('id'));
         $this->view->userForm->populate($this->view->user->toArray());
+    }
+
+    public function deleteAction()
+    {
+        if (false === ($id = $this->_getParam('id',false))) {
+            throw new SF_Exception('Unknown user');
+        }
+
+        $this->_model->deleteUser($id);
     }
 	
 	public function loginAction()

@@ -60,8 +60,10 @@ class Storefront_CatalogController extends Zend_Controller_Action
         );
     }
     
-    public function adminAction()
-    {}
+    public function listAction()
+    {
+        
+    }
     
     public function getBreadcrumb($category)
     {

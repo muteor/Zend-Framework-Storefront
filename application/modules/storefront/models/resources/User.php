@@ -33,7 +33,7 @@ class Storefront_Resource_User extends SF_Model_Resource_Db_Table_Abstract imple
         return $this->fetchRow($select);
     }
     
-    public function getUsers($paged=false, $order=null)
+    public function getUsers($paged=null, $order=null)
     {
         $select = $this->select();
         
