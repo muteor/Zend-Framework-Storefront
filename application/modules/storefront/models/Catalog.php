@@ -136,6 +136,23 @@ class Storefront_Model_Catalog extends SF_Model_Abstract implements Zend_Acl_Res
         return $cats;
     }
 
+    public function saveCategory($data, $validator = null)
+    {
+        if (null === $validator) {
+            $validator = 'add';
+        }
+
+        $validator = $this->getForm('catalogCategory' . ucfirst($validator));
+
+        if (!$validator->isValid($data)) {
+            return false;
+        }
+
+        $data = $validator->getValues();
+
+        return $this->getResource('Category')->saveRow($data);
+    }
+
     /**
      * Implement the Zend_Acl_Resource_Interface, make this model
      * an acl resource

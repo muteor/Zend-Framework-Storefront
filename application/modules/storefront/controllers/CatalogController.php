@@ -10,11 +10,17 @@ class Storefront_CatalogController extends Zend_Controller_Action
      * @var Storefront_Model_Cart
      */
     protected $_cartModel;
+
+    /**
+     * @var array
+     */
+    protected $_forms = array();
     
     public function init()
     {
         $this->_catalogModel = new Storefront_Model_Catalog();
         $this->_cartModel = new Storefront_Model_Cart();
+        $this->_redirector = $this->_helper->getHelper('redirector');
     }
 
     public function indexAction()
@@ -62,6 +68,10 @@ class Storefront_CatalogController extends Zend_Controller_Action
     
     public function listAction()
     {
+        if (!$this->_helper->acl('Admin')) {
+            return $this->_helper->redirectCommon('gotoLogin');
+        }
+        
         $this->view->categorySelect = $this->_catalogModel->getForm('catalogCategorySelect');
         $this->view->categorySelect->populate($this->getRequest()->getPost());
 
@@ -74,9 +84,62 @@ class Storefront_CatalogController extends Zend_Controller_Action
             );
         }
     }
+
+    public function addcategoryAction()
+    {
+        if (!$this->_helper->acl('Admin')) {
+            return $this->_helper->redirectCommon('gotoLogin');
+        }
+
+        $this->view->categoryForm = $this->_getCategoryForm();
+    }
+
+    public function savecategoryAction()
+    {
+        if (!$this->_helper->acl('Admin')) {
+            return $this->_helper->redirectCommon('gotoLogin');
+        }
+        
+        $request = $this->getRequest();
+
+        if (!$request->isPost()) {
+            return $this->_helper->redirector('addcategory');
+        }
+
+        if(false === $this->_catalogModel->saveCategory($request->getPost())) {
+            $this->view->categoryForm = $this->_getCategoryForm();
+            return $this->render('addcategory');
+        }
+
+        $redirector = $this->getHelper('redirector');
+        return $redirector->gotoRoute(array('action' => 'list'), 'admin');
+    }
+
+    public function addproductAction()
+    {
+        if (!$this->_helper->acl('Admin')) {
+            return $this->_helper->redirectCommon('gotoLogin');
+        }
+    }
     
     public function getBreadcrumb($category)
     {
         $this->view->bread = $this->_catalogModel->getParentCategories($category);
+    }
+
+    protected function _getCategoryForm()
+    {
+        $urlHelper = $this->_helper->getHelper('url');
+
+        $this->_forms['addCategory'] = $this->_catalogModel->getForm('catalogCategoryAdd');
+        $this->_forms['addCategory']->setAction($urlHelper->url(array(
+            'controller' => 'catalog' ,
+            'action' => 'saveCategory'
+            ),
+            'admin'
+        ));
+        $this->_forms['addCategory']->setMethod('post');
+
+        return $this->_forms['addCategory'];
     }
 }

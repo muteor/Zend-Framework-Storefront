@@ -27,7 +27,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
 	public function indexAction() 
 	{
         if (!$this->_model->checkAcl('updateUser')) {
-            return $this->render('login');
+            return $this->_helper->redirectCommon('gotoLogin');
         }
         
         $this->view->user = $this->_model->getUserById($this->_authService->getIdentity()->userId);
@@ -95,7 +95,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
 	public function listAction()
 	{
         if (!$this->_helper->acl('Admin')) {
-            return $this->render('login');
+            return $this->_helper->redirectCommon('gotoLogin');
         }
         
 	    $this->view->users = $this->_model->getUsers();
@@ -104,7 +104,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
     public function editAction()
     {
         if (!$this->_helper->acl('Admin')) {
-            return $this->render('login');
+            return $this->_helper->redirectCommon('gotoLogin');
         }
         
         $this->view->userForm = $this->getUserAdminForm();

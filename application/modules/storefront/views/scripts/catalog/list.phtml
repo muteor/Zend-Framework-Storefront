@@ -3,8 +3,8 @@
     <?=$this->categorySelect; ?>
 </p>
 <p>
-    <a href="">Add Category</a>
-    <a href="">Add Product</a>
+    <a href="<?=$this->url(array('controller' => 'catalog', 'action' => 'addcategory'), 'admin', true)?>">Add Category</a>
+    <a href="<?=$this->url(array('controller' => 'catalog', 'action' => 'addproduct'), 'admin', true)?>">Add Product</a>
 </p>
 <table class="datatable">
     <thead>
@@ -29,6 +29,12 @@
             <td><a href="">Delete</a></td>
         </tr>
         <? endforeach; ?>
+    </tbody>
+    <? else: ?>
+    <tbody>
+        <tr>
+            <td colspan="6">Select Category</td>
+        </tr>
     </tbody>
     <? endif; ?>
 </table>
