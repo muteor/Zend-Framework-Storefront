@@ -7,7 +7,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Model_Catalog extends SF_Model_Abstract
+class Storefront_Model_Catalog extends SF_Model_Abstract implements Zend_Acl_Resource_Interface, SF_Model_Acl_Interface
 {    
     /**
      * Get categories
@@ -31,6 +31,11 @@ class Storefront_Model_Catalog extends SF_Model_Abstract
     public function getCategoryByIdent($ident)
     {
         return $this->getResource('Category')->getCategoryByIdent($ident);
+    }
+
+    public function getCategories()
+    {
+        return $this->getResource('Category')->getCategories();
     }
 
     /**
@@ -129,5 +134,53 @@ class Storefront_Model_Catalog extends SF_Model_Abstract
         }
         
         return $cats;
+    }
+
+    /**
+     * Implement the Zend_Acl_Resource_Interface, make this model
+     * an acl resource
+     *
+     * @return string The resource id
+     */
+    public function getResourceId()
+    {
+        return 'Catalog';
+    }
+
+    /**
+     * Injector for the acl, the acl can be injected either directly
+     * via this method or by passing the 'acl' option to the models
+     * construct.
+     *
+     * We add all the access rule for this resource here, so we
+     * add $this as the resource, plus its rules.
+     *
+     * @param SF_Acl_Interface $acl
+     * @return SF_Model_Abstract
+     */
+    public function setAcl(SF_Acl_Interface $acl)
+    {
+        if (!$acl->has($this->getResourceId())) {
+            $acl->add($this)
+                ->allow('Guest', $this, array('register'))
+                ->allow('Customer', $this, array('saveUser'))
+                ->allow('Admin', $this);
+        }
+        $this->_acl = $acl;
+        return $this;
+    }
+
+    /**
+     * Get the acl and automatically instantiate the default acl if one
+     * has not been injected.
+     *
+     * @return Zend_Acl
+     */
+    public function getAcl()
+    {
+        if (null === $this->_acl) {
+            $this->setAcl(new Storefront_Model_Acl_Storefront());
+        }
+        return $this->_acl;
     }
 }

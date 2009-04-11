@@ -11,9 +11,9 @@
     <tbody>
 <? foreach ($this->users as $user): ?>
         <tr>
-            <td><?=$user->fullname; ?></td>
-            <td><?=$user->email; ?></td>
-            <td><?=$user->role; ?></td>
+            <td><?=$this->Escape($user->fullname); ?></td>
+            <td><?=$this->Escape($user->email); ?></td>
+            <td><?=$this->Escape($user->role); ?></td>
             <td>
             <a href="<?=$this->url(array('controller' => 'customer', 'action' => 'edit','id' => $user->userId), 'admin', true); ?>">Edit</a> / 
             <a href="<?=$this->url(array('controller' => 'customer', 'action' => 'delete','id' => $user->userId), 'admin', true); ?>">Delete</a></td>

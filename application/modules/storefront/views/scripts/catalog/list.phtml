@@ -1,23 +1,34 @@
 <h3>product catalog</h3>
+<p>
+    <?=$this->categorySelect; ?>
+</p>
+<p>
+    <a href="">Add Category</a>
+    <a href="">Add Product</a>
+</p>
 <table class="datatable">
     <thead>
         <tr>
             <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
+            <th>Ident</th>
+            <th>Discount %</th>
+            <th>Price</th>
+            <th>Sale Price</th>
             <th>Action</th>
         </tr>
     </thead>
+    <? if($this->products): ?>
     <tbody>
-<? foreach ($this->users as $user): ?>
+        <? foreach($this->products as $product): ?>
         <tr>
-            <td><?=$user->fullname; ?></td>
-            <td><?=$user->email; ?></td>
-            <td><?=$user->role; ?></td>
-            <td>
-            <a href="<?=$this->url(array('controller' => 'customer', 'action' => 'edit','id' => $user->userId), 'admin', true); ?>">Edit</a> /
-            <a href="<?=$this->url(array('controller' => 'customer', 'action' => 'delete','id' => $user->userId), 'admin', true); ?>">Delete</a></td>
+            <td><?=$this->Escape($product->name);?></td>
+            <td><?=$this->Escape($product->ident);?></td>
+            <td><?=$this->Escape($product->discountPercent);?></td>
+            <td><?=$this->Escape($product->getPrice(false,false));?></td>
+            <td><?=$this->Escape($product->getPrice());?></td>
+            <td><a href="">Delete</a></td>
         </tr>
-<? endforeach; ?>
+        <? endforeach; ?>
     </tbody>
+    <? endif; ?>
 </table>

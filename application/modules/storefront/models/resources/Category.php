@@ -50,4 +50,12 @@ class Storefront_Resource_Category extends SF_Model_Resource_Db_Table_Abstract i
                        
         return $this->fetchRow($select);
     }
+
+    public function getCategories()
+    {
+        $select = $this->select()
+                       ->order('name');
+
+        return $this->fetchAll($select);
+    }
 }

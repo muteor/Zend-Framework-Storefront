@@ -62,7 +62,17 @@ class Storefront_CatalogController extends Zend_Controller_Action
     
     public function listAction()
     {
-        
+        $this->view->categorySelect = $this->_catalogModel->getForm('catalogCategorySelect');
+        $this->view->categorySelect->populate($this->getRequest()->getPost());
+
+        if ($this->_getParam('categoryId')) {
+            $this->view->products = $this->_catalogModel->getProductsByCategory(
+                (int) $this->_getParam('categoryId'),
+                null,
+                null,
+                false
+            );
+        }
     }
     
     public function getBreadcrumb($category)
