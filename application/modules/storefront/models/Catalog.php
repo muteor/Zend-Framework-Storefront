@@ -136,8 +136,19 @@ class Storefront_Model_Catalog extends SF_Model_Abstract implements Zend_Acl_Res
         return $cats;
     }
 
+    /**
+     * Save a category
+     * 
+     * @param array $data
+     * @param string $validator
+     * @return int|false
+     */
     public function saveCategory($data, $validator = null)
     {
+        if (!$this->checkAcl('saveCategory')) {
+            throw new SF_Acl_Exception("Insufficient rights");
+        }
+
         if (null === $validator) {
             $validator = 'add';
         }
@@ -151,6 +162,56 @@ class Storefront_Model_Catalog extends SF_Model_Abstract implements Zend_Acl_Res
         $data = $validator->getValues();
 
         return $this->getResource('Category')->saveRow($data);
+    }
+
+    /**
+     * Save a product
+     * 
+     * @param array $data
+     * @param string $validator
+     * @return int|false
+     */
+    public function saveProduct($data, $validator = null)
+    {
+        if (!$this->checkAcl('saveProduct')) {
+            throw new SF_Acl_Exception("Insufficient rights");
+        }
+        
+        if (null === $validator) {
+            $validator = 'add';
+        }
+
+        $validator = $this->getForm('catalogProduct' . ucfirst($validator));
+
+        if (!$validator->isValid($data)) {
+            return false;
+        }
+
+        $data = $validator->getValues();
+
+        return $this->getResource('Product')->saveRow($data);
+    }
+
+    public function deleteProduct($product)
+    {
+        if (!$this->checkAcl('deleteProduct')) {
+            throw new SF_Acl_Exception("Insufficient rights");
+        }
+
+        if ($product instanceof Storefront_Resource_Product_Item_Interface) {
+            $productId = (int) $product->productId;
+        } else {
+            $productId = (int) $product;
+        }
+
+        $product = $this->getProductById($productId);
+
+        if (null !== $product) {
+            $product->delete();
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -179,8 +240,6 @@ class Storefront_Model_Catalog extends SF_Model_Abstract implements Zend_Acl_Res
     {
         if (!$acl->has($this->getResourceId())) {
             $acl->add($this)
-                ->allow('Guest', $this, array('register'))
-                ->allow('Customer', $this, array('saveUser'))
                 ->allow('Admin', $this);
         }
         $this->_acl = $acl;

@@ -119,6 +119,9 @@ class Storefront_CustomerController extends Zend_Controller_Action
         }
 
         $this->_model->deleteUser($id);
+
+        $redirector = $this->getHelper('redirector');
+        return $redirector->gotoRoute(array('action' => 'list'), 'admin');
     }
 	
 	public function loginAction()

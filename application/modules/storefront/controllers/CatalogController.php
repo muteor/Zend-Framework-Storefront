@@ -74,6 +74,7 @@ class Storefront_CatalogController extends Zend_Controller_Action
         
         $this->view->categorySelect = $this->_catalogModel->getForm('catalogCategorySelect');
         $this->view->categorySelect->populate($this->getRequest()->getPost());
+        $this->view->categoryId = $this->_getParam('categoryId');
 
         if ($this->_getParam('categoryId')) {
             $this->view->products = $this->_catalogModel->getProductsByCategory(
@@ -120,6 +121,60 @@ class Storefront_CatalogController extends Zend_Controller_Action
         if (!$this->_helper->acl('Admin')) {
             return $this->_helper->redirectCommon('gotoLogin');
         }
+
+        $this->view->productForm = $this->_getProductForm();
+    }
+
+    public function saveproductAction()
+    {
+        if (!$this->_helper->acl('Admin')) {
+            return $this->_helper->redirectCommon('gotoLogin');
+        }
+
+        $request = $this->getRequest();
+
+        if (!$request->isPost()) {
+            return $this->_helper->redirector('addproduct');
+        }
+
+        if(false === ($id = $this->_catalogModel->saveProduct($request->getPost()))) {
+            $this->view->productForm = $this->_getProductForm();
+            return $this->render('addproduct');
+        }
+
+        $redirector = $this->getHelper('redirector');
+        return $redirector->gotoRoute(array('action' => 'productimages', 'id' => $id), 'admin');
+    }
+
+    public function productimagesAction()
+    {
+        if (!$this->_helper->acl('Admin')) {
+            return $this->_helper->redirectCommon('gotoLogin');
+        }
+
+        if (false === ($id = $this->_getParam('id',false))) {
+            throw new SF_Exception('No product id sent');
+        }
+
+        $product = $this->_catalogModel->getProductById($id);
+
+        if (null === $product) {
+            throw new SF_Exception('Unknown product');
+        }
+
+        $this->view->product = $product;
+    }
+
+    public function deleteproductAction()
+    {
+        if (false === ($id = $this->_getParam('id',false))) {
+            throw new SF_Exception('Unknown product');
+        }
+
+        $this->_catalogModel->deleteProduct($id);
+        
+        $redirector = $this->getHelper('redirector');
+        return $redirector->gotoRoute(array('action' => 'list'), 'admin');
     }
     
     public function getBreadcrumb($category)
@@ -134,12 +189,28 @@ class Storefront_CatalogController extends Zend_Controller_Action
         $this->_forms['addCategory'] = $this->_catalogModel->getForm('catalogCategoryAdd');
         $this->_forms['addCategory']->setAction($urlHelper->url(array(
             'controller' => 'catalog' ,
-            'action' => 'saveCategory'
+            'action' => 'savecategory'
             ),
             'admin'
         ));
         $this->_forms['addCategory']->setMethod('post');
 
         return $this->_forms['addCategory'];
+    }
+
+    protected function _getProductForm()
+    {
+        $urlHelper = $this->_helper->getHelper('url');
+
+        $this->_forms['addProduct'] = $this->_catalogModel->getForm('catalogProductAdd');
+        $this->_forms['addProduct']->setAction($urlHelper->url(array(
+            'controller' => 'catalog' ,
+            'action' => 'saveproduct'
+            ),
+            'admin'
+        ));
+        $this->_forms['addProduct']->setMethod('post');
+
+        return $this->_forms['addProduct'];
     }
 }

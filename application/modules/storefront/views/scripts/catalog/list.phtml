@@ -26,7 +26,19 @@
             <td><?=$this->Escape($product->discountPercent);?></td>
             <td><?=$this->Escape($product->getPrice(false,false));?></td>
             <td><?=$this->Escape($product->getPrice());?></td>
-            <td><a href="">Delete</a></td>
+            <td>
+                <a href="<?=$this->url(array(
+                        'controller' => 'catalog',
+                        'action' => 'productimages',
+                        'id' => $product->productId,
+                        'categoryId' => $this->categoryId), 'admin', true)?>">Images</a>
+                / Edit
+                / <a href="<?=$this->url(array(
+                            'controller' => 'catalog',
+                            'action' => 'deleteproduct',
+                            'id' => $product->productId,
+                            'categoryId' => $this->categoryId), 'admin', true)?>">Delete</a>
+            </td>
         </tr>
         <? endforeach; ?>
     </tbody>
