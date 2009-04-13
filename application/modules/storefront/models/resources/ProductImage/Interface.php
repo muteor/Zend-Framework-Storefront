@@ -8,4 +8,6 @@
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 interface Storefront_Resource_ProductImage_Interface
-{}
+{
+    //public function saveImage($data){}
+}

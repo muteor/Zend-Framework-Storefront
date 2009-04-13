@@ -18,7 +18,6 @@ class Storefront_Form_Catalog_Product_Add extends SF_Form_Abstract
 
         $this->setMethod('post');
         $this->setAction('');
-        $this->setAttrib('enctype', 'multipart/form-data');
 
         // get category select
         $form = new Storefront_Form_Catalog_Category_Select(

@@ -192,6 +192,28 @@ class Storefront_Model_Catalog extends SF_Model_Abstract implements Zend_Acl_Res
         return $this->getResource('Product')->saveRow($data);
     }
 
+    public function saveProductImage(Storefront_Resource_Product_Item $product, $data, $validator = null)
+    {
+        if (!$this->checkAcl('saveProductImage')) {
+            throw new SF_Acl_Exception("Insufficient rights");
+        }
+
+        if (null === $validator) {
+            $validator = 'add';
+        }
+
+        $validator = $this->getForm('catalogProductImage' . ucfirst($validator));
+
+        if (!$validator->isValid($data)) {
+            return false;
+        }
+
+        // get post data
+        $data = $validator->getValues();
+
+        return $this->getResource('Productimage')->saveRow($data);
+    }
+
     public function deleteProduct($product)
     {
         if (!$this->checkAcl('deleteProduct')) {

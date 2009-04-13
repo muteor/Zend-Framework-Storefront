@@ -163,6 +163,37 @@ class Storefront_CatalogController extends Zend_Controller_Action
         }
 
         $this->view->product = $product;
+        $this->view->imageForm = $this->_getProductImageForm();
+        $this->view->imageForm->populate($product->toArray());
+    }
+
+    public function saveimageAction()
+    {
+        if (!$this->_helper->acl('Admin')) {
+            return $this->_helper->redirectCommon('gotoLogin');
+        }
+
+        $request = $this->getRequest();
+
+        if (!$request->isPost()) {
+            return $this->_helper->redirector('addproduct');
+        }
+
+        if (false === ($id = $this->_getParam('productId',false))) {
+            throw new SF_Exception('No product id sent');
+        }
+
+        $product = $this->_catalogModel->getProductById($id);
+
+        if(false === ($id = $this->_catalogModel->saveProductImage($product, $request->getPost()))) {
+            $this->view->product = $product;
+            $this->view->imageForm = $this->_getProductImageForm();
+            $this->view->imageForm->populate($product->toArray());
+            return $this->render('productimages');
+        }
+        
+        $redirector = $this->getHelper('redirector');
+        return $redirector->gotoRoute(array('action' => 'productimages', 'id' => $product->productId), 'admin');
     }
 
     public function deleteproductAction()
@@ -212,5 +243,21 @@ class Storefront_CatalogController extends Zend_Controller_Action
         $this->_forms['addProduct']->setMethod('post');
 
         return $this->_forms['addProduct'];
+    }
+
+    protected function _getProductImageForm()
+    {
+        $urlHelper = $this->_helper->getHelper('url');
+
+        $this->_forms['addImage'] = $this->_catalogModel->getForm('catalogProductImageAdd');
+        $this->_forms['addImage']->setAction($urlHelper->url(array(
+            'controller' => 'catalog' ,
+            'action' => 'saveimage'
+            ),
+            'admin'
+        ));
+        $this->_forms['addImage']->setMethod('post');
+
+        return $this->_forms['addImage'];
     }
 }
