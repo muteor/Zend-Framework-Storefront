@@ -119,7 +119,7 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Customer', $inserted[10]->role);
     }
 
-    public function test_User_Can_Be_Edited()
+    public function test_User_Can_Be_Edited_By_Customer_And_Admin()
     {
         $post = array(
             'userId'     => 10,
@@ -128,7 +128,28 @@ class UserTest extends PHPUnit_Framework_TestCase
             'lastname' => 'pope',
             'email'      => 'me@me.com'
         );
-        $edit = $this->_model->saveUser($post);
+
+        // Guest
+        try {
+            $edit = $this->_model->saveUser($post);
+            $this->fail('Guest should not be able to edit user');
+        } catch (SF_Acl_Exception $e) {}
+
+        // Customer
+        try {
+            $this->_model->setIdentity(array('role' => 'Customer'));
+            $edit = $this->_model->saveUser($post);
+        } catch (SF_Acl_Exception $e) {
+            $this->fail('Customer should be able to edit user');
+        }
+
+        // Admin
+        try {
+            $this->_model->setIdentity(array('role' => 'Admin'));
+            $edit = $this->_model->saveUser($post);
+        } catch (SF_Acl_Exception $e) {
+            $this->fail('Admin should be able to edit user');
+        }
 
         $this->assertEquals(10, $edit);
     }

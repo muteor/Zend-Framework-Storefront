@@ -169,7 +169,7 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
         } elseif (null === $identity) {
             $identity = new Zend_Acl_Role('Guest');
         } elseif (!$identity instanceof Zend_Acl_Role_Interface) {
-            throw new Spindle_Model_Exception('Invalid identity provided');
+            throw new SF_Model_Exception('Invalid identity provided');
         }
         $this->_identity = $identity;
         return $this;

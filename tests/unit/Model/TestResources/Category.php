@@ -71,6 +71,9 @@ class Storefront_Resource_Category extends PHPUnit_Framework_TestCase implements
     
     public function getCategoryById ($id)
     {}
+
+    public function getCategories()
+    {}
     
     public function getCategoryByIdent ($ident)
     {
