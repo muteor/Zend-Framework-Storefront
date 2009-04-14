@@ -9,5 +9,5 @@
  */
 interface Storefront_Resource_ProductImage_Interface
 {
-    //public function saveImage($data){}
+    public function setDefault($image, $product);
 }

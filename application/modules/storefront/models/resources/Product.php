@@ -78,7 +78,4 @@ class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract im
 		}
         return $this->fetchAll($select);
     } 
-    
-    public function saveProduct($info)
-    {}
 }

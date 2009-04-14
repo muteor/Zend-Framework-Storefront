@@ -30,4 +30,29 @@ class Storefront_Resource_ProductImage extends SF_Model_Resource_Db_Table_Abstra
             'refColumns' => 'productId',
         )
     );
+
+    public function setDefault($image, $product)
+    {
+        if ($image instanceof Storefront_Resource_ProductImage_Item) {
+            $imageId =$image->imageId;
+        } else {
+            $imageId = (int) $image;
+        }
+
+        if ($product instanceof Storefront_Resource_Product_Item) {
+            $productId =$product->productId;
+        } else {
+            $productId = (int) $product;
+        }
+
+        //reset defaults
+        $data = array('isDefault' => 'No');
+        $where = $this->getAdapter()->quoteInto('productId = ?', $productId);
+        $this->update($data, $where);
+
+        $data = array('isDefault' => 'Yes');
+        $where = $this->getAdapter()->quoteInto('imageId = ?', $imageId);
+
+        return $this->update($data, $where);
+    }
 }
