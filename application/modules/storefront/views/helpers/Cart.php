@@ -100,7 +100,7 @@ class Zend_View_Helper_Cart extends Zend_View_Helper_Abstract
             'value' => $this->cartModel->getShippingCost()
         ));
 
-        return $cartTable->render();
+        return $cartTable;
     }
 
     public function formatAmount($amount)
