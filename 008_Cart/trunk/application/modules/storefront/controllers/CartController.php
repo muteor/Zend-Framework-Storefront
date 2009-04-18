@@ -44,9 +44,12 @@ class Storefront_CartController extends Zend_Controller_Action
     {
         foreach($this->_getParam('quantity') as $id => $value) {
             $product = $this->_catalogModel->getProductById($id);
-            $this->_cartModel->addItem($product, $value);
+            if (null !== $product) {
+                $this->_cartModel->addItem($product, $value);
+            }
         }
 
+        /* Should really get from the shippingModel! */
         $this->_cartModel->setShippingCost($this->_getParam('shipping'));
 
         return $this->_helper->redirector('view');

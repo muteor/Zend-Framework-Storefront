@@ -3,7 +3,7 @@
         <tbody>
             <?
             $i = 0;
-            foreach($this->element->getModel() as $num => $item):
+            foreach($this->element->getModel() as $item):
             ?>
             <tr <? if($i % 2){ echo 'class="odd"';};?>>
                 <td><?=$this->Escape($item->name); ?></td>
