@@ -7,7 +7,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Bootstrap extends Zend_Application_Bootstrap_Base
+class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     /**
      * @var Zend_Log
@@ -226,10 +226,5 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
         $this->_logger->info('Bootstrap ' . __METHOD__);
         Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_Acl());
         Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_RedirectCommon());
-    }
-
-    public function run()
-    {
-        $this->frontController->dispatch();
     }
 }
