@@ -7,7 +7,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Bootstrap extends Zend_Application_Bootstrap_Base
+class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     /**
      * @var Zend_Log
@@ -115,10 +115,5 @@ class Bootstrap extends Zend_Application_Bootstrap_Base
             'layoutPath' => APPLICATION_PATH . '/layouts/scripts'
             )
         );
-    }
-
-    public function run()
-    {
-        $this->frontController->dispatch();
     }
 }
