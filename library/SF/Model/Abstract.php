@@ -12,7 +12,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-abstract class SF_Model_Abstract implements SF_Model_Interface 
+abstract class SF_Model_Abstract implements SF_Model_Interface
 {
     /**
     * @var array Class methods
@@ -125,8 +125,8 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
     /**
      * Classes are named spaced using their module name
      * this returns that module name or the first class name segment.
-     * 
-     * @return string This class namespace 
+     *
+     * @return string This class namespace
      */
     private function _getNamespace()
     {
@@ -136,11 +136,11 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
 
     /**
      * Inflect the name using the inflector filter
-     * 
+     *
      * Changes camelCaseWord to Camel_Case_Word
-     * 
+     *
      * @param string $name The name to inflect
-     * @return string The inflected string 
+     * @return string The inflected string
      */
     private function _getInflected($name)
     {
@@ -149,61 +149,5 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
             ':class'  => array('Word_CamelCaseToUnderscore')
         ));
         return ucfirst($inflector->filter(array('class' => $name)));
-    }
-
-    /**
-     * Set the identity of the current request
-     * 
-     * @param array|string|null|Zend_Acl_Role_Interface $identity
-     * @return SF_Model_Abstract
-     */
-    public function setIdentity($identity)
-    {
-        if (is_array($identity)) {
-            if (!isset($identity['role'])) {
-                $identity['role'] = 'Guest';
-            }
-            $identity = new Zend_Acl_Role($identity['role']);
-        } elseif (is_scalar($identity) && !is_bool($identity)) {
-            $identity = new Zend_Acl_Role($identity);
-        } elseif (null === $identity) {
-            $identity = new Zend_Acl_Role('Guest');
-        } elseif (!$identity instanceof Zend_Acl_Role_Interface) {
-            throw new SF_Model_Exception('Invalid identity provided');
-        }
-        $this->_identity = $identity;
-        return $this;
-    }
-
-    /**
-     * Get the identity, if no ident use guest
-     * 
-     * @return string
-     */
-    public function getIdentity()
-    {
-        if (null === $this->_identity) {
-            $auth = Zend_Auth::getInstance();
-            if (!$auth->hasIdentity()) {
-                return 'Guest';
-            }
-            $this->setIdentity($auth->getIdentity());
-        }
-        return $this->_identity;
-    }
-
-    /**
-     * Check the acl
-     * 
-     * @param string $action
-     * @return boolean 
-     */
-    public function checkAcl($action)
-    {
-        return $this->getAcl()->isAllowed(
-            $this->getIdentity(),
-            $this,
-            $action
-        );
     }
 }
