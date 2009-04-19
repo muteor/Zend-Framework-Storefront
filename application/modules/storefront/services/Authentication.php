@@ -108,12 +108,12 @@ class Storefront_Service_Authentication
                 Zend_Db_Table_Abstract::getDefaultAdapter(),
                 'user',
                 'email',
-                'passwd'
+                'passwd',
+                'SHA1(CONCAT(?,salt))'
             );
             $this->setAuthAdapter($authAdapter);
             $this->_authAdapter->setIdentity($values['email']);
             $this->_authAdapter->setCredential($values['passwd']);
-            $this->_authAdapter->setCredentialTreatment('SHA1(CONCAT(?,salt))');
         }
         return $this->_authAdapter;
     }
