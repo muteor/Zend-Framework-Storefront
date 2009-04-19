@@ -16,7 +16,7 @@ require_once 'Zend/View/Interface.php';
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_AuthInfo
+class Zend_View_Helper_AuthInfo extends Zend_View_Helper_Abstract
 {   
     /**
      * @var Storefront_Service_Authentication
