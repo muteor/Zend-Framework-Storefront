@@ -43,26 +43,6 @@ class AuthenticationTest extends PHPUnit_Framework_TestCase
         );
     }
     
-    public function test_Get_Adapter_Has_Correct_Configuration()
-    {       
-        $mockAdapter = $this->getMock('Zend_Auth_Adapter_DbTable', array(), array(), '', false);
-        $mockAdapter
-            ->expects($this->once())
-            ->method('setIdentity')
-            ->with('test@test.com');
-        $mockAdapter
-            ->expects($this->once())
-            ->method('setCredential')
-            ->with('moo');
-        $mockAdapter
-            ->expects($this->once())
-            ->method('setCredentialTreatment')
-            ->with('SHA1(CONCAT(?,salt))');
-        
-        $this->_service->setAuthAdapter($mockAdapter);
-        $this->_service->getAuthAdapter(array('email' => 'test@test.com', 'passwd' => 'moo'));
-    }
-    
     public function test_Authenticate_Returns_False_On_Invalid_Credentials()
     {
         $mockAdapter = $this->getMock('Zend_Auth_Adapter_DbTable', array(), array(), '', false);

@@ -17,16 +17,11 @@ require_once 'Zend/View/Interface.php';
  * @uses viewHelper Zend_View_Helper
  */
 class Zend_View_Helper_AuthInfo
-{
+{   
     /**
-     * @var Zend_View_Interface 
+     * @var Storefront_Service_Authentication
      */
-    public $view;
-    
-    /**
-     * @var Zend_Auth
-     */
-    protected $_auth;
+    protected $_authService;
     
     /**
      * Get user info from the auth session
@@ -36,8 +31,8 @@ class Zend_View_Helper_AuthInfo
      */
     public function authInfo ($info = null)
     {
-        if (null === $this->_auth) {
-            $this->_auth = Zend_Auth::getInstance();    
+        if (null === $this->_authService) {
+            $this->_authService = new Storefront_Service_Authentication();
         }
          
         if (null === $info) {
@@ -48,7 +43,7 @@ class Zend_View_Helper_AuthInfo
             return null;
         }
         
-        return $this->_auth->getIdentity()->$info;
+        return $this->_authService->getIdentity()->$info;
     }
     
     /**
@@ -58,15 +53,6 @@ class Zend_View_Helper_AuthInfo
      */
     public function isLoggedIn()
     {
-        return $this->_auth->hasIdentity();
-    }
-    
-    /**
-     * Sets the view field 
-     * @param $view Zend_View_Interface
-     */
-    public function setView (Zend_View_Interface $view)
-    {
-        $this->view = $view;
+        return $this->_authService->getAuth()->hasIdentity();
     }
 }

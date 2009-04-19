@@ -23,6 +23,11 @@ class Storefront_Service_Authentication
     protected $_userModel;
 
     /**
+     * @var Zend_Auth
+     */
+    protected $_auth;
+
+    /**
      * Construct 
      * 
      * @param null|Storefront_Model_User $userModel 
@@ -41,7 +46,7 @@ class Storefront_Service_Authentication
     public function authenticate($credentials)
     {
         $adapter = $this->getAuthAdapter($credentials);
-        $auth    = Zend_Auth::getInstance();
+        $auth    = $this->getAuth();
         $result  = $auth->authenticate($adapter);
 
         if (!$result->isValid()) {
@@ -55,9 +60,17 @@ class Storefront_Service_Authentication
         return true;
     }
 
+    public function getAuth()
+    {
+        if (null === $this->_auth) {
+            $this->_auth = Zend_Auth::getInstance();
+        }
+        return $this->_auth;
+    }
+
     public function getIdentity()
     {
-        $auth = Zend_Auth::getInstance();
+        $auth = $this->getAuth();
         if ($auth->hasIdentity()) {
             return $auth->getIdentity();
         }
@@ -69,7 +82,7 @@ class Storefront_Service_Authentication
      */
     public function clear()
     {
-        Zend_Auth::getInstance()->clearIdentity();
+        $this->getAuth()->clearIdentity();
     }
     
     /**
@@ -98,10 +111,10 @@ class Storefront_Service_Authentication
                 'passwd'
             );
             $this->setAuthAdapter($authAdapter);
+            $this->_authAdapter->setIdentity($values['email']);
+            $this->_authAdapter->setCredential($values['passwd']);
+            $this->_authAdapter->setCredentialTreatment('SHA1(CONCAT(?,salt))');
         }
-        $this->_authAdapter->setIdentity($values['email']);
-        $this->_authAdapter->setCredential($values['passwd']);
-        $this->_authAdapter->setCredentialTreatment('SHA1(CONCAT(?,salt))');
         return $this->_authAdapter;
     }
 }
