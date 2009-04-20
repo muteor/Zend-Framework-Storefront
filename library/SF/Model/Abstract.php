@@ -28,16 +28,6 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
      * @var array Form instances
      */
     protected $_forms = array();
-
-    /**
-     * @var Zend_Acl
-     */
-    protected $_acl;
-
-    /**
-     * @var string
-     */
-    protected $_identity;
     
    /**
     * Constructor

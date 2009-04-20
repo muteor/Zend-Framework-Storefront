@@ -12,6 +12,16 @@
 abstract class SF_Model_Acl_Abstract extends SF_Model_Abstract implements SF_Model_Acl_Interface, Zend_Acl_Resource_Interface
 {
     /**
+     * @var Zend_Acl
+     */
+    protected $_acl;
+
+    /**
+     * @var string
+     */
+    protected $_identity;
+
+    /**
      * Set the identity of the current request
      *
      * @param array|string|null|Zend_Acl_Role_Interface $identity
