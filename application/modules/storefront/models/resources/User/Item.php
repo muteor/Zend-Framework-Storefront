@@ -11,7 +11,7 @@ class Storefront_Resource_User_Item extends SF_Model_Resource_Db_Table_Row_Abstr
     public function getRoleId()
     {
         if (null === $this->getRow()->role) {
-            return 'guest';
+            return 'Guest';
         }
         return $this->getRow()->role;
     }
