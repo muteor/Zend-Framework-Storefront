@@ -1,0 +1,21 @@
+<h3><?= $this->Escape($this->category->name); ?></h3>
+<p>
+    <?= $this->breadcrumb(); ?>
+</p>
+<? foreach($this->products as $product):  ?>
+<div class="productitem clearfix">
+    <?=$this->productImage($product->defaultImage, array('class' => 'right'))->thumbnail(); ?>
+    <h4><a href="<?=$this->url(array('productIdent' => $product->ident, 
+                               'categoryIdent' => $this->category->ident),
+                               'catalog_category_product'); ?>"><?=$this->Escape($product->name); ?></a></h4>
+    <p><?=$this->Escape($product->shortDescription); ?></p>
+    <p><?=$this->productPrice($product); ?></p>
+    <?=$this->Cart()->addForm($product); ?>
+</div>
+<? endforeach; ?>
+
+<? if($this->products instanceof Zend_Paginator): ?>
+<?= $this->paginationControl($this->products,
+                             'Sliding',
+                             'catalog/_paginator.phtml'); ?>
+<? endif ?>

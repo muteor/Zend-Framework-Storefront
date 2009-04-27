@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="StoreFront" default="build" basedir="../">
+
+    <target name="getProps">
+       <property file="${basedir}/build/ant.properties" />
+       
+       <condition property="script-suffix" value=".bat" else="">
+            <os family="windows" />
+       </condition>
+    
+       <echo message="---- Build Properties ----" />
+       <echo message="" />
+       
+       <echo message="OS is ${os.name}" />
+       <echo message="Basedir is ${basedir}" />
+       <echo message="Property file is ${basedir}/build/ant.properties" />
+       <echo message="Script-suffix is ${script-suffix}" />
+       
+       <echo message="" />
+       <echo message="---- Storefront Properties ----" />
+       <echo message="" />
+       
+       <echo message="Environment is ${environment}" />    
+
+    </target>
+
+	<target name="test" depends="getProps">
+	   <exec dir="${basedir}/tests" executable="phpunit${script-suffix}" failonerror="true">
+	      <arg line="--colors --report ${basedir}/build/report
+	         --log-xml ${basedir}/build/logs/phpunit.xml 
+             --log-pmd ${basedir}/build/logs/phpunit.pmd.xml
+             --log-metrics ${basedir}/build/logs/phpunit.metrics.xml
+             --coverage-xml ${basedir}/build/logs/phpunit.coverage.xml 
+             AllTests.php"/>
+	   </exec>
+	</target>
+	
+	<target name="configure" depends="getProps">
+	   <copy file="${basedir}/application/application.php.dist"
+	         tofile="${basedir}/application/application.php" overwrite="true" />
+	   <replace file="${basedir}/application/application.php" token="@ENVIRONMENT@" value="${environment}" />
+	</target>
+	
+	<target name="buildPreparation">
+        <mkdir dir="${basedir}/build/logs" />
+        <mkdir dir="${basedir}/build/report" />
+    </target>
+    
+    <target name="clean">
+        <delete dir="${basedir}/build/logs" />
+        <delete dir="${basedir}/build/report" />
+    </target>
+
+    <target name="build" depends="buildPreparation,configure,test"/>
+</project>
