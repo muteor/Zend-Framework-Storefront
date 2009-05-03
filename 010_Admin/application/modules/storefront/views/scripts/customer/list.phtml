@@ -1,0 +1,23 @@
+<h3>current users</h3>
+<table class="datatable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+<? foreach ($this->users as $user): ?>
+        <tr>
+            <td><?=$this->Escape($user->fullname); ?></td>
+            <td><?=$this->Escape($user->email); ?></td>
+            <td><?=$this->Escape($user->role); ?></td>
+            <td>
+            <a href="<?=$this->url(array('controller' => 'customer', 'action' => 'edit','id' => $user->userId), 'admin', true); ?>">Edit</a> / 
+            <a href="<?=$this->url(array('controller' => 'customer', 'action' => 'delete','id' => $user->userId), 'admin', true); ?>">Delete</a></td>
+        </tr>
+<? endforeach; ?>
+    </tbody>
+</table>
