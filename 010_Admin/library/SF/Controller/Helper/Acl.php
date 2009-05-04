@@ -79,7 +79,7 @@ class SF_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
         } elseif (null === $identity) {
             $identity = new Zend_Acl_Role('Guest');
         } elseif (!$identity instanceof Zend_Acl_Role_Interface) {
-            throw new Spindle_Model_Exception('Invalid identity provided');
+            throw new SF_Model_Exception('Invalid identity provided');
         }
         $this->_identity = $identity;
         return $this;
