@@ -7,7 +7,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl_Resource_Interface
+class Storefront_Model_Catalog extends SF_Model_Acl_Abstract
 {    
     /**
      * Get categories
