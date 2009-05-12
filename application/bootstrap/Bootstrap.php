@@ -77,11 +77,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             'modelResource' => array(
               'path'      => 'models/resources',
               'namespace' => 'Resource',
-            ),
-            'service' => array(
-              'path'      => 'services',
-              'namespace' => 'Service',
-            ),
+            )
         ));
     }
 

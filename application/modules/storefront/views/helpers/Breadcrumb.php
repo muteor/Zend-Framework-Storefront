@@ -1,6 +1,6 @@
 <?php
 /**
- * Zend_View_Helper_Breadcrumb
+ * Storefront_View_Helper_Breadcrumb
  * 
  * Display the category breadcrumb
  * 
@@ -9,7 +9,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Zend_View_Helper_Breadcrumb extends Zend_View_Helper_Abstract 
+class Storefront_View_Helper_Breadcrumb extends Zend_View_Helper_Abstract
 {       
     public function breadcrumb($product = null)
     {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Zend_View_Helper_Cart
+ * Storefront_View_Helper_Cart
  *
  * Helper for all shopping cart
  *
@@ -9,7 +9,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Zend_View_Helper_Cart extends Zend_View_Helper_Abstract
+class Storefront_View_Helper_Cart extends Zend_View_Helper_Abstract
 {
     public $cartModel;
 

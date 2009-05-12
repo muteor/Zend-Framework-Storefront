@@ -1,6 +1,6 @@
 <?php
 /**
- * Zend_View_Helper_UserInfo
+ * Storefront_View_Helper_UserInfo
  * 
  * Access authentication data saved in the session
  * 
@@ -16,7 +16,7 @@ require_once 'Zend/View/Interface.php';
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_AuthInfo extends Zend_View_Helper_Abstract
+class Storefront_View_Helper_AuthInfo extends Zend_View_Helper_Abstract
 {   
     /**
      * @var Storefront_Service_Authentication

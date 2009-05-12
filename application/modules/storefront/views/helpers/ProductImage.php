@@ -1,6 +1,6 @@
 <?php
 /**
- * Zend_View_Helper_ProductImage
+ * Storefront_View_Helper_ProductImage
  * 
  * Helper for displaying product images
  * 
@@ -9,7 +9,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Zend_View_Helper_ProductImage extends Zend_View_Helper_HtmlElement
+class Storefront_View_Helper_ProductImage extends Zend_View_Helper_HtmlElement
 {
     /**
      * @var Storefront_Resource_ProductImage_Item
