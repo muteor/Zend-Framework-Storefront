@@ -33,7 +33,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->bootstrap('frontController');
         $this->frontController->setResponse(new Zend_Controller_Response_Http());
         $this->frontController->setRequest(new Zend_Controller_Request_Http());
-        $this->frontController->throwExceptions(true);
     }
 
     /**
@@ -51,7 +50,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 		if ('production' == $this->getEnvironment()) {
 			$filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
-			$logger->addFilter($filter);
+			//$logger->addFilter($filter);
 		}
 
         $this->_logger = $logger;

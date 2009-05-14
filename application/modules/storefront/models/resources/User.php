@@ -1,7 +1,4 @@
 <?php
-/** Storefront_Resource_User_Item */
-require_once dirname(__FILE__) . '/User/Item.php';
-
 /**
  * Storefront_Resource_User
  * 

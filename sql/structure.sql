@@ -63,3 +63,14 @@ CREATE TABLE  `user` (
   KEY `email_pass` (`email`,`passwd`),
   KEY `email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+--
+-- Definition of table `storefront`.`page`
+--
+
+CREATE TABLE `page` (
+  `pageId` INT NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) NOT NULL,
+  `body` Text NOT NULL,
+  PRIMARY KEY (`pageId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

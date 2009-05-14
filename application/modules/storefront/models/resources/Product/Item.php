@@ -1,7 +1,4 @@
 <?php
-/** Storefront_Resource_Product_Interface */
-require_once dirname(__FILE__) . '/Item/Interface.php';
-
 /**
  * Storefront_Resource_Product_Item
  * 
