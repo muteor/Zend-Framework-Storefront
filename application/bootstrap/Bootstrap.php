@@ -127,6 +127,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $this->_view = $viewRenderer->view;
 
+        // add global helpers
+        $this->_view->addHelperPath(APPLICATION_PATH . '/views/helpers', 'Zend_View_Helper');
+
         // set encoding and doctype
         $this->_view->setEncoding('UTF-8');
         $this->_view->doctype('XHTML1_STRICT');

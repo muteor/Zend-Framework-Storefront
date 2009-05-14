@@ -11,7 +11,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_View_Helper_BaseUrl extends Zend_View_Helper_Abstract
+class Zend_View_Helper_BaseUrl extends Zend_View_Helper_Abstract
 { 
     public function baseUrl($file = null) 
     { 
