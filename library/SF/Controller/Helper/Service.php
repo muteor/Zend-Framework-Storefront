@@ -19,8 +19,14 @@ class SF_Controller_Helper_Service extends Zend_Controller_Action_Helper_Abstrac
                     'Service',
                     ucfirst($service)
             ));
-            if (!class_exists($class)) {
+
+            $front = Zend_Controller_Front::getInstance();
+            $classPath = $front->getModuleDirectory($module) . '/services/' . ucfirst($service) . '.php';
+            if (!file_exists($classPath)) {
                 return false;
+            }
+            if (!class_exists($class)) {
+                throw new SF_Exception("Class $class not found in " . basename($classPath));
             }
             $this->_services[$module][$service] = new $class();
         }

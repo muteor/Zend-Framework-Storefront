@@ -9,5 +9,7 @@ class Storefront_IndexController extends Zend_Controller_Action
         if ($service = $this->_helper->service('page', 'cms')) {
             $this->view->page = $service->getPageById(1);
         }
+
+        $this->_helper->service('pages', 'cms');
     }
 }
