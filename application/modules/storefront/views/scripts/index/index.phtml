@@ -1,9 +1,6 @@
-<h3>welcome <span>to the storefront</span></h3>
+<? if($this->page): ?>
+<h3><?=$this->page->title;?></h3>
 <p>
-    Please select a category...
-</p>
-<? if($this->pageData): ?>
-<p>
-    <?=$this->pageData; ?>
+    <?=$this->page->body; ?>
 </p>
 <? endif; ?>

@@ -50,7 +50,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
 		if ('production' == $this->getEnvironment()) {
 			$filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
-			//$logger->addFilter($filter);
+			$logger->addFilter($filter);
 		}
 
         $this->_logger = $logger;
@@ -224,5 +224,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->_logger->info('Bootstrap ' . __METHOD__);
         Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_Acl());
         Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_RedirectCommon());
+        Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_Service());
     }
 }
