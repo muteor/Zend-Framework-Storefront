@@ -1,0 +1,92 @@
+<h2 class="noDisplay">Main Navigation</h2>
+<div class="main-nav">
+    <ul class="clearfix">
+        <li class="current">
+            <a href="
+                <?= $this->url(array(
+                        'controller' => 'index',
+                        'action'     => 'index',
+                        ), 
+                        'default', true
+                    ); 
+                 ?>" 
+               title="Homepage">Store</a>
+        </li>
+        <? if ($this->AuthInfo()->isLoggedIn()): ?>
+        <li>
+            <a href="
+                <?= $this->url(array(
+                        'controller' => 'customer',
+                        'action'     => 'logout',
+                        ), 
+                        'default', true
+                    ); 
+                 ?>"
+               title="logout">Logout</a>
+        </li>
+        <?else: ?>
+        <li>
+            <a href="
+                <?= $this->url(array(
+                        'controller' => 'customer',
+                        'action'     => 'login',
+                        ), 
+                        'default', true
+                    ); 
+                 ?>"
+               title="login">Login</a>
+        </li>
+        <? endif; ?>
+		<? if (!$this->AuthInfo()->isLoggedIn()): ?>
+        <li>
+            <a href="
+                <?= $this->url(array(
+                        'controller' => 'customer',
+                        'action'     => 'register',
+                        ), 
+                        'default', true
+                    ); 
+                 ?>"
+               title="register">Register</a>
+        </li>
+		<? endif; ?>
+        <li>
+            <a href="
+                <?= $this->url(array(
+                        'controller' => 'index',
+                        'action'     => 'index',
+                        'module'     => 'cms'
+                        ), 
+                        'default', true
+                    ); 
+                 ?>"
+               title="about">About</a>
+        </li>
+        <li>
+            <a href="
+                <?= $this->url(array(
+                        'controller' => 'index',
+                        'action'     => 'index',
+                        'module'     => 'cms'
+                        ), 
+                        'default', true
+                    ); 
+                 ?>"
+               title="Contact">Contact</a>
+        </li>
+        <? if ('Admin' === $this->AuthInfo('role')): ?>
+        <li>
+            <a href="
+                <?= $this->url(array(
+                        'controller' => 'admin',
+                        'action'     => 'index',
+                        'module'     => 'storefront'
+                        ), 
+                        'admin', true
+                    ); 
+                 ?>"
+               title="administration area">Admin</a>
+        </li>
+        <? endif; ?>
+    </ul>
+</div>

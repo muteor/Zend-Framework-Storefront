@@ -1,0 +1,43 @@
+<?= $this->doctype() ?>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <?= $this->headTitle(); ?>
+    
+    <?= $this->headMeta(); ?>
+    
+    <?= $this->headStyle(); ?>
+    
+    <?= $this->headLink(); ?>
+    
+    <?= $this->headScript(); ?>
+</head>
+<body>
+    <h1 class="noDisplay"><?= $this->placeholder('Zend_View_Helper_HeadTitle');?></h1>
+    
+    <div id="headwrap" class="clearfix">
+        
+        <div class="right">
+           <?= $this->render('_adminnav.phtml') ?>
+        </div>    
+        
+        <div id="logo" class="left">
+            <img src="/images/layout/logo.png" alt="Shop till you drop..." />
+        </div>
+        
+    </div>
+    
+    <div id="contentWrap" class="clearfix">
+        <?= $this->layout()->content ?> 
+    </div>
+    
+    <div id="footer" class="clearfix">
+        <div class="left">
+            <span class="rss"><a href="/rss" title="products feed">RSS 2.0</a></span>
+        </div>
+        <div class="right">
+            &#169; 2008 Keith Pope
+        </div>
+    </div>
+</body>
+</html>
