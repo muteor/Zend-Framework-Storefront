@@ -51,5 +51,14 @@
         <delete dir="${basedir}/build/report" />
     </target>
 
+    <target name="deploy">
+        <echo message="---- Removing require_once ----" />
+        <replaceregexp byline="true">
+            <regexp pattern="require_once 'Zend/"/>
+            <substitution expression="// require_once 'Zend/"/>
+            <fileset dir="${basedir}/library/Zend" excludes="**/*Autoloader.php" includes="**/*.php" />
+        </replaceregexp>
+    </target>
+
     <target name="build" depends="buildPreparation,configure,test"/>
 </project>
