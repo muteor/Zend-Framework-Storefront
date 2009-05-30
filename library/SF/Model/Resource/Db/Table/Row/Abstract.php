@@ -119,4 +119,13 @@ abstract class SF_Model_Resource_Db_Table_Row_Abstract
     {       
         return call_user_func_array(array($this->getRow(), $method), $arguments);
     }
+
+    public function __wakeup()
+    {
+        if (!$this->getRow()->isConnected()) {
+            $tableClass = $this->getRow()->getTableClass();
+            $table = new $tableClass();
+            $this->getRow()->setTable($table);
+        }
+    }
 }

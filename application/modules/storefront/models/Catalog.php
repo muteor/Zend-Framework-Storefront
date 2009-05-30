@@ -126,7 +126,7 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
         if (0 == $category->parentId) {
             return $cats;
         }
-        
+
         $parent = $category->getParentCategory();
         $cats[] = $parent;
         
