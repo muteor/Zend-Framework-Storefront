@@ -21,7 +21,7 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
         if (false === $includeDefault) {
             $select->where('isDefault != ?', 'Yes');
         }
-        return $this->findDependentRowset('Storefront_Resource_ProductImage',
+        return $this->findDependentRowset('Storefront_Resource_Productimage',
             'Image', 
             $select
         );
@@ -34,7 +34,7 @@ class Storefront_Resource_Product_Item extends SF_Model_Resource_Db_Table_Row_Ab
      */
     public function getDefaultImage()
     {
-        $row = $this->findDependentRowset('Storefront_Resource_ProductImage', 
+        $row = $this->findDependentRowset('Storefront_Resource_Productimage',
             'Image', 
             $this->select()
                  ->where('isDefault = ?', 'Yes')

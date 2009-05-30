@@ -7,11 +7,11 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Resource_ProductImage extends SF_Model_Resource_Db_Table_Abstract implements Storefront_Resource_ProductImage_Interface 
+class Storefront_Resource_Productimage extends SF_Model_Resource_Db_Table_Abstract implements Storefront_Resource_Productimage_Interface
 {
     protected $_name = 'productImage';
     protected $_primary = 'imageId';
-    protected $_rowClass = 'Storefront_Resource_ProductImage_Item';
+    protected $_rowClass = 'Storefront_Resource_Productimage_Item';
 
     protected $_referenceMap = array(
         'Image' => array(
@@ -23,7 +23,7 @@ class Storefront_Resource_ProductImage extends SF_Model_Resource_Db_Table_Abstra
 
     public function setDefault($image, $product)
     {
-        if ($image instanceof Storefront_Resource_ProductImage_Item) {
+        if ($image instanceof Storefront_Resource_Productimage_Item) {
             $imageId =$image->imageId;
         } else {
             $imageId = (int) $image;

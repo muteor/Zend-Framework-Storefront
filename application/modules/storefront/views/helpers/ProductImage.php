@@ -28,7 +28,7 @@ class Storefront_View_Helper_ProductImage extends Zend_View_Helper_HtmlElement
      * @param array $attribs Attributes for the img tag
      * @return Zend_View_Helper_ProductImage
      */
-    public function productImage(Storefront_Resource_ProductImage_Item $image = null, $attribs = false)
+    public function productImage(Storefront_Resource_Productimage_Item $image = null, $attribs = false)
     {
         $this->_image = $image;
         $this->_attribs = $attribs;
