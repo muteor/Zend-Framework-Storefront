@@ -24,14 +24,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     public $frontController;
 
+    /**
+     * Configure the pluginloader cache
+     */
     protected function _initPluginLoaderCache()
     {
-        // Plugin loader cache
-        $classFileIncCache = APPLICATION_PATH . '/../data/pluginLoaderCache.php';
-        if (file_exists($classFileIncCache)) {
-            include_once $classFileIncCache;
+        if ('production' == $this->getEnvironment()) {
+            $classFileIncCache = APPLICATION_PATH . '/../data/pluginLoaderCache.php';
+            if (file_exists($classFileIncCache)) {
+                include_once $classFileIncCache;
+            }
+            Zend_Loader_PluginLoader::setIncludeFileCache($classFileIncCache);
         }
-        Zend_Loader_PluginLoader::setIncludeFileCache($classFileIncCache);
     }
 
     /**
@@ -237,34 +241,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_Service());
     }
 
+    /**
+     * Init the db metadata and paginator caches
+     */
     protected function _initDbCaches()
     {
-        // Metadata cache for Zend_Db_Table
-        $frontendOptions = array(
-            'automatic_serialization' => true
-        );
+        if ('production' == $this->getEnvironment()) {
+            // Metadata cache for Zend_Db_Table
+            $frontendOptions = array(
+                'automatic_serialization' => true
+            );
 
-        $cache = Zend_Cache::factory('Core',
-            'Apc',
-            $frontendOptions
-        );
-        Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
-
-        // Paginator cache
-        $paginator = Zend_Paginator::factory(array());
-        $frontendOptions = array(
-            'lifetime' => 3600,
-            'automatic_serialization' => true
-        );
-        $backendOptions = array(
-            'cache_dir'=> APPLICATION_PATH . '/../data/cache/db'
-        );
-
-        $cache = Zend_cache::factory('Core',
-            'File',
-            $frontendOptions,
-            $backendOptions
-        );
-        Zend_Paginator::setCache($cache);
+            $cache = Zend_Cache::factory('Core',
+                'Apc',
+                $frontendOptions
+            );
+            Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
+        }
     }
 }

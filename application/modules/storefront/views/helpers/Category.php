@@ -21,6 +21,6 @@ class Storefront_View_Helper_Category extends Zend_View_Helper_Abstract
     public function Category()
     {
         $catalogModel = new Storefront_Model_Catalog();
-        return $catalogModel->getCategoriesByParentId(0);
+        return $catalogModel->getCached()->getCategoriesByParentId(0);
     }
 }

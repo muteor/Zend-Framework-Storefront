@@ -18,19 +18,18 @@ class Storefront_CatalogController extends Zend_Controller_Action
 
     public function indexAction()
     {       
-        $products = $this->_catalogModel->getProductsByCategory(
+        $products = $this->_catalogModel->getCached()->getProductsByCategory(
             $this->_getParam('categoryIdent', 0),
 			$this->_getParam('page', 1),
             array('name')
         );
 
-        $category = $this->_catalogModel->getCategoryByIdent($this->_getParam('categoryIdent', ''));
-        
+        $category = $this->_catalogModel->getCached()->getCategoryByIdent($this->_getParam('categoryIdent', ''));
         if (null === $category) {
             throw new SF_Exception_404('Unknown category ' . $this->_getParam('categoryIdent'));
         }
         
-        $subs = $this->_catalogModel->getCategoriesByParentId($category->categoryId);
+        $subs = $this->_catalogModel->getCached()->getCategoriesByParentId($category->categoryId);
         $this->getBreadcrumb($category);
 
         $this->view->assign(array(

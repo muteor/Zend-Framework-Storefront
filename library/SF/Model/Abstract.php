@@ -28,7 +28,17 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
      * @var array Form instances
      */
     protected $_forms = array();
-    
+
+    /**
+     * @var SF_Model_Cache_Abstract
+     */
+    protected $_cache;
+
+    /**
+     * @var array cache options
+     */
+    protected $_cacheOptions = array();
+
    /**
     * Constructor
     *
@@ -110,6 +120,64 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
             $this->_forms[$name] = new $class(array('model' => $this));
         }
 	    return $this->_forms[$name];
+    }
+
+    /**
+     * Set the cache to use
+     * 
+     * @param SF_Model_Cache_Abstract $cache
+     */
+    public function setCache(SF_Model_Cache_Abstract $cache)
+    {
+        $this->_cache = $cache;
+    }
+
+    /**
+     * Set the cache options
+     * 
+     * @param array $options 
+     */
+    public function setCacheOptions(array $options)
+    {
+        $this->_cacheOptions = $options;
+    }
+
+    /**
+     * Get the cache options
+     * 
+     * @return array
+     */
+    public function getCacheOptions()
+    {
+        if (empty($this->_cacheOptions)) {
+            $frontendOptions = array(
+                'lifetime' => 1800,
+                'automatic_serialization' => true
+            );
+            $backendOptions = array(
+                'cache_dir'=> APPLICATION_PATH . '/../data/cache/db'
+            );
+            $this->_cacheOptions = array(
+                'frontend'        => 'Class',
+                'backend'         => 'File',
+                'frontendOptions' => $frontendOptions,
+                'backendOptions'  => $backendOptions
+            );
+        }
+        return $this->_cacheOptions;
+    }
+
+    /**
+     * Get the cache
+     * 
+     * @return SF_Model_Cache_Abstract 
+     */
+    public function getCached()
+    {
+        if (null === $this->_cache) {
+            $this->_cache = new SF_Model_Cache($this, $this->getCacheOptions());
+        }
+        return $this->_cache;
     }
 
     /**
