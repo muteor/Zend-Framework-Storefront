@@ -190,7 +190,17 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
 
         $data = $validator->getValues();
 
-        return $this->getResource('Product')->saveRow($data);
+
+        $primary = $this->getResource('Product')->saveRow($data);
+
+        // clear the cache
+        $this->getCached()
+             ->getCache()
+             ->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                array('product')
+             );
+
+        return $primary;
     }
 
    /**

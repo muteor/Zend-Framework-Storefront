@@ -168,15 +168,17 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
     }
 
     /**
-     * Get the cache
-     * 
+     * Query the cache
+     *
+     * @param string $tagged The tag to save data to
      * @return SF_Model_Cache_Abstract 
      */
-    public function getCached()
+    public function getCached($tagged = null)
     {
         if (null === $this->_cache) {
-            $this->_cache = new SF_Model_Cache($this, $this->getCacheOptions());
+            $this->_cache = new SF_Model_Cache($this, $this->getCacheOptions(), $tagged);
         }
+        $this->_cache->setTagged($tagged);
         return $this->_cache;
     }
 

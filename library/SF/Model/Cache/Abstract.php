@@ -48,12 +48,17 @@ abstract class SF_Model_Cache_Abstract
     protected $_model;
 
     /**
+     * @var string The tag this call will be stored against
+     */
+    protected $_tagged;
+
+    /**
      * Constructor 
      * 
      * @param SF_Model_Abstract $model
      * @param array|Zend_Config $options 
      */
-    public function __construct(SF_Model_Abstract $model, $options)
+    public function __construct(SF_Model_Abstract $model, $options, $tagged = null)
     {
         $this->_model = $model;
 
@@ -64,6 +69,8 @@ abstract class SF_Model_Cache_Abstract
         if (is_array($options)) {
             $this->setOptions($options);
         }
+
+        $this->setTagged($tagged);
     }
 
    /**
@@ -160,6 +167,15 @@ abstract class SF_Model_Cache_Abstract
         $this->_frontend = $frontend;
     }
 
+    public function setTagged($tagged=null)
+    {
+        $this->_tagged = $tagged;
+
+        if (null === $tagged) {
+            $this->_tagged = 'default';
+        }   
+    }
+
     /**
      * Proxy calls from here to Zend_Cache, Zend_Cache
      * will be using the Class frontend which caches the model
@@ -174,8 +190,9 @@ abstract class SF_Model_Cache_Abstract
         if (!is_callable(array($this->_model, $method))) {
             throw new SF_Model_Exception('Method ' . $method . ' does not exist in class ' . get_class($this->_model) );
         }
-
-        $callback = array($this->getCache(), $method);
+        $cache = $this->getCache();
+        $cache->setTagsArray(array($this->_tagged));
+        $callback = array($cache, $method);
         return call_user_func_array($callback, $params);
     }
 }
