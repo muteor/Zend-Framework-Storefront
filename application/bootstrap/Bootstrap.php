@@ -30,7 +30,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initPluginLoaderCache()
     {
         if ('production' == $this->getEnvironment()) {
-            $classFileIncCache = APPLICATION_PATH . '/../data/pluginLoaderCache.php';
+            $classFileIncCache = APPLICATION_PATH . '/../data/cache/pluginLoaderCache.php';
             if (file_exists($classFileIncCache)) {
                 include_once $classFileIncCache;
             }
@@ -246,6 +246,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initDbCaches()
     {
+        $this->_logger->info('Bootstrap ' . __METHOD__);
         if ('production' == $this->getEnvironment()) {
             // Metadata cache for Zend_Db_Table
             $frontendOptions = array(
@@ -256,7 +257,69 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 'Apc',
                 $frontendOptions
             );
-            Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
+            Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);  
+        }
+    }
+
+    /**
+     * Add gracefull error handling to the bootstrap process
+     */
+    protected function _bootstrap($resource = null)
+    {
+        $errorHandling = $this->getOption('errorhandling');
+        try {
+            parent::_bootstrap($resource);
+        } catch(Exception $e) {
+            if (true == (bool) $errorHandling['graceful']) {
+                $this->__handleErrors($e, $errorHandling['email']);
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    /**
+     * Add graceful error handling to the dispatch, this will handle
+     * errors during Front Controller dispatch.
+     */
+    public function run()
+    {
+        $errorHandling = $this->getOption('errorhandling');
+        try {
+            parent::run();
+        } catch(Exception $e) {
+            if (true == (bool) $errorHandling['graceful']) {
+                $this->__handleErrors($e, $errorHandling['email']);
+            } else {
+                throw $e;
+            }
+        }
+    }
+
+    /**
+     * Handle errors gracefully, this will work as long as the views,
+     * and the Zend classes are available
+     *
+     * @param Exception $e
+     * @param string $email
+     */
+    protected function __handleErrors(Exception $e, $email)
+    {
+        header('HTTP/1.1 500 Internal Server Error');
+        $view = new Zend_View();
+        $view->addScriptPath(dirname(__FILE__) . '/../views/scripts');
+        echo $view->render('fatalError.phtml');
+
+        if ('' != $email) {
+            $mail = new Zend_Mail();
+            $mail->setSubject('Fatal error in application Storefront');
+            $mail->addTo($email);
+            $mail->setBodyText(
+                $e->getFile() . "\n" .
+                $e->getMessage() . "\n" .
+                $e->getTraceAsString() . "\n"
+            );
+            @$mail->send();
         }
     }
 }
