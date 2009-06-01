@@ -1,8 +1,7 @@
 <?php
 $paths = array(
-    get_include_path(),
-    '../library/Incu',
-     '../library',
+    realpath(dirname(__FILE__) . '/../library'),
+    '.',
 );
 set_include_path(implode(PATH_SEPARATOR, $paths));
 
@@ -11,6 +10,7 @@ defined('APPLICATION_PATH')
 defined('APPLICATION_ENV')
     or define('APPLICATION_ENV', '@ENVIRONMENT@');
 
+require_once 'Zend/Loader/Autoloader.php';
 require_once 'Zend/Application.php';
 
 $application = new Zend_Application(
