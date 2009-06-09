@@ -118,7 +118,6 @@ abstract class SF_Model_Cache_Abstract
                 $this->_frontendOptions,
                 $this->_backendOptions
             );
-            $this->_cache->getCategoryByIdent('SSS');
         }
         return $this->_cache;
     }
