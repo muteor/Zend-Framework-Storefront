@@ -34,6 +34,17 @@
              AllTests.php"/>
 	   </exec>
 	</target>
+
+    <target name="testapp" depends="getProps">
+	   <exec dir="${basedir}/tests/application" executable="phpunit${script-suffix}" failonerror="true">
+	      <arg line="--colors --report ${basedir}/build/report
+	         --log-xml ${basedir}/build/logs/phpunit.xml
+             --log-pmd ${basedir}/build/logs/phpunit.pmd.xml
+             --log-metrics ${basedir}/build/logs/phpunit.metrics.xml
+             --coverage-xml ${basedir}/build/logs/phpunit.coverage.xml
+             AllTests.php"/>
+	   </exec>
+	</target>
 	
 	<target name="configure" depends="getProps">
 	   <copy file="${basedir}/application/application.php.dist"

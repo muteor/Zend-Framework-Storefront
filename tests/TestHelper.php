@@ -79,6 +79,7 @@ _SF_Autloader_SetUp();
 /**
  * Start session now!
  */
+Zend_Session::$_unitTestEnabled = true;
 Zend_Session::start();
 
 /**
