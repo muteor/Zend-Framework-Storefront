@@ -1,0 +1,52 @@
+<h3>product catalog</h3>
+<p>
+    <?=$this->categorySelect; ?>
+</p>
+<p>
+    <a href="<?=$this->url(array('controller' => 'catalog', 'action' => 'addcategory'), 'admin', true)?>">Add Category</a>
+    <a href="<?=$this->url(array('controller' => 'catalog', 'action' => 'addproduct'), 'admin', true)?>">Add Product</a>
+</p>
+<table class="datatable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Ident</th>
+            <th>Discount %</th>
+            <th>Price</th>
+            <th>Sale Price</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <? if($this->products): ?>
+    <tbody>
+        <? foreach($this->products as $product): ?>
+        <tr>
+            <td><?=$this->Escape($product->name);?></td>
+            <td><?=$this->Escape($product->ident);?></td>
+            <td><?=$this->Escape($product->discountPercent);?></td>
+            <td><?=$this->Escape($product->getPrice(false,false));?></td>
+            <td><?=$this->Escape($product->getPrice());?></td>
+            <td>
+                <a href="<?=$this->url(array(
+                        'controller' => 'catalog',
+                        'action' => 'productimages',
+                        'id' => $product->productId,
+                        'categoryId' => $this->categoryId), 'admin', true)?>">Images</a>
+                / Edit
+                / <a href="<?=$this->url(array(
+                            'controller' => 'catalog',
+                            'action' => 'deleteproduct',
+                            'id' => $product->productId,
+                            'categoryId' => $this->categoryId), 'admin', true)?>">Delete</a>
+            </td>
+        </tr>
+        <? endforeach; ?>
+    </tbody>
+    <? else: ?>
+    <tbody>
+        <tr>
+            <td colspan="6">Select Category</td>
+        </tr>
+    </tbody>
+    <? endif; ?>
+</table>
