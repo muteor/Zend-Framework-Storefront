@@ -15,7 +15,7 @@ class CustomerControllerTest extends ControllerTestCase
 
     public function testUserCanAuthenticate()
     {
-        $this->login('example1@example.com','123456');
+        $this->login('me@me.com','123456');
     }
 
     public function testFailedLogin()
@@ -31,7 +31,7 @@ class CustomerControllerTest extends ControllerTestCase
 
     public function testUserHasProfileAccessWhenLoggedIn()
     {
-        $this->login('example1@example.com','123456');
+        $this->login('me@me.com','123456');
         $this->dispatch('/customer');
         $this->assertQuery('form');
         $this->assertXpath('/html/body/div[2]/div[2]/form');
@@ -40,7 +40,7 @@ class CustomerControllerTest extends ControllerTestCase
     public function testAdminAreaRoute()
     {
         //authenticate admin user
-        $this->login('example1@example.com','123456');
+        $this->login('me@me.com','123456');
         $this->dispatch('/admin');
         $this->assertRoute('admin');
     }
