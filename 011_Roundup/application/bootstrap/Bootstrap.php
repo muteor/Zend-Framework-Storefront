@@ -25,17 +25,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     public $frontController;
 
     /**
-     * Setup request and response so we can use Firebug for logging
-     * also make the dispatcher prefix the default module
-     */
-    protected function _initFrontControllerSettings()
-    {
-        $this->bootstrap('frontController');
-        $this->frontController->setResponse(new Zend_Controller_Response_Http());
-        $this->frontController->setRequest(new Zend_Controller_Request_Http());
-    }
-
-    /**
      * Setup the logging
      */
     protected function _initLogging()
@@ -118,14 +107,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     /**
      * Setup the view
      */
-    protected function _initView()
+    protected function _initViewSettings()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
 
-        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
-        $viewRenderer->init();
+        $this->bootstrap('view');
 
-        $this->_view = $viewRenderer->view;
+        $this->_view = $this->getResource('view');
 
         // add global helpers
         $this->_view->addHelperPath(APPLICATION_PATH . '/views/helpers', 'Zend_View_Helper');
@@ -149,12 +137,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         // setting a separator string for segments:
         $this->_view->headTitle()->setSeparator(' - ');
-
-        // init the layouts
-        Zend_Layout::startMvc(array('layout' => 'main',
-            'layoutPath' => APPLICATION_PATH . '/layouts/scripts'
-            )
-        );
     }
 
     /**
