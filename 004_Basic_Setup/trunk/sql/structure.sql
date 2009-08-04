@@ -10,7 +10,7 @@ CREATE TABLE  `category` (
   PRIMARY KEY  (`categoryId`),
   UNIQUE KEY `ident` (`ident`),
   KEY `parent` (`parentId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Definition of table `storefront`.`product`
