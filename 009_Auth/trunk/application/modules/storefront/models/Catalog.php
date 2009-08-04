@@ -118,21 +118,21 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
      * @param Storefront_Resource_Category_Item $category
      * @return array
      */
-    public function getParentCategories($category)
+    public function getParentCategories($category, $appendParent = true)
     {
-        $cats = array($category);
-        
+        $cats = $appendParent ? array($category) : array();
+
         if (0 == $category->parentId) {
             return $cats;
         }
-        
+
         $parent = $category->getParentCategory();
         $cats[] = $parent;
-        
+
         if (0 != $parent->parentId) {
-            $cats = array_merge($cats, $this->getParentCategories($parent)); 
+            $cats = array_merge($cats, $this->getParentCategories($parent, false));
         }
-        
+
         return $cats;
     }
 
