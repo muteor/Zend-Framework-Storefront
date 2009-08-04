@@ -122,18 +122,18 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
     public function getParentCategories($category, $appendParent = true)
     {
         $cats = $appendParent ? array($category) : array();
-        
+
         if (0 == $category->parentId) {
             return $cats;
         }
 
         $parent = $category->getParentCategory();
         $cats[] = $parent;
-        
+
         if (0 != $parent->parentId) {
             $cats = array_merge($cats, $this->getParentCategories($parent, false));
         }
-        
+
         return $cats;
     }
 
