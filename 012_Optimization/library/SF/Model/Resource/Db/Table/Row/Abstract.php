@@ -1,9 +1,9 @@
 <?php
 /**
  * SF_Model_Resource_Db_Table_Row_Abstract
- * 
+ *
  * Composite the Zend_Db_Table_Row
- * 
+ *
  * @category   Storefront
  * @package    Storefront_Model_Resource
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
@@ -25,15 +25,15 @@ abstract class SF_Model_Resource_Db_Table_Row_Abstract
      * @param  array $config OPTIONAL Array of user-specified config options.
      * @return void
      */
-    public function __construct(array $config = array()) 
+    public function __construct(array $config = array())
     {
         $this->setRow($config);
     }
-    
+
     /**
      * First looks for getter Methods for the columnName, that are used to lazy
      * load dependant data (data not contained in the row).
-     * 
+     *
      * Lastly proxies to the __get method of the row.
      *
      * @param string $columnName
@@ -45,7 +45,7 @@ abstract class SF_Model_Resource_Db_Table_Row_Abstract
         if (method_exists($this,$lazyLoader)) {
             return $this->$lazyLoader();
         }
-        
+
         return $this->getRow()->__get($columnName);
     }
 
@@ -72,7 +72,7 @@ abstract class SF_Model_Resource_Db_Table_Row_Abstract
     {
         return $this->getRow()->__set($columnName, $value);
     }
-    
+
     /**
      * Returns the connected row
      *
@@ -82,7 +82,7 @@ abstract class SF_Model_Resource_Db_Table_Row_Abstract
     {
         return $this->_row;
     }
-    
+
     /**
      * Sets the row
      *
@@ -90,24 +90,24 @@ abstract class SF_Model_Resource_Db_Table_Row_Abstract
      */
     public function setRow(array $config = array())
     {
-        $rowClass = 'Zend_Db_Table_Row';  
+        $rowClass = 'Zend_Db_Table_Row';
         if (isset($config['rowClass'])) {
             $rowClass = $config['rowClass'];
         }
-        
+
         if (is_string($rowClass)) {
             $this->_row = new $rowClass($config);
             return;
         }
-        
+
         if (is_object($rowClass)) {
             $this->_row = $rowClass;
             return;
         }
-        
+
         throw new SF_Model_Exception('Could not set rowClass in ' . __CLASS__);
     }
-    
+
     /**
      * Proxy method calls to the connected row, thing like toArray() etc
      *
@@ -116,10 +116,13 @@ abstract class SF_Model_Resource_Db_Table_Row_Abstract
      * @return mixed
      */
     public function __call($method, array $arguments)
-    {       
+    {
         return call_user_func_array(array($this->getRow(), $method), $arguments);
     }
 
+    /**
+     * Reconnect the table if we are serialized
+     */
     public function __wakeup()
     {
         if (!$this->getRow()->isConnected()) {
