@@ -39,7 +39,7 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
      * 
      * @var Zend_Session_Namespace
      */
-    protected $_sessionNs;
+    protected $_sessionNamespace;
 
     /**
      * Called from the __construct defined by model abstract
@@ -98,7 +98,7 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
      */
     public function setSessionNs(Zend_Session_Namespace $ns)
     {
-        $this->_sessionNs = $ns;
+        $this->_sessionNamespace = $ns;
     }
     
     /**
@@ -108,10 +108,10 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
      */
     public function getSessionNs()
     {
-        if (null === $this->_sessionNs) {
+        if (null === $this->_sessionNamespace) {
             $this->setSessionNs(new Zend_Session_Namespace(__CLASS__));
         }
-        return $this->_sessionNs;
+        return $this->_sessionNamespace;
     }
 
     /**
