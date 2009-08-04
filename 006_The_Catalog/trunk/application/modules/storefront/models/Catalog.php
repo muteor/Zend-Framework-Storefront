@@ -107,21 +107,21 @@ class Storefront_Model_Catalog extends SF_Model_Abstract
         return $cats;
     }
     
-    public function getParentCategories($category)
+    public function getParentCategories($category, $appendParent = true)
     {
-        $cats = array($category);
-        
+        $cats = $appendParent ? array($category) : array();
+
         if (0 == $category->parentId) {
             return $cats;
         }
-        
+
         $parent = $category->getParentCategory();
         $cats[] = $parent;
-        
+
         if (0 != $parent->parentId) {
-            $cats = array_merge($cats, $this->getParentCategories($parent)); 
+            $cats = array_merge($cats, $this->getParentCategories($parent, false));
         }
-        
+
         return $cats;
     }
 }
