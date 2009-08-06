@@ -51,6 +51,6 @@ class Storefront_Resource_User extends SF_Model_Resource_Db_Table_Abstract imple
 		          	  ->setCurrentPageNumber((int) $paged);
 			return $paginator;
 		}
-        return $this->fetchAll();
+        return $this->fetchAll($select);
     }
 }
