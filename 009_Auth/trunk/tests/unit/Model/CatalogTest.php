@@ -122,7 +122,7 @@ class CatalogTest extends PHPUnit_Framework_TestCase
     {
         $category = $this->_model->getCategoryByIdent('Category-8');
         $cats =$this->_model->getParentCategories($category);
-        $this->assertEquals(6, count($cats));
+        $this->assertEquals(4, count($cats));
 
         $category = $this->_model->getCategoryByIdent('Category-1');
         $cats =$this->_model->getParentCategories($category);
