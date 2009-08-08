@@ -21,8 +21,8 @@ class Storefront_CustomerController extends Zend_Controller_Action
         $this->view->userForm = $this->getUserForm();
     }
     
-	public function indexAction() 
-	{
+    public function indexAction()
+    {
         $userID = 1; //will be from session
         $this->view->user = $this->_model->getUserById($userID);
         $this->view->userForm = $this->getUserForm()->populate($this->view->user->toArray());
@@ -39,6 +39,8 @@ class Storefront_CustomerController extends Zend_Controller_Action
         if (false === ($id = $this->_model->saveUser($request->getPost()))) {
             return $this->render('index');
         }
+
+        return $this->_helper->redirector('index');
     }
 
 	public function registerAction()
