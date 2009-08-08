@@ -24,8 +24,8 @@ class Storefront_CustomerController extends Zend_Controller_Action
         $this->view->userForm = $this->getUserForm();
     }
     
-	public function indexAction() 
-	{
+    public function indexAction()
+    {
         if (!$this->_model->checkAcl('updateUser')) {
             return $this->_helper->redirectCommon('gotoLogin');
         }
@@ -42,38 +42,16 @@ class Storefront_CustomerController extends Zend_Controller_Action
     public function saveAction()
     {
         $request = $this->getRequest();
-        $redirector = $this->_helper->getHelper('Redirector');
 
-        $validator = 'edit';
-        $onFail = 'edit';
-        $onSuccess = array(
-            'urlOptions' => array(
-                'controller' => 'customer',
-                'action' => 'index'
-            ),
-            'route' => 'default'
-        );
-
-        if ($this->_getParam('isAdmin')) {
-            $this->view->user = $this->_model->getUserById($this->_getParam('id'));
-            $this->view->userForm = $this->getUserAdminForm();
-
-            $validator = 'admin';
-            $onFail = 'edit';
-            $onSuccess = array(
-                'urlOptions' => array(
-                    'controller' => 'customer',
-                    'action' => 'list'
-                ),
-                'route' => 'admin'
-            );
+        if (!$request->isPost()) {
+            return $this->_helper->redirector('index');
         }
 
-        if (false === $this->_model->saveUser($request->getPost(), $validator)) {
-            return $this->render($onFail);
+        if (false === ($id = $this->_model->saveUser($request->getPost()))) {
+            return $this->render('index');
         }
-
-        return $redirector->gotoRoute($onSuccess['urlOptions'], $onSuccess['route']);
+        
+        return $this->_helper->redirector('index');
     }
 
     public function registerAction()
