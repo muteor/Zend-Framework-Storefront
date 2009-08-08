@@ -76,8 +76,8 @@ class Storefront_CustomerController extends Zend_Controller_Action
         return $redirector->gotoRoute($onSuccess['urlOptions'], $onSuccess['route']);
     }
 
-	public function registerAction()
-	{}
+    public function registerAction()
+    {}
 	
     public function completeRegistrationAction()
     {
@@ -100,29 +100,6 @@ class Storefront_CustomerController extends Zend_Controller_Action
         
 	    $this->view->users = $this->_model->getUsers();
 	}
-
-    public function editAction()
-    {
-        if (!$this->_helper->acl('Admin')) {
-            return $this->_helper->redirectCommon('gotoLogin');
-        }
-        
-        $this->view->userForm = $this->getUserAdminForm();
-        $this->view->user = $this->_model->getUserById($this->_getParam('id'));
-        $this->view->userForm->populate($this->view->user->toArray());
-    }
-
-    public function deleteAction()
-    {
-        if (false === ($id = $this->_getParam('id',false))) {
-            throw new SF_Exception('Unknown user');
-        }
-
-        $this->_model->deleteUser($id);
-
-        $redirector = $this->getHelper('redirector');
-        return $redirector->gotoRoute(array('action' => 'list'), 'admin');
-    }
 	
 	public function loginAction()
 	{}
@@ -148,8 +125,8 @@ class Storefront_CustomerController extends Zend_Controller_Action
         
         return $this->_helper->redirector('index');
 	}
-	
-	public function logoutAction()
+
+    public function logoutAction()
     {
         $this->_authService->clear();
         return $this->_helper->redirector('index');
@@ -185,22 +162,6 @@ class Storefront_CustomerController extends Zend_Controller_Action
         $this->_forms['userEdit']->setMethod('post');
 
         return $this->_forms['userEdit'];
-    }
-
-    public function getUserAdminForm()
-    {
-        $urlHelper = $this->_helper->getHelper('url');
-
-        $this->_forms['userAdmin'] = $this->_model->getForm('userAdmin');
-        $this->_forms['userAdmin']->setAction($urlHelper->url(array(
-            'controller' => 'customer' ,
-            'action' => 'save'
-            ),
-            'admin'
-        ));
-        $this->_forms['userAdmin']->setMethod('post');
-
-        return $this->_forms['userAdmin'];
     }
     
     public function getLoginForm()

@@ -150,19 +150,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $router = $this->frontController->getRouter();
 
-        // Admin context route
-        $route = new Zend_Controller_Router_Route(
-            'admin/:module/:controller/:action/*',
-            array(
-                'action'     => 'index',
-                'controller' => 'admin',
-                'module'     => 'storefront',
-                'isAdmin'    => true
-            )
-        );
-
-        $router->addRoute('admin', $route);
-
         // catalog category product route
         $route = new Zend_Controller_Router_Route(
             'catalog/:categoryIdent/:productIdent',
