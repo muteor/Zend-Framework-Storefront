@@ -70,15 +70,6 @@ class Storefront_CustomerController extends Zend_Controller_Action
         }
 	}
 	
-	public function listAction()
-	{
-        if (!$this->_helper->acl('Admin')) {
-            return $this->_helper->redirectCommon('gotoLogin');
-        }
-        
-	    $this->view->users = $this->_model->getUsers();
-	}
-	
 	public function loginAction()
 	{}
 	
