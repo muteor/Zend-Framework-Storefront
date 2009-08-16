@@ -1,0 +1,43 @@
+<?php if ($this->pageCount): ?>
+<div class="paginationControl">
+<?= $this->firstItemNumber; ?> - <?= $this->lastItemNumber; ?>
+ of <?= $this->totalItemCount; ?>
+
+<!-- First page link -->
+<?php if (isset($this->previous)): ?>
+  <a href="<?= $this->url(array('page' => $this->first), 'catalog_category'); ?>">
+    First
+  </a> |
+<?php else: ?>
+  <span class="disabled">First</span> |
+<?php endif; ?>
+
+<!-- Previous page link -->
+<?php if (isset($this->previous)): ?>
+  <a href="<?= $this->url(array('page' => $this->previous), 'catalog_category'); ?>">
+    &lt; Previous
+  </a> |
+<?php else: ?>
+  <span class="disabled">&lt; Previous</span> |
+<?php endif; ?>
+
+<!-- Next page link -->
+<?php if (isset($this->next)): ?>
+  <a href="<?= $this->url(array('page' => $this->next), 'catalog_category'); ?>">
+    Next &gt;
+  </a> |
+<?php else: ?>
+  <span class="disabled">Next &gt;</span> |
+<?php endif; ?>
+
+<!-- Last page link -->
+<?php if (isset($this->next)): ?>
+  <a href="<?= $this->url(array('page' => $this->last), 'catalog_category'); ?>">
+    Last
+  </a>
+<?php else: ?>
+  <span class="disabled">Last</span>
+<?php endif; ?>
+
+</div>
+<?php endif; ?>

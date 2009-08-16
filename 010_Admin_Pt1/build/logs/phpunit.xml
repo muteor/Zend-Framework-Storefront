@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Storefront" tests="36" assertions="106" failures="0" errors="0" time="1.324300">
+    <testsuite name="Storefront Unit Tests" tests="36" assertions="106" failures="0" errors="0" time="1.324300">
+      <testsuite name="ModelAbstractTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/ModelAbstractTest.php" tests="4" assertions="6" failures="0" errors="0" time="0.060296">
+        <testcase name="test_Constructor_Can_Set_Options" class="ModelAbstractTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/ModelAbstractTest.php" line="48" assertions="2" time="0.005627"/>
+        <testcase name="test_GetResource_Tries_To_Instantiate_The_Correct_Resource" class="ModelAbstractTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/ModelAbstractTest.php" line="55" assertions="1" time="0.043062"/>
+        <testcase name="test_GetForm_Tries_To_Instantiate_The_Correct_Form" class="ModelAbstractTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/ModelAbstractTest.php" line="60" assertions="1" time="0.004831"/>
+        <testcase name="test_GetMethods_Inflect_As_Expected" class="ModelAbstractTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/ModelAbstractTest.php" line="65" assertions="2" time="0.006776"/>
+      </testsuite>
+      <testsuite name="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" tests="10" assertions="31" failures="0" errors="0" time="0.277044">
+        <testcase name="test_Catalog_Get_Product_By_Id_Returns_Product_Item" class="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" line="51" assertions="4" time="0.036828"/>
+        <testcase name="test_Catalog_Get_Product_By_Ident_Returns_Product_Item" class="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" line="61" assertions="3" time="0.024122"/>
+        <testcase name="test_Catalog_Product_Item_Can_Get_Images" class="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" line="71" assertions="2" time="0.021124"/>
+        <testcase name="test_Catalog_Can_Get_Categories_By_parentId" class="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" line="79" assertions="2" time="0.026595"/>
+        <testcase name="test_Catalog_Can_Get_Category_By_Ident" class="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" line="86" assertions="3" time="0.024478"/>
+        <testcase name="test_Catalog_Can_Get_Category_Parent" class="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" line="94" assertions="3" time="0.024414"/>
+        <testcase name="test_Catalog_Can_Get_Products_By_CategoryId" class="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" line="103" assertions="2" time="0.033836"/>
+        <testcase name="test_Catalog_Can_Get_Products_By_CategoryIdent" class="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" line="109" assertions="3" time="0.034379"/>
+        <testcase name="test_Catalog_Can_Get_Category_Children_Ids" class="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" line="115" assertions="5" time="0.025113"/>
+        <testcase name="test_Catalog_Can_Get_Category_Parents" class="CatalogTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CatalogTest.php" line="121" assertions="4" time="0.026155"/>
+      </testsuite>
+      <testsuite name="UserTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/UserTest.php" tests="6" assertions="10" failures="0" errors="0" time="0.677340">
+        <testcase name="test_User_Get_User_By_Id_Returns_User_Row" class="UserTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/UserTest.php" line="52" assertions="2" time="0.017810"/>
+        <testcase name="test_User_Get_User_By_Email_Returns_User_Row" class="UserTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/UserTest.php" line="60" assertions="2" time="0.009984"/>
+        <testcase name="test_User_Can_Register" class="UserTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/UserTest.php" line="68" assertions="1" time="0.336557"/>
+        <testcase name="test_User_Register_Fails_On_Invalid_Input" class="UserTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/UserTest.php" line="83" assertions="1" time="0.088385"/>
+        <testcase name="test_User_Register_Can_Not_Set_Role" class="UserTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/UserTest.php" line="103" assertions="3" time="0.097381"/>
+        <testcase name="test_User_Can_Be_Edited_By_Customer_And_Admin" class="UserTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/UserTest.php" line="122" assertions="1" time="0.127223"/>
+      </testsuite>
+      <testsuite name="AuthenticationTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Service/AuthenticationTest.php" tests="5" assertions="14" failures="0" errors="0" time="0.160639">
+        <testcase name="test_Get_Adpater_Returns_Zend_Auth_Adapter_DbTable" class="AuthenticationTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Service/AuthenticationTest.php" line="36" assertions="1" time="0.093536"/>
+        <testcase name="test_Authenticate_Returns_False_On_Invalid_Credentials" class="AuthenticationTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Service/AuthenticationTest.php" line="46" assertions="2" time="0.015494"/>
+        <testcase name="test_Authenticate_Returns_True_On_Valid_Credentials" class="AuthenticationTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Service/AuthenticationTest.php" line="62" assertions="2" time="0.016848"/>
+        <testcase name="test_Authenticate_Saves_Identity_To_Session" class="AuthenticationTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Service/AuthenticationTest.php" line="78" assertions="4" time="0.024039"/>
+        <testcase name="test_Authenticate_Can_Clear_Identity" class="AuthenticationTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Service/AuthenticationTest.php" line="107" assertions="5" time="0.010722"/>
+      </testsuite>
+      <testsuite name="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" tests="11" assertions="45" failures="0" errors="0" time="0.148981">
+        <testcase name="test_Cart_Is_Countable" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="68" assertions="2" time="0.013458"/>
+        <testcase name="test_Cart_Can_Add_An_Item" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="73" assertions="8" time="0.019937"/>
+        <testcase name="test_Cart_Can_Remove_Item" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="101" assertions="6" time="0.013907"/>
+        <testcase name="test_Cart_Returns_The_Correct_Session_Namespace" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="118" assertions="4" time="0.007824"/>
+        <testcase name="test_Cart_Saves_Data_To_Session" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="126" assertions="4" time="0.018125"/>
+        <testcase name="test_Cart_Totals_Should_Be_Zero_On_New" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="147" assertions="3" time="0.007180"/>
+        <testcase name="test_Cart_Line_Item_Calculations" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="153" assertions="5" time="0.014967"/>
+        <testcase name="test_Cart_Total_Calculations" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="179" assertions="5" time="0.019794"/>
+        <testcase name="test_Cart_Should_Query_Session_On_Instantiation" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="202" assertions="2" time="0.014829"/>
+        <testcase name="test_Cart_Should_Not_Accept_Negative_Qty" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="217" assertions="3" time="0.008598"/>
+        <testcase name="test_Cart_Should_Remove_Item_If_Added_With_Zero_Qty" class="CartTest" file="/home/keith/www/chapter10new/trunk/tests/unit/Model/CartTest.php" line="226" assertions="3" time="0.010362"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>
