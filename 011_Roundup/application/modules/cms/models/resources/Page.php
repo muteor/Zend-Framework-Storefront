@@ -1,4 +1,9 @@
 <?php
+/** Cms_Resource_Page_Item */
+if (!class_exists('Cms_Resource_Page_Item')) {
+    require_once dirname(__FILE__) . '/Page/Item.php';
+}
+
 /**
  * Cms_Resource_Page
  *
