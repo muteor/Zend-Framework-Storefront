@@ -1,4 +1,14 @@
 <?php
+/** Storefront_Resource_ProductImage_Item */
+if (!class_exists('Storefront_Resource_Productimage_Item')) {
+    require_once dirname(__FILE__) . '/Productimage/Item.php';
+}
+
+/** Storefront_Resource_Product */
+if (!class_exists('Storefront_Resource_Product')) {
+    require_once dirname(__FILE__) . '/Product.php';
+}
+
 /**
  * Storefront_Resource_ProductImage
  * 
