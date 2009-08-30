@@ -1,0 +1,8 @@
+<div class="sub-nav">
+<h3>select <span>category</span></h3>
+    <ul>
+        <? foreach ($this->categories as $category): ?>
+        <li><a href="<?=$this->url(array('categoryIdent' => $category->ident), 'catalog_category', true );?>"><?=$category->name; ?></a></li>
+        <? endforeach; ?>
+    </ul>
+</div>      

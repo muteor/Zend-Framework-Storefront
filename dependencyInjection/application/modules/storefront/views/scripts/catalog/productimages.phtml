@@ -1,0 +1,8 @@
+<h3>current <span>images</span></h3>
+<? if(0 < sizeof($this->product->getImages(true))): ?>
+<? foreach ($this->product->getImages(true) as $image): ?>
+<?=$this->productImage($image)->thumbnail(); ?>
+<? endforeach;?>
+<? endif;?>
+<h3>upload image</h3>
+<?=$this->imageForm; ?>
