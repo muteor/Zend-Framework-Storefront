@@ -12,10 +12,14 @@ defined('APPLICATION_ENV')
 
 require_once 'Zend/Loader/Autoloader.php';
 require_once 'Zend/Application.php';
+require_once 'Yadif/Container.php';
+
+$container = new Yadif_Container(include APPLICATION_PATH . '/config/objects.php');
 
 $application = new Zend_Application(
     APPLICATION_ENV,
     APPLICATION_PATH.'/config/store.ini'
 );
+$application->getBootstrap()->setContainer($container);
 $application->bootstrap();
 $application->run();

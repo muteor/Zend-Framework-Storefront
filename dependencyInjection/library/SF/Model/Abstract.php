@@ -39,6 +39,11 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
      */
     protected $_cacheOptions = array();
 
+    /**
+     * @var Yadif_Container
+     */
+    protected $_container;
+
    /**
     * Constructor
     *
@@ -180,6 +185,24 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
         }
         $this->_cache->setTagged($tagged);
         return $this->_cache;
+    }
+
+    /**
+     * Set the container instance
+     *
+     * @param Yadif_Container $container
+     */
+    public function setContainer(Yadif_Container $container)
+    {
+        $this->_container = $container;
+    }
+
+    /**
+     * @return Yadif_Container
+     */
+    public function getContainer()
+    {
+        return $this->_container;
     }
 
     /**
