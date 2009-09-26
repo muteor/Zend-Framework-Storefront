@@ -89,24 +89,27 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
         return $this;
     }
 
-	/**
-	 * Get a resource
-	 *
-	 * @param string $name
-	 * @return SF_Model_Resource_Interface 
-	 */
-	public function getResource($name) 
-	{
-        if (!isset($this->_resources[$name])) {
-            $class = join('_', array(
-                    $this->_getNamespace(),
-                    'Resource',
-                    $this->_getInflected($name)
-            ));
-            $this->_resources[$name] = new $class();
-        }
-	    return $this->_resources[$name];
-	}
+    /**
+     * Add a model resource to this model
+     * 
+     * @param string $name
+     * @param SF_Model_Resource_Interface $resource 
+     */
+    public function addResource($name, SF_Model_Resource_Interface $resource)
+    {
+        $this->_resources[strtolower($name)] = $resource;
+    }
+
+    /**
+     * Get a resource
+     *
+     * @param string $name
+     * @return SF_Model_Resource_Interface
+     */
+    public function getResource($name)
+    {
+        return $this->_resources[strtolower($name)];
+    }
 
     /**
      * Get a Form
