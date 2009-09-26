@@ -16,11 +16,15 @@ require_once 'Zend/View/Interface.php';
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Storefront_View_Helper_Category extends Zend_View_Helper_Abstract
+class Storefront_View_Helper_Category extends SF_View_Helper_Abstract
 {
+    public function  __construct()
+    {
+        $this->_catalogModel = $this->getContainer()->getComponent('Storefront_Model_Catalog');
+    }
+
     public function Category()
     {
-        $catalogModel = new Storefront_Model_Catalog();
-        return $catalogModel->getCached()->getCategoriesByParentId(0);
+        return $this->_catalogModel->getCached()->getCategoriesByParentId(0);
     }
 }

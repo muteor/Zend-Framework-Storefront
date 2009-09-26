@@ -9,15 +9,20 @@
  */
 class Cms_Service_Page
 {
-    protected $_pageModel;
-
-    public function __construct()
-    {
-        $this->_pageModel = new Cms_Model_Page();
-    }
+    protected $_model;
 
     public function getPageById($id)
     {
-        return $this->_pageModel->getPageById($id);
+        return $this->getModel()->getPageById($id);
+    }
+
+    public function setModel(SF_Model_Interface $model)
+    {
+        $this->_model = $model;
+    }
+
+    public function getModel()
+    {
+        return $this->_model;
     }
 }

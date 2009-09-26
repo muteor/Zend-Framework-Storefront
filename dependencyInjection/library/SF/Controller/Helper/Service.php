@@ -20,7 +20,7 @@ class SF_Controller_Helper_Service extends Zend_Controller_Action_Helper_Abstrac
                     ucfirst($service)
             ));
 
-            $front = Zend_Controller_Front::getInstance();
+            $front = $this->getFrontController();
             $classPath = $front->getModuleDirectory($module) . '/services/' . ucfirst($service) . '.php';
             if (!file_exists($classPath)) {
                 return false;
@@ -28,9 +28,13 @@ class SF_Controller_Helper_Service extends Zend_Controller_Action_Helper_Abstrac
             if (!class_exists($class)) {
                 throw new SF_Exception("Class $class not found in " . basename($classPath));
             }
-            $this->_services[$module][$service] = new $class();
+
+            $container = $this->getActionController()->getInvokeArg('bootstrap')->getContainer();
+
+            $this->_services[$module][$service] = $container->getComponent($class);
         }
-	    return $this->_services[$module][$service];
+
+        return $this->_services[$module][$service];
     }
 
     public function direct($service, $module)

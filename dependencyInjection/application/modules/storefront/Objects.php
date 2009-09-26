@@ -5,7 +5,7 @@ class Storefront_Objects extends Yadif_Module
     {
         $this->_initModelResources();
         $this->_initModelAcl();
-        $this->_initCache();
+        //$this->_initCache();
         $this->_initModels();
     }
 
@@ -13,7 +13,6 @@ class Storefront_Objects extends Yadif_Module
     {
         $this->bind("Storefront_Model_Catalog")
              ->to("Storefront_Model_Catalog")
-                ->param('name', 'MOOOOOOO')
                 ->method('addResource')
                     ->args(':name','Storefront_Resource_Category')
                     ->param(':name', 'Category')
@@ -25,8 +24,8 @@ class Storefront_Objects extends Yadif_Module
                     ->param(':name', 'Productimage')
                 ->method('setAcl')
                     ->args('Storefront_Model_Acl_Storefront')
-                ->method('setCache')
-                    ->args('Storefront_Model_Cache_Catalog')
+                //->method('setCache')
+                    //->args('Storefront_Model_Cache_Catalog')
              ->scope(Yadif_Container::SCOPE_PROTOTYPE);
     }
 

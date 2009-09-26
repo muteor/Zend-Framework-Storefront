@@ -108,7 +108,11 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
      */
     public function getResource($name)
     {
-        return $this->_resources[strtolower($name)];
+        $name = strtolower($name);
+        if (!isset($this->_resources[$name])) {
+            throw new SF_Model_Exception("Resource: $name not found");
+        }
+        return $this->_resources[$name];
     }
 
     /**
