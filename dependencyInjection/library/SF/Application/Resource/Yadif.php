@@ -24,15 +24,16 @@ class SF_Application_Resource_Yadif extends Zend_Application_Resource_ResourceAb
      */
     public function init()
     {
-        $l = Zend_Loader_Autoloader::getInstance();
-        //print_r($l);
-        //die();
         $this->_yadif = $this->getBootstrap()->getContainer();
 
         if (!$this->_yadif instanceof Yadif_Container) {
             throw new Max_Application_Exception('The container must be an instance of Yadif_Container');
         }
 
+        // pass all options back to Yadif
+        $this->_yadif->setConfig(new Zend_Config($this->getBootstrap()->getOptions()));
+
+        // load each modules object configs
         $this->_loadObjects();
     }
 

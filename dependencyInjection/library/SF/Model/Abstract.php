@@ -35,11 +35,6 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
     protected $_cache;
 
     /**
-     * @var array cache options
-     */
-    protected $_cacheOptions = array();
-
-    /**
      * @var Yadif_Container
      */
     protected $_container;
@@ -133,52 +128,7 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
         }
 	    return $this->_forms[$name];
     }
-
-    /**
-     * Set the cache to use
-     * 
-     * @param SF_Model_Cache_Abstract $cache
-     */
-    public function setCache(SF_Model_Cache_Abstract $cache)
-    {
-        $this->_cache = $cache;
-    }
-
-    /**
-     * Set the cache options
-     * 
-     * @param array $options 
-     */
-    public function setCacheOptions(array $options)
-    {
-        $this->_cacheOptions = $options;
-    }
-
-    /**
-     * Get the cache options
-     * 
-     * @return array
-     */
-    public function getCacheOptions()
-    {
-        if (empty($this->_cacheOptions)) {
-            $frontendOptions = array(
-                'lifetime' => 1800,
-                'automatic_serialization' => true
-            );
-            $backendOptions = array(
-                'cache_dir'=> APPLICATION_PATH . '/../data/cache/db'
-            );
-            $this->_cacheOptions = array(
-                'frontend'        => 'Class',
-                'backend'         => 'File',
-                'frontendOptions' => $frontendOptions,
-                'backendOptions'  => $backendOptions
-            );
-        }
-        return $this->_cacheOptions;
-    }
-
+    
     /**
      * Query the cache
      *
@@ -188,28 +138,15 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
     public function getCached($tagged = null)
     {
         if (null === $this->_cache) {
-            $this->_cache = new SF_Model_Cache($this, $this->getCacheOptions(), $tagged);
+            throw new SF_Model_Exception('No cache for Model: ' . __CLASS__);
         }
         $this->_cache->setTagged($tagged);
         return $this->_cache;
     }
 
-    /**
-     * Set the container instance
-     *
-     * @param Yadif_Container $container
-     */
-    public function setContainer(Yadif_Container $container)
+    public function setCache(SF_Model_Cache $cache)
     {
-        $this->_container = $container;
-    }
-
-    /**
-     * @return Yadif_Container
-     */
-    public function getContainer()
-    {
-        return $this->_container;
+        $this->_cache = $cache;
     }
 
     /**
