@@ -141,6 +141,7 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
             throw new SF_Model_Exception('No cache for Model: ' . __CLASS__);
         }
         $this->_cache->setTagged($tagged);
+        $this->_cache->setModel($this);
         return $this->_cache;
     }
 

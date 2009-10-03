@@ -7,12 +7,13 @@ class Storefront_Objects extends Yadif_Module
         $this->_initModelAcl();
         $this->_initCache();
         $this->_initModels();
+        $this->_initServices();
     }
 
     protected function _initModels()
     {
-        $this->bind("Storefront_Model_Catalog")
-             ->to("Storefront_Model_Catalog")
+        $this->bind('Storefront_Model_Catalog')
+             ->to('Storefront_Model_Catalog')
                 ->method('addResource')
                     ->args(':name','Storefront_Resource_Category')
                     ->param(':name', 'Category')
@@ -27,30 +28,39 @@ class Storefront_Objects extends Yadif_Module
                 ->method('setCache')
                     ->args('Storefront_Model_Cache_Catalog')
              ->scope(Yadif_Container::SCOPE_PROTOTYPE);
+
+        $this->bind('Storefront_Model_Cart');
+
+        $this->bind('Storefront_Model_User')
+             ->to('Storefront_Model_User')
+                ->method('addResource')
+                    ->args(':name', 'Storefront_Resource_User')
+                    ->param(':name', 'User');
     }
 
     protected function _initModelResources()
     {
-        $this->bind('Storefront_Resource_Category')
-             ->to('Storefront_Resource_Category');
-
-        $this->bind('Storefront_Resource_Product')
-             ->to('Storefront_Resource_Product');
-
-        $this->bind('Storefront_Resource_Productimage')
-             ->to('Storefront_Resource_Productimage');
+        $this->bind('Storefront_Resource_Category');
+        $this->bind('Storefront_Resource_Product');
+        $this->bind('Storefront_Resource_Productimage');
+        $this->bind('Storefront_Resource_User');
     }
 
     protected function _initModelAcl()
     {
-        $this->bind('Storefront_Model_Acl_Storefront')
-             ->to('Storefront_Model_Acl_Storefront');
+        $this->bind('Storefront_Model_Acl_Storefront');
     }
 
     protected function _initCache()
     {
         $this->bind('Storefront_Model_Cache_Catalog')
              ->to('SF_Model_Cache')
-                ->args('c:Storefront_Model_Catalog','%storefront.model.cache.options%');
+                ->args('%storefront.model.cache.options%');
+    }
+
+    protected function _initServices()
+    {
+        $this->bind('Storefront_Service_Authentication')
+             ->args('Storefront_Model_User');
     }
 }

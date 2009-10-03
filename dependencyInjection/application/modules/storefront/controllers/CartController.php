@@ -14,8 +14,9 @@ class Storefront_CartController extends Zend_Controller_Action
 
     public function init()
     {
-        $this->_cartModel = new Storefront_Model_Cart();
-        $this->_catalogModel = new Storefront_Model_Catalog();
+        $container = $this->getInvokeArg('bootstrap')->getContainer();
+        $this->_catalogModel = $container->Storefront_Model_Catalog;
+        $this->_cartModel = $container->Storefront_Model_Cart;
     }
 
     public function addAction()

@@ -58,10 +58,8 @@ abstract class SF_Model_Cache_Abstract
      * @param SF_Model_Abstract $model
      * @param array|Zend_Config $options 
      */
-    public function __construct(SF_Model_Abstract $model, $options, $tagged = null)
+    public function __construct($options, $tagged = null)
     {
-        $this->_model = $model;
-
         if ($options instanceof Zend_Config) {
             $options = $options->toArray();
         }
@@ -104,6 +102,16 @@ abstract class SF_Model_Cache_Abstract
     }
 
     /**
+     * Set the Model to cache
+     *
+     * @param SF_Model_Abstract $model
+     */
+    public function setModel($model)
+    {
+        $this->_frontendOptions['cached_entity'] = $model;
+    }
+
+    /**
      * Get the cache instance, configure a new instance 
      * if one not present.
      * 
@@ -130,7 +138,6 @@ abstract class SF_Model_Cache_Abstract
     public function setFrontendOptions(array $frontend)
     {
         $this->_frontendOptions = $frontend;
-        $this->_frontendOptions['cached_entity'] = $this->_model;
     }
 
     /**
@@ -186,9 +193,6 @@ abstract class SF_Model_Cache_Abstract
      */
     public function __call($method, $params)
     {
-        if (!is_callable(array($this->_model, $method))) {
-            throw new SF_Model_Exception('Method ' . $method . ' does not exist in class ' . get_class($this->_model) );
-        }
         $cache = $this->getCache();
         $cache->setTagsArray(array($this->_tagged));
         $callback = array($cache, $method);

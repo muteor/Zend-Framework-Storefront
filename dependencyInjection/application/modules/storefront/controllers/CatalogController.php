@@ -13,7 +13,8 @@ class Storefront_CatalogController extends Zend_Controller_Action
     
     public function init()
     {
-        $this->_catalogModel = new Storefront_Model_Catalog();
+        $container = $this->getInvokeArg('bootstrap')->getContainer();
+        $this->_catalogModel = $container->Storefront_Model_Catalog;
     }
 
     public function indexAction()

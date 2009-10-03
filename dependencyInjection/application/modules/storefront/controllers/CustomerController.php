@@ -14,9 +14,11 @@ class Storefront_CustomerController extends Zend_Controller_Action
     
     public function init()
     {
+        $container = $this->getInvokeArg('bootstrap')->getContainer();
+
         // get the default model
-        $this->_model = new Storefront_Model_User();
-        $this->_authService = new Storefront_Service_Authentication();
+        $this->_model = $container->Storefront_Model_User;
+        $this->_authService = $container->Storefront_Service_Authentication;
 
         // add forms
         $this->view->registerForm = $this->getRegistrationForm();

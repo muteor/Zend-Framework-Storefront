@@ -94,13 +94,6 @@ class Yadif_Container
     protected $_instances = array();
 
     /**
-     * Reference cache for cyclic referenced objects
-     * 
-     * @var array
-     */
-    protected $_referenceCache = array();
-
-    /**
      * Config
      *
      * @var Zend_Config
@@ -383,13 +376,6 @@ class Yadif_Container
                 } else {
                     $value =  $this->getParam($argument, $component);
                 }
-            } elseif(substr($argument, 0, 1) == 'c') {
-                $ref = strtolower(substr($argument, 2));
-                if (isset($this->_referenceCache[$ref])) {
-                    $value = $this->_referenceCache[$ref];
-                } else {
-                    $value = $this->getComponent($ref);
-                }
             } else {
                 $value = $this->getComponent($argument);
             }
@@ -440,10 +426,8 @@ class Yadif_Container
             $component = call_user_func_array($component[self::CONFIG_FACTORY], $this->injectParameters($constructorArguments, $name));
         } else if(empty($constructorArguments)) { // if no instructions
                 $component = $componentReflection->newInstance();
-                $this->_referenceCache[$name] = $component;
             } else {
                 $component = $componentReflection->newInstanceArgs($this->injectParameters($constructorArguments, $name));
-                $this->_referenceCache[$name] = $component;
             }
 
         foreach ($setterMethods as $method) {
@@ -466,8 +450,6 @@ class Yadif_Container
         if($scope !== self::SCOPE_PROTOTYPE) {
             $this->_instances[$name] = $component;
         }
-
-        $this->_referenceCache = array();
 
         return $component;
     }
