@@ -1,0 +1,32 @@
+<div style="padding: 8px;">
+    <table style="width: 100%;">
+        <tbody>
+            <?
+            $i = 0;
+            foreach($this->element->getModel() as $item):
+            ?>
+            <tr <? if($i % 2){ echo 'class="odd"';};?>>
+                <td><?=$this->Escape($item->name); ?></td>
+                <td><?=$this->element->qtys->getElement($item->productId); ?></td>
+                <td class="rt"><?=$this->Cart()->formatAmount($item->getLineCost()); ?></td>
+            </tr>
+            <?
+            ++$i;
+            endforeach;
+            ?>
+            <tr>
+                <td colspan="2" class="rt">SubTotal:</td>
+                <td class="rt colRight"><?=$this->Cart()->formatAmount($this->element->getModel()->getSubTotal()); ?></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="rt">Shipping: <?=$this->element->getElement('shipping');?></td>
+                <td class="rt colRight"><?=$this->Cart()->formatAmount($this->element->getModel()->getShippingCost()); ?></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="rt">Total:</td>
+                <td class="rt"><?=$this->Cart()->formatAmount($this->element->getModel()->getTotal()); ?></td>
+            </tr>
+        </tbody>
+    </table>
+    <?=$this->element->getElement('update-cart'); ?>
+</div>
