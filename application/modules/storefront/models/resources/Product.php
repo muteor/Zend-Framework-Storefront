@@ -34,6 +34,16 @@ class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract im
     {
         return $this->fetchRow($this->select()->where('ident = ?', $ident));
     }
+
+    /**
+     * Get all the products
+     * 
+     * @return Zend_Db_Table_Rowset
+     */
+    public function getAllProducts()
+    {
+        return $this->fetchAll();
+    }
     
     /**
      * Get a list of product by their category
@@ -53,19 +63,19 @@ class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract im
             $select->order($order);
         }
 		
-		if (null !== $paged) {
-			$adapter = new Zend_Paginator_Adapter_DbTableSelect($select);
-			$count = clone $select;
-			$count->reset(Zend_Db_Select::COLUMNS);
-			$count->reset(Zend_Db_Select::FROM);
-			$count->from('product', new Zend_Db_Expr('COUNT(*) AS `zend_paginator_row_count`'));
-			$adapter->setRowCount($count);
-			
-			$paginator = new Zend_Paginator($adapter);
-			$paginator->setItemCountPerPage(5)
-		          	  ->setCurrentPageNumber((int) $paged);
-			return $paginator;
-		}
+        if (null !== $paged) {
+                $adapter = new Zend_Paginator_Adapter_DbTableSelect($select);
+                $count = clone $select;
+                $count->reset(Zend_Db_Select::COLUMNS);
+                $count->reset(Zend_Db_Select::FROM);
+                $count->from('product', new Zend_Db_Expr('COUNT(*) AS `zend_paginator_row_count`'));
+                $adapter->setRowCount($count);
+
+                $paginator = new Zend_Paginator($adapter);
+                $paginator->setItemCountPerPage(5)
+                          ->setCurrentPageNumber((int) $paged);
+                return $paginator;
+        }
         return $this->fetchAll($select);
     } 
 }

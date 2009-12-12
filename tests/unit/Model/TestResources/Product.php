@@ -74,4 +74,9 @@ class Storefront_Resource_Product extends PHPUnit_Framework_TestCase implements 
     {
         return true;
     }
+
+    public function getAllProducts()
+    {
+        return $this->_rowset;
+    }
 }

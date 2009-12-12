@@ -16,6 +16,8 @@ require_once 'unit/Model/CatalogTest.php';
 require_once 'unit/Model/UserTest.php';
 require_once 'unit/Model/CartTest.php';
 require_once 'unit/Service/AuthenticationTest.php';
+require_once 'unit/Document/ProductDocumentTest.php';
+require_once 'unit/Service/IndexerTest.php';
 
 class SF_Unit_AllTests
 {
@@ -32,6 +34,8 @@ class SF_Unit_AllTests
         $suite->addTestSuite('UserTest');
         $suite->addTestSuite('AuthenticationTest');
         $suite->addTestSuite('CartTest');
+        $suite->addTestSuite('ProductDocumentTest');
+        $suite->addTestSuite('IndexerServiceTest');
 
         return $suite;
     }

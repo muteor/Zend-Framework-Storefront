@@ -79,6 +79,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             'modelResource' => array(
               'path'      => 'models/resources',
               'namespace' => 'Resource',
+            ),
+            'document' => array(
+                'path' => 'models/document',
+                'namespace' => 'Model_Document'
             )
         ));
     }
@@ -303,5 +307,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             );
             @$mail->send();
         }
+    }
+
+    protected function _initZendSearch()
+    {
+        
+        $filter = new Zend_Search_Lucene_Analysis_TokenFilter_ShortWords();
+
+        $analyzer = new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive();
+        $analyzer->addFilter($filter);
+        
+        Zend_Search_Lucene_Analysis_Analyzer::setDefault($analyzer);
     }
 }

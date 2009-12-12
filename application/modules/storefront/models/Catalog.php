@@ -8,7 +8,22 @@
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
 class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl_Resource_Interface
-{    
+{
+    /**
+     * @var Storefront_Service_ProductIndexer
+     */
+    protected $_indexerService;
+
+    /**
+     * @var string
+     */
+    protected $_indexDirectory;
+
+    /**
+     * @var Storefront_Model_Document_Product
+     */
+    protected $_document;
+    
     /**
      * Get categories
      *
@@ -33,9 +48,25 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
         return $this->getResource('Category')->getCategoryByIdent($ident);
     }
 
+    /**
+     * Get all categories
+     *
+     * @return Zend_Db_Table_Rowset|null
+     */
     public function getCategories()
     {
         return $this->getResource('Category')->getCategories();
+    }
+
+    /**
+     * Get the category item by its id
+     *
+     * @param int $id
+     * @return Storefront_Resource_Category_Item|null
+     */
+    public function getCategoryById($id)
+    {
+        return $this->getResource('Category')->getCategoryById($id);
     }
 
     /**
@@ -60,6 +91,16 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
     public function getProductByIdent($ident)
     {        
         return $this->getResource('Product')->getProductByIdent($ident);
+    }
+
+    /**
+     * Fetch all the products
+     * 
+     * @return Zend_Db_Table_Rowset|null
+     */
+    public function getAllProducts()
+    {
+        return $this->getResource('Product')->getAllProducts();
     }
     
     /**
@@ -200,6 +241,9 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
                 array('product')
              );
 
+        // index the product
+        $this->_indexProduct($primary);
+
         return $primary;
     }
 
@@ -252,11 +296,14 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
         }
 
         $product = $this->getProductById($productId);
-
+$this->getIndexer()->deleteProduct($product->productId);
         if (null !== $product) {
             $product->delete();
             return true;
         }
+
+        //remove from the index
+        
 
         return false;
     }
@@ -305,5 +352,108 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
             $this->setAcl(new Storefront_Model_Acl_Storefront());
         }
         return $this->_acl;
+    }
+
+    /**
+     * Index a product
+     * 
+     * @param int $productId
+     * @return void 
+     */
+    protected function _indexProduct($productId)
+    {
+        $product = $this->getProductById($productId);
+
+        if (null === $product) {
+            return;
+        }
+
+        $document = $this->createDocument($product);
+        $this->getIndexer()->indexProduct($document);
+        $this->getIndexer()->commit();
+    }
+
+    public function reindexProducts()
+    {
+        if (!$this->checkAcl('reindexProduct')) {
+            throw new SF_Acl_Exception("Insufficient rights");
+        }
+
+        $this->getIndexer()->reIndexAllProducts($this);
+    }
+
+    public function optimizeProductIndex()
+    {
+        if (!$this->checkAcl('optimizeProductIndex')) {
+            throw new SF_Acl_Exception("Insufficient rights");
+        }
+
+        $this->getIndexer()->doMaintenance();
+    }
+
+    /**
+     * @return Storefront_Service_ProductIndexer
+     */
+    public function getIndexer()
+    {
+        if (null === $this->_indexerService) {
+            $this->_indexerService = new Storefront_Service_ProductIndexer();
+            $this->_indexerService->setIndexDirectory($this->getIndexDirectory());
+        }
+        return $this->_indexerService;
+    }
+
+    /**
+     * @param Storefront_Service_ProductIndexer $indexerService 
+     */
+    public function setIndexer($indexerService)
+    {
+        $this->_indexerService = $indexerService;
+    }
+
+    /**
+     * Create a document for a product
+     *
+     * @param Storefront_Resource_Product_Item $product
+     * @return Storefront_Model_Document_Product
+     */
+    public function createDocument($product)
+    {
+        if (null === $this->_document) {
+            $categories = $this->getCategoryChildrenIds($product->categoryId);
+            foreach ($categories as $key => $catId) {
+                if (null !== $cat = $this->getCategoryById($catId)) {
+                    $categories[$key] = $cat->name;
+                }
+            }
+            $this->_document = new Storefront_Model_Document_Product($product, join(',', $categories));
+        }
+        return $this->_document;
+    }
+
+    /**
+     * @param Storefront_Model_Document_Product $document
+     */
+    public function setDocument($document)
+    {
+        $this->_document = $document;
+    }
+
+    public function getIndexDirectory()
+    {
+        if (null === $this->_indexDirectory) {
+            $fc = Zend_Controller_Front::getInstance();
+            $config = $fc->getParam('bootstrap')->getOption('product');
+            $this->_indexDirectory = $config['index'];
+        }
+        return $this->_indexDirectory;
+    }
+
+    /**
+     * @param string $_indexDirectory
+     */
+    public function setIndexDirectory($_indexDirectory)
+    {
+        $this->_indexDirectory = $_indexDirectory;
     }
 }

@@ -198,6 +198,22 @@ class Storefront_CatalogController extends Zend_Controller_Action
         $redirector = $this->getHelper('redirector');
         return $redirector->gotoRoute(array('action' => 'list'), 'admin');
     }
+
+    public function reindexAction()
+    {
+        $this->_catalogModel->reindexProducts();
+        
+        $redirector = $this->getHelper('redirector');
+        return $redirector->gotoRoute(array('action' => 'list'), 'admin');
+    }
+
+    public function optimizeindexAction()
+    {
+        $this->_catalogModel->optimizeProductIndex();
+
+        $redirector = $this->getHelper('redirector');
+        return $redirector->gotoRoute(array('action' => 'list'), 'admin');
+    }
     
     public function getBreadcrumb($category)
     {

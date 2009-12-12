@@ -84,14 +84,14 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
         return $this;
     }
 
-	/**
-	 * Get a resource
-	 *
-	 * @param string $name
-	 * @return SF_Model_Resource_Interface 
-	 */
-	public function getResource($name) 
-	{
+    /**
+     * Get a resource
+     *
+     * @param string $name
+     * @return SF_Model_Resource_Interface
+     */
+    public function getResource($name)
+    {
         if (!isset($this->_resources[$name])) {
             $class = join('_', array(
                     $this->_getNamespace(),
@@ -100,8 +100,8 @@ abstract class SF_Model_Abstract implements SF_Model_Interface
             ));
             $this->_resources[$name] = new $class();
         }
-	    return $this->_resources[$name];
-	}
+        return $this->_resources[$name];
+    }
 
     /**
      * Get a Form

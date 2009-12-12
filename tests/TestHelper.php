@@ -45,7 +45,6 @@ date_default_timezone_set('Europe/London');
  */
 $root  = realpath(dirname(__FILE__) . '/../');
 $paths = array(
-    get_include_path(),
     "$root/library/Incu",
     "$root/library",
     "$root/tests",
