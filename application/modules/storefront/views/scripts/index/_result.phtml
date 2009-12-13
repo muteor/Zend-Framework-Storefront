@@ -1,0 +1,8 @@
+<div class="productitem clearfix">
+    <?=$this->productImage($this->product->defaultImage, array('class' => 'right'))->thumbnail(); ?>
+    <h4><a href="<?=$this->url(array('productIdent' => $this->product->ident,
+                               'categoryIdent' => $this->category->ident),
+                               'catalog_category_product'); ?>"><?=$this->Escape($this->product->name); ?></a></h4>
+    <p><?=$this->Escape($this->product->shortDescription); ?></p>
+    <p><?=$this->productPrice($this->product); ?></p>
+</div>

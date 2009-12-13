@@ -51,6 +51,10 @@
                 <h3>in your <span>cart</span></h3>
                 <?= $this->Cart()->getSummary(); ?>
             </div>
+            <div>
+                <h3>product <span>search</span></h3>
+                <?=$this->SearchForm()->render();?>
+            </div>
         </div>
         <div class="content left">
             <?= $this->layout()->content ?> 
