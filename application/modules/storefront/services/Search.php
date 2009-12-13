@@ -21,7 +21,6 @@ class Storefront_Service_Search
     public function query(SF_Search_Searcher_Interface $searcher)
     {
         $hits  = $this->_index->find($searcher->parse());
-
         return $hits;
     }
 }

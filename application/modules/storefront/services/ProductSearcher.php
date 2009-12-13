@@ -28,6 +28,31 @@ class Storefront_Service_ProductSearcher implements SF_Search_Searcher_Interface
 
     public function parse()
     {
-        return Zend_Search_Lucene_Search_QueryParser::parse($this->_data['query']);
+        $data = $this->_data;
+
+        $query = Zend_Search_Lucene_Search_QueryParser::parse($data['query']);
+
+        if ('' != $data['pricefrom'] && '' != $data['priceto']) {
+            $from = new Zend_Search_Lucene_Index_Term(
+                $this->_formatPrice($data['pricefrom']),
+                'price'
+            );
+            $to = new Zend_Search_Lucene_Index_Term(
+                $this->_formatPrice($data['priceto']),
+                'price'
+            );
+            $q = new Zend_Search_Lucene_Search_Query_Range(
+                 $from, $to, true // inclusive
+             );
+            $query = Zend_Search_Lucene_Search_QueryParser::parse($data['query'] . ' +' . $q);
+        }
+        
+        return $query;
+    }
+
+    protected function _formatPrice($price)
+    {
+        $price = (int) $price;
+        return str_pad(str_replace('.','',$price * 100), 10, '0', STR_PAD_LEFT);
     }
 }

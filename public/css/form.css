@@ -52,3 +52,7 @@ form p.error {
     color: #d20037;
     background: #fff url("/images/layout/form-error-box-bg.gif") repeat-x;
 }
+
+#searchForm dd {
+    padding: 5px 5px 0 0;
+}

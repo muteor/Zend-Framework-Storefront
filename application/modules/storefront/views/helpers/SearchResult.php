@@ -15,9 +15,9 @@ class Storefront_View_Helper_SearchResult extends Zend_View_Helper_Abstract
     {
         $catalog = new Storefront_Model_Catalog();
         $product = $catalog->getProductById($hit->productId);
-        $category = $catalog->getCategoryById($product->categoryId);
 
         if (null !== $product) {
+            $category = $catalog->getCategoryById($product->categoryId);
             $this->view->product = $product;
             $this->view->category = $category;
             return $this->view->render('index/_result.phtml');
