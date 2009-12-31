@@ -254,7 +254,7 @@ class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterato
      * @return array|boolean current key
      */
     public function key()
-    {;
+    {
         return key($this->_items);
     }
 

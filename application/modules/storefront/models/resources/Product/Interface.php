@@ -11,5 +11,6 @@ interface Storefront_Resource_Product_Interface
 {
     public function getProductById($id);
     public function getProductByIdent($ident);
+    public function getAllProducts();
     public function getProductsByCategory($categoryId, $paged=null, $order=null);
 }
