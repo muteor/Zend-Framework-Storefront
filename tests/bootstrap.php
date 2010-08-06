@@ -19,36 +19,57 @@ $path = array(
 set_include_path(implode(PATH_SEPARATOR, $path));
 
 require_once 'Mockery.php';
+require_once 'Zend/Loader/Autoloader.php';
 
-/**
- * Autoloading
- */
-function SFTestAutoloader($class)
-{
-    $class = ltrim($class, '\\');
+$autoloader = Zend\Loader\Autoloader::getInstance();
+$autoloader->registerNamespace('Zend');
+$autoloader->registerNamespace('PHPUnit');
+$autoloader->registerNamespace('Mockery');
+$autoloader->registerNamespace('SF');
 
-    if (!preg_match('#^(SF(Test)?|PHPUnit|Zend|Mockery)(\\\\|_)#', $class)) {
-        return false;
-    }
-
-    // ns'd
-    $segments = explode('\\', $class); // preg_split('#\\\\|_#', $class);//
-    $ns       = array_shift($segments);
-
-    if ('' !== $ns) {
-        $file = implode('/', $segments) . '.php';
-        return include_once $ns . '/' . $file;
-    }
-
-    // old ns
-    $segments = explode('_', $class);
-    $ns       = array_shift($segments);
-
-    $file = implode('/', $segments) . '.php';
-    if (file_exists($file)) {
-        return include_once $file;
-    }
-
-    return false;
-}
-spl_autoload_register('SFTestAutoloader', true, true);
+$resourceAutoloader = new Zend\Loader\ResourceAutoloader(array(
+    'basePath'  => "$root/application/modules/storefront",
+    'namespace' => "Storefront"
+));
+$resourceAutoloader->addResourceTypes(array(
+    'modelResource' => array(
+      'path'      => 'models/resources',
+      'namespace' => 'Resource',
+    ),
+    'document' => array(
+        'path' => 'models/document',
+        'namespace' => 'Model\\Document'
+    ),
+    'dbtable' => array(
+        'namespace' => 'Model\\DbTable',
+        'path'      => 'models/DbTable',
+    ),
+    'mappers' => array(
+        'namespace' => 'Model\\Mapper',
+        'path'      => 'models/mappers',
+    ),
+    'form'    => array(
+        'namespace' => 'Form',
+        'path'      => 'forms',
+    ),
+    'model'   => array(
+        'namespace' => 'Model',
+        'path'      => 'models',
+    ),
+    'plugin'  => array(
+        'namespace' => 'Plugin',
+        'path'      => 'plugins',
+    ),
+    'service' => array(
+        'namespace' => 'Service',
+        'path'      => 'services',
+    ),
+    'viewhelper' => array(
+        'namespace' => 'View\\Helper',
+        'path'      => 'views/helpers',
+    ),
+    'viewfilter' => array(
+        'namespace' => 'View\\Filter',
+        'path'      => 'views/filters',
+    ),
+));
