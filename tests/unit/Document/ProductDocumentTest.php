@@ -1,13 +1,7 @@
 <?php
-/**
- * TestHelper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
+namespace SFTest;
 
-require_once APPLICATION_PATH . '/modules/storefront/models/document/Product.php';
-require_once APPLICATION_PATH . '/modules/storefront/models/resources/Product/Item/Interface.php';
-
-class ProductDocumentTest extends PHPUnit_Framework_TestCase
+class ProductDocumentTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Storefront_Document_Product

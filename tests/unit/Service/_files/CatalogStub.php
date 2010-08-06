@@ -1,5 +1,4 @@
 <?php
-require_once APPLICATION_PATH . '/modules/storefront/models/Catalog.php';
 class Resource_Stub extends PHPUnit_Framework_TestCase
 {
     public function getAllProducts()

@@ -1,5 +1,12 @@
 <?php
 /**
+ * @namespace SF\Model
+ */
+namespace SF\Model;
+
+use SF\Model\Cache\AbstractCache as ModelCache;
+
+/**
  * SF_Model_Cache
  * 
  * Concrete model cache
@@ -9,5 +16,5 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class SF_Model_Cache extends SF_Model_Cache_Abstract
+class Cache extends ModelCache
 {}

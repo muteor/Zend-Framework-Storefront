@@ -1,5 +1,12 @@
 <?php
 /**
+ * @namespace SF\Plugin
+ */
+namespace SF\Plugin;
+
+use Zend\Controller\Plugin\AbstractPlugin as ZendAbstractPlugin;
+
+/**
  * Application Action Plugin
  * 
  * This plugin uses the action stack to provide global
@@ -10,7 +17,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class SF_Plugin_Action extends Zend_Controller_Plugin_Abstract 
+class Action extends ZendAbstractPlugin
 {
     protected $_stack;
 

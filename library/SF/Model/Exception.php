@@ -1,11 +1,18 @@
 <?php
+/**
+ * @namespace SF\Model
+ */
+namespace SF\Model;
+
+use SF\Exception;
+
 /** 
- * SF_Model_Exception 
+ * Model Exception
  * 
  * @category   Storefront
- * @package    SF_Model
+ * @package    SF\Model
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class SF_Model_Exception extends SF_Exception
+class Exception extends Exception\Base
 {}

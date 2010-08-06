@@ -1,6 +1,14 @@
 <?php
 /**
- * SF_Model_Resource_Db_Table_Abstract
+ * @namespace SF\Model
+ */
+namespace SF\Model\DbTable;
+
+use SF\Model,
+    Zend\Db\Table\AbstractTable as ZendAbstractTable;
+
+/**
+ * AbstractTable
  * 
  * Provides some common db functionality that is shared
  * across our db-based resources.
@@ -10,7 +18,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-abstract class SF_Model_Resource_Db_Table_Abstract extends Zend_Db_Table_Abstract implements SF_Model_Resource_Db_Interface
+abstract class AbstractTable extends ZendAbstractTable implements Model\Db
 {
 	/**
      * Save a row to the database

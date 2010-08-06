@@ -1,10 +1,5 @@
 <?php
 /**
- * TestHelper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
  * Test case for Storefront_Catalog
  * 
  * This test simply tests the interface between the model

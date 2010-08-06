@@ -1,14 +1,21 @@
 <?php
 /**
+ * @namespace SF\Controller\Helper
+ */
+namespace SF\Controller\Helper;
+
+use Zend\Controller\Action\Helper\AbstractHelper as ZendHelperAbstract;
+
+/**
  * Acl action helper used for when we want to control access to resources
  * that do not have a Model.
  *
  * @category   Storefront
- * @package    SF_Controller_Helper
+ * @package    SF\Controller\Helper
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class SF_Controller_Helper_Acl extends Zend_Controller_Action_Helper_Abstract
+class Acl extends ZendHelperAbstract
 {
     /**
      * @var Zend_Acl

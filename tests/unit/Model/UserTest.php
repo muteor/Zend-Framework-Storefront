@@ -1,15 +1,5 @@
 <?php
 /**
- * TestHelper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
- * User Model
- */
-require_once 'modules/storefront/models/User.php';
-
-/**
  * Test case for Storefront_User
  */
 class UserTest extends PHPUnit_Framework_TestCase

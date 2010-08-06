@@ -1,6 +1,11 @@
 <?php
 /**
- * SF_Model_Cache_Abstract
+ * @namespace SF\Model\Cache
+ */
+namespace SF\Model\Cache;
+
+/**
+ * AbstractCache
  *
  * Cache proxy for models, proxies calls to the model to
  * the Zend_Cache class cache.
@@ -10,7 +15,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-abstract class SF_Model_Cache_Abstract
+abstract class AbstractCache
 {
     /**
      * @var array Class methods

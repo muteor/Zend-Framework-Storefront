@@ -1,16 +1,4 @@
 <?php
-/**
- * TestHelper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-require_once APPLICATION_PATH . '/modules/storefront/models/document/Product.php';
-require_once APPLICATION_PATH . '/modules/storefront/models/resources/Product/Item/Interface.php';
-require_once APPLICATION_PATH . '/modules/storefront/services/ProductIndexer.php';
-require_once 'Zend/Application.php';
-require_once dirname(__FILE__) . '/_files/ZendSearchStub.php';
-require_once dirname(__FILE__) . '/_files/CatalogStub.php';
-
 class IndexerServiceTest extends PHPUnit_Framework_TestCase
 {
     /**

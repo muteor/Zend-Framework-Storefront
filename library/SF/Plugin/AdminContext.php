@@ -1,5 +1,12 @@
 <?php
 /**
+ * @namespace SF\Plugin
+ */
+namespace SF\Plugin;
+
+use Zend\Controller\Plugin\AbstractPlugin as ZendAbstractPlugin;
+
+/**
  * SF_Plugin_AdminContext
  * 
  * This plugin detects if we are in the admininstration area
@@ -12,7 +19,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class SF_Plugin_AdminContext extends Zend_Controller_Plugin_Abstract 
+class AdminContext extends ZendAbstractPlugin
 {
     public function preDispatch(Zend_Controller_Request_Abstract $request) 
     {        

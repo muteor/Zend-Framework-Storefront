@@ -1,14 +1,4 @@
 <?php
-/**
- * TestHelper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
- * Product
- */
-require_once APPLICATION_PATH . '/modules/storefront/models/resources/Product/Item/Interface.php';
-
 class CartTest extends PHPUnit_Framework_TestCase
 {
     /**

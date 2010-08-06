@@ -1,15 +1,5 @@
 <?php
 /**
- * TestHelper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
-
-/**
- * Storefront_Service_Authenticationl
- */
-require_once 'modules/storefront/services/Authentication.php';
-
-/**
  * Test case for Storefront_Service_Authentication
  */
 class AuthenticationTest extends PHPUnit_Framework_TestCase

@@ -1,13 +1,12 @@
 <?php
-/**
- * TestHelper
- */
-require_once dirname(__FILE__) . '/../../TestHelper.php';
+namespace SFTest;
+
+use SF\Model\AbstractModel as SFAbstractModel;
 
 /**
  * Concrete class for testing
  */
-class My_TestModel extends SF_Model_Abstract
+class MyTestModel extends SFAbstractModel
 {
     protected $_testSetter;
 
@@ -28,7 +27,7 @@ class My_Form_Test_Me {}
 /**
  * Test case for Model_Abstract
  */
-class ModelAbstractTest extends PHPUnit_Framework_TestCase
+class ModelAbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SF_Model_Interface
@@ -37,7 +36,7 @@ class ModelAbstractTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->_model = new My_TestModel();
+        $this->_model = new MyTestModel();
     }
     
     protected function tearDown()
@@ -48,7 +47,7 @@ class ModelAbstractTest extends PHPUnit_Framework_TestCase
     public function test_Constructor_Can_Set_Options()
     {
         $options = array('test' => true);
-        $model = new My_TestModel($options);
+        $model = new MyTestModel($options);
         $this->assertTrue($this->readAttribute($model, '_testSetter'));
     }
 

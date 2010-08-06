@@ -1,5 +1,12 @@
 <?php
 /**
+ * @namespace SF\Model\Acl
+ */
+namespace SF\Model\Acl;
+
+use Zend\Acl\Resource as ZendAclResource;
+
+/**
  * SF_Model_Acl_Abstract
  *
  * Base model class for models that have acl support
@@ -9,7 +16,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-abstract class SF_Model_Acl_Abstract extends SF_Model_Abstract implements SF_Model_Acl_Interface, Zend_Acl_Resource_Interface
+abstract class AbstractAcl extends AbstractModel implements Acl, ZendAclResource
 {
     /**
      * @var Zend_Acl

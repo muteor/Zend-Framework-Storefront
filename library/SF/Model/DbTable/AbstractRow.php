@@ -1,15 +1,20 @@
 <?php
 /**
- * SF_Model_Resource_Db_Table_Row_Abstract
+ * @namespace SF\Model
+ */
+namespace SF\Model\DbTable;
+
+/**
+ * AbstractRow
  * 
- * Composite the Zend_Db_Table_Row
+ * Composite the Zend\Db\Table\AbstractRow
  * 
  * @category   Storefront
  * @package    Storefront_Model_Resource
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-abstract class SF_Model_Resource_Db_Table_Row_Abstract
+abstract class AbstractRow
 {
     /**
      * @var Zend_Db_Table_Row
