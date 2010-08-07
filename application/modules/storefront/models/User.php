@@ -3,7 +3,8 @@ namespace Storefront\Model;
 
 use SF\Model\Acl\AbstractAcl as SFAbstractAcl,
     SF\Acl\Acl as SFAclInterface,
-    SF\Acl;
+    SF\Acl,
+    Storefront\Model\Acl\Storefront as StorefrontAcl;
 
 /**
  * Storefront\Model\User
@@ -177,8 +178,8 @@ class User extends SFAbstractAcl
      */
     public function setAcl(SFAclInterface $acl)
     {
-        if (!$acl->has($this->getResourceId())) {
-            $acl->add($this)
+        if (!$acl->hasResource($this->getResourceId())) {
+            $acl->addResource($this)
                 ->allow('Guest', $this, array('register'))
                 ->allow('Customer', $this, array('saveUser'))
                 ->allow('Admin', $this);
@@ -196,7 +197,7 @@ class User extends SFAbstractAcl
     public function getAcl()
     {
         if (null === $this->_acl) {
-            $this->setAcl(new Storefront_Model_Acl_Storefront());
+            $this->setAcl(new StorefrontAcl());
         }
         return $this->_acl;
     }

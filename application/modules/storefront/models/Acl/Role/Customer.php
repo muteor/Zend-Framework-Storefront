@@ -1,13 +1,16 @@
 <?php
+namespace Storefront\Model\Acl\Role;
+
+use Zend\Acl\Role as ZendAclRole;
 /**
- * Storefront_Model_Acl_Role_Customer
+ * Customer
  *
  * @category   Storefront
  * @package    Storefront_Model_Acl
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Model_Acl_Role_Customer implements Zend_Acl_Role_Interface
+class Customer implements ZendAclRole
 {
     public function getRoleId()
     {

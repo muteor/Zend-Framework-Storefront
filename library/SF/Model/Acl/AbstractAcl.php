@@ -4,8 +4,13 @@
  */
 namespace SF\Model\Acl;
 
-use SF\Model\AbstractModel as SFAbstractModel,
-    Zend\Acl\Resource as ZendAclResource;
+use SF\Model,
+    SF\Model\AbstractModel as SFAbstractModel,
+    Zend\Acl\Resource as ZendAclResource,
+    Zend\Acl\Role as ZendAclRole,
+    Zend\Acl\Role\GenericRole as ZendAclGenericRole,
+    Zend\Authentication
+;
 
 /**
  * SF_Model_Acl_Abstract
@@ -20,7 +25,7 @@ use SF\Model\AbstractModel as SFAbstractModel,
 abstract class AbstractAcl extends SFAbstractModel implements Acl, ZendAclResource
 {
     /**
-     * @var Zend_Acl
+     * @var Zend\Acl
      */
     protected $_acl;
 
@@ -28,6 +33,11 @@ abstract class AbstractAcl extends SFAbstractModel implements Acl, ZendAclResour
      * @var string
      */
     protected $_identity;
+
+    /**
+     * @var Zend\Authentication\AuthenticationService
+     */
+    protected $_authenticationService;
 
     /**
      * Set the identity of the current request
@@ -41,13 +51,13 @@ abstract class AbstractAcl extends SFAbstractModel implements Acl, ZendAclResour
             if (!isset($identity['role'])) {
                 $identity['role'] = 'Guest';
             }
-            $identity = new Zend_Acl_Role($identity['role']);
+            $identity = new ZendAclGenericRole($identity['role']);
         } elseif (is_scalar($identity) && !is_bool($identity)) {
-            $identity = new Zend_Acl_Role($identity);
+            $identity = new ZendAclGenericRole($identity);
         } elseif (null === $identity) {
-            $identity = new Zend_Acl_Role('Guest');
-        } elseif (!$identity instanceof Zend_Acl_Role_Interface) {
-            throw new SF_Model_Exception('Invalid identity provided');
+            $identity = new ZendAclGenericRole('Guest');
+        } elseif (!$identity instanceof ZendAclRole) {
+            throw new Model\InvalidOperation('Invalid identity provided');
         }
         $this->_identity = $identity;
         return $this;
@@ -61,7 +71,7 @@ abstract class AbstractAcl extends SFAbstractModel implements Acl, ZendAclResour
     public function getIdentity()
     {
         if (null === $this->_identity) {
-            $auth = Zend_Auth::getInstance();
+            $auth = $this->_getAuthenticationService();
             if (!$auth->hasIdentity()) {
                 return 'Guest';
             }
@@ -83,5 +93,30 @@ abstract class AbstractAcl extends SFAbstractModel implements Acl, ZendAclResour
             $this,
             $action
         );
+    }
+
+    /**
+     * Get the authentication service
+     *
+     * @return Zend\Authentication\AuthenticationService
+     */
+    protected function _getAuthenticationService()
+    {
+        if (null === $this->_authenticationService) {
+            $storage = new Authentication\Storage\Session();
+            $this->_authenticationService = new Authentication\AuthenticationService($storage);
+        }
+
+        return $this->_authenticationService;
+    }
+
+    /**
+     * Injector for the authentication service
+     * 
+     * @param Authentication\AuthenticationService $auth
+     */
+    public function setAuthenticationService(Authentication\AuthenticationService $auth)
+    {
+        $this->_authenticationService = $auth;
     }
 }

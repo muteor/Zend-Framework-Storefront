@@ -1,4 +1,8 @@
 <?php
+namespace Storefront\Model\Acl\Resource;
+
+use Zend\Acl\Resource as ZendAclResource;
+
 /**
  * Storefront_Model_Acl_Resource_Admin
  *
@@ -7,7 +11,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Model_Acl_Resource_Admin implements Zend_Acl_Resource_Interface
+class Admin implements ZendAclResource
 {
     public function getResourceId()
     {
