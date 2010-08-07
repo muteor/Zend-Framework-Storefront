@@ -4,6 +4,9 @@
  */
 namespace SF\Model;
 
+use SF\Model\Cache,
+    Zend\Filter;
+
 /**
  * AbstractModel
  * 
@@ -98,14 +101,20 @@ abstract class AbstractModel implements Model
     public function getResource($name)
     {
         if (!isset($this->_resources[$name])) {
-            $class = join('_', array(
-                    $this->_getNamespace(),
-                    'Resource',
-                    $this->_getInflected($name)
-            ));
+            $class = $this->_getNamespace() . '\\Resource\\' . ucfirst($name) . 'Resource';
             $this->_resources[$name] = new $class();
         }
         return $this->_resources[$name];
+    }
+
+    /**
+     * Injector for resources
+     * 
+     * @param array $resources
+     */
+    public function setResources(array $resources)
+    {
+        $this->_resources = $resources;
     }
 
     /**
@@ -117,11 +126,8 @@ abstract class AbstractModel implements Model
     public function getForm($name)
     {
         if (!isset($this->_forms[$name])) {
-            $class = join('_', array(
-                    $this->_getNamespace(),
-                    'Form',
-                    $this->_getInflected($name)
-            ));
+            $class = $this->_getNamespace() . '\\Form\\' . ucfirst($name);
+            $class = str_replace('Model\\', '', $class);
             $this->_forms[$name] = new $class(array('model' => $this));
         }
 	    return $this->_forms[$name];
@@ -132,7 +138,7 @@ abstract class AbstractModel implements Model
      * 
      * @param SF_Model_Cache_Abstract $cache
      */
-    public function setCache(SF_Model_Cache_Abstract $cache)
+    public function setCache(Cache\AbstractCache $cache)
     {
         $this->_cache = $cache;
     }
@@ -181,7 +187,7 @@ abstract class AbstractModel implements Model
     public function getCached($tagged = null)
     {
         if (null === $this->_cache) {
-            $this->_cache = new SF_Model_Cache($this, $this->getCacheOptions(), $tagged);
+            $this->_cache = new Cache\Cache($this, $this->getCacheOptions(), $tagged);
         }
         $this->_cache->setTagged($tagged);
         return $this->_cache;
@@ -195,24 +201,7 @@ abstract class AbstractModel implements Model
      */
     private function _getNamespace()
     {
-        $ns = explode('_', get_class($this));
-        return $ns[0];
-    }
-
-    /**
-     * Inflect the name using the inflector filter
-     *
-     * Changes camelCaseWord to Camel_Case_Word
-     *
-     * @param string $name The name to inflect
-     * @return string The inflected string
-     */
-    private function _getInflected($name)
-    {
-        $inflector = new Zend_Filter_Inflector(':class');
-        $inflector->setRules(array(
-            ':class'  => array('Word_CamelCaseToUnderscore')
-        ));
-        return ucfirst($inflector->filter(array('class' => $name)));
+        $reflection = new \ReflectionClass($this);
+        return $reflection->getNamespaceName();
     }
 }

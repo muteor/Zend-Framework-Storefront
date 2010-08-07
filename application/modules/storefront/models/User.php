@@ -1,13 +1,19 @@
 <?php
+namespace Storefront\Model;
+
+use SF\Model\Acl\AbstractAcl as SFAbstractAcl,
+    SF\Acl\Acl as SFAclInterface,
+    SF\Acl;
+
 /**
- * Storefront_Model_User
+ * Storefront\Model\User
  *
  * @category   Storefront
- * @package    Storefront_Model_Resource
+ * @package    Storefront\Model\Resource
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Model_User extends SF_Model_Acl_Abstract
+class User extends SFAbstractAcl
 {    
     /**
      * Get User by their id
@@ -54,7 +60,7 @@ class Storefront_Model_User extends SF_Model_Acl_Abstract
     public function registerUser($post)
     {
         if (!$this->checkAcl('register')) {
-            throw new SF_Acl_Exception("Insufficient rights");
+            throw new Acl\AccessDenied("Insufficient rights");
         }
         
         $form = $this->getForm('userRegister');
@@ -71,7 +77,7 @@ class Storefront_Model_User extends SF_Model_Acl_Abstract
     public function saveUser($post, $validator = null)
     {
         if (!$this->checkAcl('saveUser')) {
-            throw new SF_Acl_Exception("Insufficient rights");
+            throw new Acl\AccessDenied("Insufficient rights");
         }
 
         if (null === $validator) {
@@ -128,7 +134,7 @@ class Storefront_Model_User extends SF_Model_Acl_Abstract
     public function deleteUser($user)
     {
         if (!$this->checkAcl('deleteUser')) {
-            throw new SF_Acl_Exception("Insufficient rights");
+            throw new Acl\AccessDenied("Insufficient rights");
         }
 
         if ($user instanceof Storefront_Resource_User_Item_Interface) {
@@ -169,7 +175,7 @@ class Storefront_Model_User extends SF_Model_Acl_Abstract
      * @param SF_Acl_Interface $acl
      * @return SF_Model_Abstract
      */
-    public function setAcl(SF_Acl_Interface $acl)
+    public function setAcl(SFAclInterface $acl)
     {
         if (!$acl->has($this->getResourceId())) {
             $acl->add($this)

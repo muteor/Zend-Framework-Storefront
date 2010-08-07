@@ -1,18 +1,15 @@
 <?php
+namespace Storefront\Model\Resource\User;
+
 /**
- * @namespace SF\Model
- */
-namespace SF\Model;
-
-use SF\Exception;
-
-/** 
- * Model Exception
- * 
+ * User interface
+ *
  * @category   Storefront
- * @package    SF\Model
+ * @package    Storefront_Model_Resource
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Exception extends Exception\Base
-{}
+interface User
+{
+    public function getFullname();
+}

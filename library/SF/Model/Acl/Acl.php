@@ -4,6 +4,8 @@
  */
 namespace SF\Model\Acl;
 
+use SF\Acl\Acl as AclInterface;
+
 /**
  * Acl Interface
  *
@@ -17,6 +19,6 @@ interface Acl
     public function setIdentity($identity);
     public function getIdentity();
     public function checkAcl($action);
-    public function setAcl(SF_Acl_Interface $acl);
+    public function setAcl(AclInterface $acl);
     public function getAcl();
 }

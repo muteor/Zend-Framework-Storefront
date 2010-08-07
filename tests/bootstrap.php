@@ -34,7 +34,7 @@ $resourceAutoloader = new Zend\Loader\ResourceAutoloader(array(
 $resourceAutoloader->addResourceTypes(array(
     'modelResource' => array(
       'path'      => 'models/resources',
-      'namespace' => 'Resource',
+      'namespace' => 'Model\\Resource',
     ),
     'document' => array(
         'path' => 'models/document',

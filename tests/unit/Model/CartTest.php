@@ -1,5 +1,9 @@
 <?php
-class CartTest extends PHPUnit_Framework_TestCase
+namespace SFTest\Model;
+
+use Mockery as m;
+
+class CartTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SF_Model_Interface
@@ -8,21 +12,7 @@ class CartTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        _SF_Autloader_SetUp();
-
-        Zend_Loader::loadClass('Zend_Session_Namespace');
-        // configure the resource loader atuo load models
-        $loader = new Zend_Loader_Autoloader_Resource(array(
-            'basePath' => APPLICATION_PATH . '/modules/storefront',
-            'namespace' => 'Storefront'
-            )
-        );
-        $loader->addResourceType('Model', 'models', 'Model');
-        $loader->addResourceType('ModelResource', 'models/resources', 'Resource');
-        $loader->addResourceType('Form', 'forms', 'Form');
-        $loader->addResourceType('Service', 'services', 'Service');
-
-        $mockNS = $this->getMock('Zend_Session_Namespace');
+        $mockNS = m::mock('Zend\\Session\\Namespace');
         $this->_model = new Storefront_Model_Cart(
             array('sessionNs' => $mockNS)
         );
@@ -30,8 +20,8 @@ class CartTest extends PHPUnit_Framework_TestCase
     
     protected function tearDown()
     {
-        _SF_Autloader_TearDown();
         $this->_model = null;
+        m::close();
     }
 
     protected function getProductMock()

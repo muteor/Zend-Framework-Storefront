@@ -1,4 +1,8 @@
 <?php
+namespace Storefront\Model;
+
+use SF\Model;
+
 /**
  * Storefront_Model_Cart
  *
@@ -7,7 +11,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Model_Cart extends SF_Model_Abstract implements SeekableIterator, Countable, ArrayAccess
+class Cart extends Model\AbstractModel implements \SeekableIterator, \Countable, \ArrayAccess
 {
    /**
      * The cart item objects

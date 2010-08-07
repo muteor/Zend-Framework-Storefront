@@ -1,8 +1,10 @@
 <?php
-require_once 'modules/storefront/models/resources/User/Interface.php';
-require_once 'modules/storefront/models/resources/User/Item/Interface.php';
+namespace SFTest\Model\Resource;
 
-class Storefront_Resource_User extends PHPUnit_Framework_TestCase implements Storefront_Resource_User_Interface
+use Storefront\Model\Resource\User,
+    Mockery as m;
+
+class UserResource implements User\Resource
 {
     protected $_rowset = null;
     
@@ -10,7 +12,7 @@ class Storefront_Resource_User extends PHPUnit_Framework_TestCase implements Sto
     {
         $data = array();
         for($i=0; $i<10; $i++) {
-            $mock = $this->getMock('Storefront_Resource_User_Item_Interface');
+            $mock = m::mock('Storefront\\Model\\Resource\\User\\User');
             
             $mock->userId = $i;
             $mock->title = $i % 2 ? 'Mr' : 'Mrs';
