@@ -1,81 +1,91 @@
 <?php
+namespace Storefront\Model\Resource;
+
+use SF\Model\DbTable\AbstractRow as SFModelDbRowAbstract;
 /**
- * Storefront_Resource_Product
+ * Storefront_Resource_Product_Item
  * 
  * @category   Storefront
  * @package    Storefront_Model_Resource
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Resource_Product extends SF_Model_Resource_Db_Table_Abstract implements Storefront_Resource_Product_Interface 
-{
-    protected $_name    = 'product';
-    protected $_primary  = 'productId';
-    protected $_rowClass = 'Storefront_Resource_Product_Item';
-    
+class Product extends SFModelDbRowAbstract implements Product\Product
+{   
     /**
-     * Get a product by its productId
+     * Get product images
      *
-     * @param int $id The id to search for
-     * @return Storefront_Resource_Product_Item|null
+     * @param  boolean $includeDefault Whether to include the default
+     * @return array Containing Storefront_Resource_ProductImage_Item
      */
-    public function getProductById($id)
-    {
-        return $this->find($id)->current();
-    }
-    
-    /**
-     * Get a product by its ident string
-     *
-     * @param string $ident The ident to search for
-     * @return Storefront_Resource_Product_Item|null
-     */
-    public function getProductByIdent($ident)
-    {
-        return $this->fetchRow($this->select()->where('ident = ?', $ident));
-    }
-
-    /**
-     * Get all the products
-     * 
-     * @return Zend_Db_Table_Rowset
-     */
-    public function getAllProducts()
-    {
-        return $this->fetchAll();
-    }
-    
-    /**
-     * Get a list of product by their category
-     *
-     * @param  int|array $categoryId The category id(s)
-     * @param  boolean   $paged      Use Zend_Paginator?
-     * @param  array     $order      Order results
-     * @return Zend_Db_Table_Rowset|Zend_Paginator
-     */
-    public function getProductsByCategory($categoryId, $paged=null, $order=null)
+    public function getImages($includeDefault=false)
     {
         $select = $this->select();
-        $select->from('product')
-               ->where("categoryId IN(?)", $categoryId);
+        if (false === $includeDefault) {
+            $select->where('isDefault != ?', 'Yes');
+        }
+        return $this->findDependentRowset('Storefront_Resource_Productimage',
+            'Image', 
+            $select
+        );
+    }
+    
+    /**
+     * Get the default image
+     *
+     * @return Storefront_Resource_ProductImage_Item
+     */
+    public function getDefaultImage()
+    {
+        $row = $this->findDependentRowset('Storefront_Resource_Productimage',
+            'Image', 
+            $this->select()
+                 ->where('isDefault = ?', 'Yes')
+                 ->limit(1)
+        )->current();
         
-        if (true === is_array($order)) {
-            $select->order($order);
+        return $row;
+    }
+    
+    /**
+     * Get the price
+     *
+     * @param  boolean $withDiscount Include discount calculation
+     * @param  boolean $withTax      Include tax calculation
+     * @return string The products price
+     */
+    public function getPrice($withDiscount=true,$withTax=true)
+    {
+        $price = $this->getRow()->price;
+        if (true === $this->isDiscounted() && true === $withDiscount) {
+            $discount = $this->getRow()->discountPercent;
+            $discounted = ($price*$discount)/100;
+            $price = round($price - $discounted, 2);
         }
-		
-        if (null !== $paged) {
-                $adapter = new Zend_Paginator_Adapter_DbTableSelect($select);
-                $count = clone $select;
-                $count->reset(Zend_Db_Select::COLUMNS);
-                $count->reset(Zend_Db_Select::FROM);
-                $count->from('product', new Zend_Db_Expr('COUNT(*) AS `zend_paginator_row_count`'));
-                $adapter->setRowCount($count);
-
-                $paginator = new Zend_Paginator($adapter);
-                $paginator->setItemCountPerPage(5)
-                          ->setCurrentPageNumber((int) $paged);
-                return $paginator;
+        if (true === $this->isTaxable() && true === $withTax) {
+            $taxService = new Storefront_Service_Taxation();
+            $price = $taxService->addTax($price);
         }
-        return $this->fetchAll($select);
-    } 
+        return $price;
+    }
+    
+    /**
+     * Is this product discounted ?
+     *
+     * @return boolean
+     */
+    public function isDiscounted()
+    {
+        return 0 == $this->getRow()->discountPercent ? false : true;
+    }
+    
+    /**
+     * Is this product taxable?
+     *
+     * @return boolean
+     */
+    public function isTaxable()
+    {
+        return 'Yes' == $this->getRow()->taxable ? true : false;
+    }
 }

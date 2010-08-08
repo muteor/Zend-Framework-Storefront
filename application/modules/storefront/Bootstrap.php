@@ -1,13 +1,26 @@
 <?php
+namespace Storefront;
+
+use Zend\Application\Bootstrap as ZendBootstrap,
+    Zend\Loader\PluginLoader as ZendPluginLoader,
+    Zend\Log as ZendLog,
+    Zend\Registry as ZendRegistry,
+    Zend\Locale\Locale as ZendLocale,
+    Zend\Db\Profiler as ZendDbProfiler,
+    Zend\Controller\Router\Route as ZendRouter,
+    Zend\Controller\Action\HelperBroker as ZendActionHelperBroker,
+    Zend\Search as ZendSearch
+;
+
 /**
- * The application bootstrap used by Zend_Application
+ * The application bootstrap used by Zend\Application
  *
  * @category   Bootstrap
  * @package    Bootstrap
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
+class Bootstrap extends ZendBootstrap
 {
     /**
      * @var Zend_Log
@@ -34,7 +47,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             if (file_exists($classFileIncCache)) {
                 include_once $classFileIncCache;
             }
-            Zend_Loader_PluginLoader::setIncludeFileCache($classFileIncCache);
+            ZendPluginLoader::setIncludeFileCache($classFileIncCache);
         }
     }
 
@@ -44,20 +57,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initLogging()
     {
         $this->bootstrap('frontController');
-        $logger = new Zend_Log();
+        $logger = new ZendLog\Logger();
 
         $writer = 'production' == $this->getEnvironment() ?
-			new Zend_Log_Writer_Stream(APPLICATION_PATH . '/../data/logs/app.log') :
-			new Zend_Log_Writer_Firebug();
+			new ZendLog\Writer\Stream(APPLICATION_PATH . '/../data/logs/app.log') :
+			new ZendLog\Writer\Firebug();
         $logger->addWriter($writer);
 
-		if ('production' == $this->getEnvironment()) {
-			$filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
-			$logger->addFilter($filter);
-		}
+        if ('production' == $this->getEnvironment()) {
+                $filter = new ZendLog\Filter\Priority(Zend_Log::CRIT);
+                $logger->addFilter($filter);
+        }
 
         $this->_logger = $logger;
-        Zend_Registry::set('log', $logger);
+        ZendRegistry::set('log', $logger);
     }
 
     /**
@@ -74,7 +87,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             ),
             'document' => array(
                 'path' => 'models/document',
-                'namespace' => 'Model_Document'
+                'namespace' => 'Model\Document'
             )
         ));
     }
@@ -86,8 +99,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
         
-        $locale = new Zend_Locale('en_GB');
-        Zend_Registry::set('Zend_Locale', $locale);
+        $locale = new ZendLocale('en_GB');
+        ZendRegistry::set('Zend_Locale', $locale);
     }
 
     /**
@@ -95,14 +108,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initDbProfiler()
     {
-        $this->_logger->info('Bootstrap ' . __METHOD__);
-        
-        if ('production' !== $this->getEnvironment()) {
-            $this->bootstrap('db');
-            $profiler = new Zend_Db_Profiler_Firebug('All DB Queries');
-            $profiler->setEnabled(true);
-            $this->getPluginResource('db')->getDbAdapter()->setProfiler($profiler);
-        }
+//        $this->_logger->info('Bootstrap ' . __METHOD__);
+//
+//        if ('production' !== $this->getEnvironment()) {
+//            $this->bootstrap('db');
+//            $profiler = new ZendDbProfiler\Firebug('All DB Queries');
+//            $profiler->setEnabled(true);
+//            $this->getPluginResource('db')->getDbAdapter()->setProfiler($profiler);
+//        }
     }
     
     /**
@@ -111,7 +124,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initConfig()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
-        Zend_Registry::set('config', $this->getOptions());
+        ZendRegistry::set('config', $this->getOptions());
     }
 
     /**
@@ -126,7 +139,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->_view = $this->getResource('view');
 
         // add global helpers
-        $this->_view->addHelperPath(APPLICATION_PATH . '/views/helpers', 'Zend_View_Helper');
+        $this->_view->addHelperPath(APPLICATION_PATH . '/views/helpers', 'Zend\View\Helper');
 
         // set encoding and doctype
         $this->_view->setEncoding('UTF-8');
@@ -160,7 +173,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $router = $this->frontController->getRouter();
 
         // Admin context route
-        $route = new Zend_Controller_Router_Route(
+        $route = new ZendRouter\Route(
             'admin/:module/:controller/:action/*',
             array(
                 'action'     => 'index',
@@ -173,7 +186,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $router->addRoute('admin', $route);
 
         // catalog category product route
-        $route = new Zend_Controller_Router_Route(
+        $route = new ZendRouter\Route(
             'catalog/:categoryIdent/:productIdent',
             array(
                 'action'        => 'view',
@@ -190,7 +203,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $router->addRoute('catalog_category_product', $route);
 
         // catalog category route
-        $route = new Zend_Controller_Router_Route(
+        $route = new ZendRouter\Route(
             'catalog/:categoryIdent/:page',
             array(
                 'action'        => 'index',
@@ -214,9 +227,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initActionHelpers()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
-        Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_Acl());
-        Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_RedirectCommon());
-        Zend_Controller_Action_HelperBroker::addHelper(new SF_Controller_Helper_Service());
+        //ZendActionHelperBroker::addHelper(new SF\Controller\Helper\Acl());
+        //ZendActionHelperBroker::addHelper(new SF\Controller\Helper\RedirectCommon());
+        //ZendActionHelperBroker::addHelper(new SF\Controller\Helper\Service());
     }
 
     /**
@@ -235,7 +248,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 'Apc',
                 $frontendOptions
             );
-            Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);  
+            Zend\Db\Table\AbstractTable::setDefaultMetadataCache($cache);
         }
     }
 
@@ -304,11 +317,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initZendSearch()
     {
         
-        $filter = new Zend_Search_Lucene_Analysis_TokenFilter_ShortWords();
+        $filter = new ZendSearch\Lucene\Analysis\TokenFilter\ShortWords();
 
-        $analyzer = new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive();
+        $analyzer = new ZendSearch\Lucene\Analysis\Analyzer\Common\Utf8Num\CaseInsensitive();
         $analyzer->addFilter($filter);
         
-        Zend_Search_Lucene_Analysis_Analyzer::setDefault($analyzer);
+        ZendSearch\Lucene\Analysis\Analyzer\Analyzer::setDefault($analyzer);
     }
 }

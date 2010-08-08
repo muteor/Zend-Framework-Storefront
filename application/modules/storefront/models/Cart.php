@@ -1,7 +1,9 @@
 <?php
 namespace Storefront\Model;
 
-use SF\Model;
+use SF\Model,
+    Zend\Session as ZendSession,
+    Storefront\Model\Resource;
 
 /**
  * Storefront_Model_Cart
@@ -43,7 +45,7 @@ class Cart extends Model\AbstractModel implements \SeekableIterator, \Countable,
      * 
      * @var Zend_Session_Namespace
      */
-    protected $_sessionNamespace;
+    protected $_storage;
 
     /**
      * Called from the __construct defined by model abstract
@@ -60,7 +62,7 @@ class Cart extends Model\AbstractModel implements \SeekableIterator, \Countable,
      * @param int $qty
      * @return Storefront_Resource_Cart_Item
      */
-    public function addItem(Storefront_Resource_Product_Item_Interface $product, $qty)
+    public function addItem(Resource\Product\Product $product, $qty)
     {
         if (0 > $qty) {
             return false;
@@ -71,7 +73,7 @@ class Cart extends Model\AbstractModel implements \SeekableIterator, \Countable,
             return false;
         }
         
-        $item = new Storefront_Resource_Cart_Item($product, $qty);   
+        $item = new Resource\CartItem($product, $qty);
         $this->_items[$item->productId] = $item;
         $this->persist();
         return $item;
@@ -88,7 +90,7 @@ class Cart extends Model\AbstractModel implements \SeekableIterator, \Countable,
             unset($this->_items[$product]);
         }
 
-        if ($product instanceof Storefront_Resource_Product_Item_Interface) {
+        if ($product instanceof Resource\Product\Product) {
             unset($this->_items[$product->productId]);
         }
         
@@ -96,26 +98,27 @@ class Cart extends Model\AbstractModel implements \SeekableIterator, \Countable,
     }
 
     /**
-     * Setter for the session namespace
+     * Set the storage
      * 
-     * @param Zend_Session_Namespace $ns 
+     * @param ZendSession\Container $ns
      */
-    public function setSessionNs(Zend_Session_Namespace $ns)
+    public function setStorage(ZendSession\Container $storage)
     {
-        $this->_sessionNamespace = $ns;
+        $this->_storage = $storage;
     }
     
     /**
-     * Getter for session namespace
+     * Get the storage
      * 
-     * @return  Zend_Session_Namespace
+     * @return ZendSession\Container
      */
-    public function getSessionNs()
+    public function getStorage()
     {
-        if (null === $this->_sessionNamespace) {
-            $this->setSessionNs(new Zend_Session_Namespace(__CLASS__));
+        if (null === $this->_storage) {
+            $storage = new ZendSession\Container('CartStorage');
+            $this->setStorage($storage);
         }
-        return $this->_sessionNamespace;
+        return $this->_storage;
     }
 
     /**
@@ -123,8 +126,8 @@ class Cart extends Model\AbstractModel implements \SeekableIterator, \Countable,
      */
     public function persist()
     {
-        $this->getSessionNs()->items = $this->_items;
-        $this->getSessionNs()->shipping = $this->getShippingCost();
+        $this->getStorage()->items = $this->_items;
+        $this->getStorage()->shipping = $this->getShippingCost();
     }
 
     /**
@@ -132,11 +135,11 @@ class Cart extends Model\AbstractModel implements \SeekableIterator, \Countable,
      */
     public function loadSession()
     {
-        if (isset($this->getSessionNs()->items)) {
-            $this->_items = $this->getSessionNs()->items;
+        if (isset($this->getStorage()->items)) {
+            $this->_items = $this->getStorage()->items;
         }
-        if (isset($this->getSessionNs()->shipping)) {
-            $this->setShippingCost($this->getSessionNs()->shipping);
+        if (isset($this->getStorage()->shipping)) {
+            $this->setShippingCost($this->getStorage()->shipping);
         }
     }
 

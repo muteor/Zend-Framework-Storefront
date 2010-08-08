@@ -1,4 +1,6 @@
 <?php
+namespace Storefront\Service;
+
 /**
  * Storefront_Service_Taxation
  * 
@@ -9,7 +11,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Service_Taxation
+class Taxation
 {
     const TAXRATE = 15;
        

@@ -18,6 +18,8 @@ $path = array(
 );
 set_include_path(implode(PATH_SEPARATOR, $path));
 
+define('APPLICATION_PATH', "$root/application");
+
 require_once 'Mockery.php';
 require_once 'Zend/Loader/Autoloader.php';
 
