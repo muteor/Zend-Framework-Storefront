@@ -1,4 +1,10 @@
 <?php
+namespace Storefront\Form\User;
+
+use SF\Form,
+    Storefront\Model,
+    Zend\Form as ZendForm;
+
 /**
  * The base user form
  *
@@ -7,15 +13,15 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_User_Base extends SF_Form_Abstract
+class Base extends Form\AbstractForm
 {
     public function init()
     {
         // add path to custom validators
         $this->addElementPrefixPath(
-            'Storefront_Validate',
+            'Storefront\\Model\\Validate',
             APPLICATION_PATH . '/modules/storefront/models/validate/',
-            'validate'
+            ZendForm\Element::VALIDATE
         );
 
         $this->addElement('select', 'title', array(
@@ -49,7 +55,7 @@ class Storefront_Form_User_Base extends SF_Form_Abstract
             'validators' => array(
                 array('StringLength', true, array(3, 128)),
                 array('EmailAddress'),
-                array('UniqueEmail', false, array(new Storefront_Model_User())),
+                array('UniqueEmail', false, array($this->getModel())),
             ),
             'required'   => true,
             'label'      => 'Email',

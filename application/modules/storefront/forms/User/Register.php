@@ -1,4 +1,6 @@
 <?php
+namespace Storefront\Form\User;
+
 /**
  * The registration form
  * 
@@ -7,7 +9,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_User_Register extends Storefront_Form_User_Base
+class Register extends Base
 {
     public function init()
     {

@@ -1,5 +1,9 @@
 <?php
-class Storefront_Validate_PasswordVerification extends Zend_Validate_Abstract
+namespace Storefront\Model\Validate;
+
+use Zend\Validator;
+
+class PasswordVerification extends Validator\AbstractValidator
 {
     const NOT_MATCH = 'notMatch';
 

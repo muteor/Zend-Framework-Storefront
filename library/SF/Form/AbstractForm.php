@@ -1,7 +1,8 @@
 <?php
 namespace SF\Form;
 
-use Zend\Form\Form as ZendForm;
+use Zend\Form\Form as ZendForm,
+    SF\Model\Model as SFModelInterface;
 
 /**
  * Simple base form class to provide model injection
@@ -23,7 +24,7 @@ class AbstractForm extends ZendForm
      * 
      * @param SF_Model_Interface $model 
      */
-    public function setModel(SF_Model_Interface $model)
+    public function setModel(SFModelInterface $model)
     {
         $this->_model = $model;
     }

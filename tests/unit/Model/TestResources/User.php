@@ -60,10 +60,8 @@ class UserResource implements User\Resource
     
     public function createRow(array $data = array(), $defaultSource = null)
     {
-        $mock = $this->getMock('Storefront_Resource_User_Item_Interface', array('getFullname', 'save'));
-        $mock->expects($this->any())
-             ->method('save')
-             ->will($this->returnValue(10));
+        $mock = m::mock('Storefront\\Model\\Resource\\User\\User');
+        $mock->shouldReceive('save')->andReturn(10);
        
         $this->_rowset[10] = $mock;
         

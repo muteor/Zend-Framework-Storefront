@@ -1,5 +1,10 @@
 <?php
-class Storefront_Validate_UniqueIdent extends Zend_Validate_Abstract
+namespace Storefront\Model\Validate;
+
+use Zend\Validator,
+    Storefront\Model;
+
+class UniqueIdent extends Validator\AbstractValidator
 {
     const IDENT_EXISTS = 'identExists';
 
@@ -10,7 +15,7 @@ class Storefront_Validate_UniqueIdent extends Zend_Validate_Abstract
     protected $_model;
     protected $_method;
 
-    public function __construct(SF_Model_Interface $model, $method)
+    public function __construct(Model\User $model, $method)
     {
         $this->_model  = $model;
         $this->_method = $method;

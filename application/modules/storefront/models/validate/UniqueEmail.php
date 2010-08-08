@@ -1,5 +1,10 @@
 <?php
-class Storefront_Validate_UniqueEmail extends Zend_Validate_Abstract
+namespace Storefront\Model\Validate;
+
+use Zend\Validator,
+    Storefront\Model;
+
+class UniqueEmail extends Validator\AbstractValidator
 {
     const EMAIL_EXISTS = 'emailExists';
 
@@ -7,7 +12,7 @@ class Storefront_Validate_UniqueEmail extends Zend_Validate_Abstract
         self::EMAIL_EXISTS => 'Email "%value%" already exists in our system',
     );
 
-    public function __construct(Storefront_Model_User $model)
+    public function __construct(Model\User $model)
     {
         $this->_model = $model;
     }

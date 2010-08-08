@@ -126,7 +126,7 @@ abstract class AbstractModel implements Model
     public function getForm($name)
     {
         if (!isset($this->_forms[$name])) {
-            $class = $this->_getNamespace() . '\\Form\\' . ucfirst($name);
+            $class = $this->_getNamespace() . '\\Form\\' . $this->_getInflected($name);
             $class = str_replace('Model\\', '', $class);
             $this->_forms[$name] = new $class(array('model' => $this));
         }
@@ -203,5 +203,23 @@ abstract class AbstractModel implements Model
     {
         $reflection = new \ReflectionClass($this);
         return $reflection->getNamespaceName();
+    }
+
+    /**
+     * Get the inflected name
+     * 
+     * @param  string $name
+     * @return string
+     */
+    private function _getInflected($name) {
+        $inflector = new Filter\Inflector(':class');
+        $inflector->setRules(array(
+            ':class' => array('Word\\CamelCaseToUnderscore')
+        ));
+
+        $inflected = ucfirst($inflector->filter(array('class' => $name)));
+        $inflected = str_replace('_', '\\', $inflected);
+
+        return $inflected;
     }
 }

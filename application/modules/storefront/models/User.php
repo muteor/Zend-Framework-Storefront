@@ -85,7 +85,7 @@ class User extends SFAbstractAcl
             $validator = 'edit';
         }
 
-        $form = $this->getForm('user' . ucfirst($validator));
+        $form = $this->getForm('User' . ucfirst($validator));
 
         return $this->save($form, $post);
     }
@@ -121,7 +121,7 @@ class User extends SFAbstractAcl
         }
 
         $user = array_key_exists('userId', $data) ?
-            $this->getResource('User')->getUserById($data['userId']) : null;
+        $this->getResource('User')->getUserById($data['userId']) : null;
 
         return $this->getResource('User')->saveRow($data, $user);
     }
