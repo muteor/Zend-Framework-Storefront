@@ -4,6 +4,11 @@
  */
 namespace SF\Model\Cache;
 
+use SF\Model,
+    Zend\Config,
+    Zend\Cache
+;
+
 /**
  * AbstractCache
  *
@@ -63,11 +68,11 @@ abstract class AbstractCache
      * @param SF_Model_Abstract $model
      * @param array|Zend_Config $options 
      */
-    public function __construct(SF_Model_Abstract $model, $options, $tagged = null)
+    public function __construct(Model\AbstractModel $model, $options, $tagged = null)
     {
         $this->_model = $model;
 
-        if ($options instanceof Zend_Config) {
+        if ($options instanceof Config\Config) {
             $options = $options->toArray();
         }
 
@@ -103,7 +108,7 @@ abstract class AbstractCache
      * 
      * @param Zend_Cache $cache 
      */
-    public function setCache(Zend_Cache $cache)
+    public function setCache(Cache\Cache $cache)
     {
         $this->_cache = $cache;
     }
@@ -117,7 +122,7 @@ abstract class AbstractCache
     public function getCache()
     {
         if (null === $this->_cache) {
-            $this->_cache = Zend_Cache::factory(
+            $this->_cache = Cache\Cache::factory(
                 $this->_frontend,
                 $this->_backend,
                 $this->_frontendOptions,
@@ -166,7 +171,7 @@ abstract class AbstractCache
     public function setFrontend($frontend)
     {
         if ('Class' != $frontend) {
-            throw new SF_Model_Exception('Frontend type must be Class');
+            throw new Model\InvalidOperation('Frontend type must be Class');
         }
         $this->_frontend = $frontend;
     }
@@ -192,7 +197,7 @@ abstract class AbstractCache
     public function __call($method, $params)
     {
         if (!is_callable(array($this->_model, $method))) {
-            throw new SF_Model_Exception('Method ' . $method . ' does not exist in class ' . get_class($this->_model) );
+            throw new Model\InvalidOperation('Method ' . $method . ' does not exist in class ' . get_class($this->_model) );
         }
         $cache = $this->getCache();
         $cache->setTagsArray(array($this->_tagged));

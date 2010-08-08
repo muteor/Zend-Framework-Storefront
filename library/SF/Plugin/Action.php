@@ -4,7 +4,8 @@
  */
 namespace SF\Plugin;
 
-use Zend\Controller\Plugin\AbstractPlugin as ZendAbstractPlugin;
+use Zend\Controller\Plugin\AbstractPlugin as ZendAbstractPlugin,
+    Zend\Controller\Request;
 
 /**
  * Application Action Plugin
@@ -21,7 +22,7 @@ class Action extends ZendAbstractPlugin
 {
     protected $_stack;
 
-    public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request) 
+    public function dispatchLoopStartup(Request\AbstractRequest $request)
     {
         $stack = $this->getStack();
         

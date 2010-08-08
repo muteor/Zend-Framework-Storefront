@@ -4,7 +4,9 @@
  */
 namespace SF\Plugin;
 
-use Zend\Controller\Plugin\AbstractPlugin as ZendAbstractPlugin;
+use Zend\Controller\Plugin\AbstractPlugin as ZendAbstractPlugin,
+    Zend\Controller\Request;
+
 
 /**
  * SF_Plugin_AdminContext
@@ -21,10 +23,10 @@ use Zend\Controller\Plugin\AbstractPlugin as ZendAbstractPlugin;
  */
 class AdminContext extends ZendAbstractPlugin
 {
-    public function preDispatch(Zend_Controller_Request_Abstract $request) 
+    public function preDispatch(Request\AbstractRequest $request)
     {        
         if($request->getParam('isAdmin')) {
-            $layout = Zend_Layout::getMvcInstance();
+            $layout = Zend\Layout\Layout::getMvcInstance();
             $layout->setLayout('admin');
         }
     }
