@@ -1,5 +1,5 @@
 <?php
-namespace SFTest;
+namespace SFTest\Document;
 
 use Storefront\Model,
      Mockery as m;
@@ -37,10 +37,10 @@ class ProductDocumentTest extends \PHPUnit_Framework_TestCase
 
     public function test_Document_Maps_Data_Correctly()
     {
-//        $this->assertEquals(1, $this->_document->getFieldUtf8Value('productId'));
-//        $this->assertEquals('category1,category2', $this->_document->getFieldUtf8Value('categories'));
-//        $this->assertEquals('test1', $this->_document->getFieldUtf8Value('name'));
-//        $this->assertEquals('description', $this->_document->getFieldUtf8Value('description'));
-//        $this->assertEquals('0000001099', $this->_document->getFieldUtf8Value('price'));
+        $this->assertEquals(1, $this->_document->getFieldUtf8Value('productId'));
+        $this->assertEquals('category1,category2', $this->_document->getFieldUtf8Value('categories'));
+        $this->assertEquals('test1', $this->_document->getFieldUtf8Value('name'));
+        $this->assertEquals('description', $this->_document->getFieldUtf8Value('description'));
+        $this->assertEquals('0000001099', $this->_document->getFieldUtf8Value('price'));
     }
 }
