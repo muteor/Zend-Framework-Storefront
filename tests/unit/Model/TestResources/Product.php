@@ -1,8 +1,10 @@
 <?php
-require_once 'modules/storefront/models/resources/Product/Interface.php';
-require_once 'modules/storefront/models/resources/Product/Item/Interface.php';
+namespace SFTest\Model\Resource;
 
-class Storefront_Resource_Product extends PHPUnit_Framework_TestCase implements Storefront_Resource_Product_Interface
+use Storefront\Model\Resource\Product,
+    Mockery as m;
+
+class ProductResource implements Product\Resource
 {
     protected $_rowset = null;
     protected $_mockRow = null;
@@ -11,12 +13,8 @@ class Storefront_Resource_Product extends PHPUnit_Framework_TestCase implements 
     {       
         $data = array();
         for($i=0; $i<10; $i++) {
-            $mock = $this->getMock('Storefront_Resource_Product_Item_Interface');
-            
-            // mock the item calls
-            $mock->expects($this->any())
-                 ->method('getImages')
-                 ->will($this->returnValue(array(true)));
+            $mock = m::mock('Storefront\\Model\\Resource\\Product\\Product');
+            $mock->shouldReceive('getImages')->andReturn(array(true));
             
             $mock->productId = $i;
             $mock->categoryId = $i;
@@ -37,9 +35,7 @@ class Storefront_Resource_Product extends PHPUnit_Framework_TestCase implements 
     }
     
     public function getProductById($id)
-    {
-        $this->assertNotEquals(0, $id, 'Assertion failed in ' . __CLASS__);
-        
+    {   
         foreach ($this->_rowset as $product) {
             if($product->productId == $id) {
                 return $product;

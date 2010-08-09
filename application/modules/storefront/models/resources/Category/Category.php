@@ -1,4 +1,6 @@
 <?php
+namespace Storefront\Model\Resource\Category;
+
 /**
  * Storefront_Resource_Product_Item_Interface
  * 
@@ -7,7 +9,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-interface Storefront_Resource_Category_Item_Interface
+interface Category
 {
     public function getParentCategory();
 }

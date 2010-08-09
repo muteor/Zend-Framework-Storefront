@@ -1,4 +1,11 @@
 <?php
+namespace Storefront\Model;
+
+use SF\Model\Acl\AbstractAcl as SFAbstractAcl,
+    Zend\Acl\Resource as ZendAclResourceInterface,
+    Zend\Cache,
+    SF\Acl;
+
 /**
  * Storefront_Catalog
  * 
@@ -7,7 +14,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl_Resource_Interface
+class Catalog extends SFAbstractAcl implements ZendAclResourceInterface
 {
     /**
      * @var Storefront_Service_ProductIndexer
@@ -188,7 +195,7 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
     public function saveCategory($data, $validator = null)
     {
         if (!$this->checkAcl('saveCategory')) {
-            throw new SF_Acl_Exception("Insufficient rights");
+            throw new Acl\AccessDenied("Insufficient rights");
         }
 
         if (null === $validator) {
@@ -216,7 +223,7 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
     public function saveProduct($data, $validator = null)
     {
         if (!$this->checkAcl('saveProduct')) {
-            throw new SF_Acl_Exception("Insufficient rights");
+            throw new Acl\AccessDenied("Insufficient rights");
         }
         
         if (null === $validator) {
@@ -237,7 +244,7 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
         // clear the cache
         $this->getCached()
              ->getCache()
-             ->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+             ->clean(Cache\Cache::CLEANING_MODE_MATCHING_ANY_TAG,
                 array('product')
              );
 
@@ -258,7 +265,7 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
    public function saveProductImage(Storefront_Resource_Product_Item $product, $data, $validator = null)
     {
         if (!$this->checkAcl('saveProductImage')) {
-            throw new SF_Acl_Exception("Insufficient rights");
+            throw new Acl\AccessDenied("Insufficient rights");
         }
 
         if (null === $validator) {
@@ -286,7 +293,7 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
     public function deleteProduct($product)
     {
         if (!$this->checkAcl('deleteProduct')) {
-            throw new SF_Acl_Exception("Insufficient rights");
+            throw new Acl\AccessDenied("Insufficient rights");
         }
 
         if ($product instanceof Storefront_Resource_Product_Item_Interface) {
@@ -296,7 +303,7 @@ class Storefront_Model_Catalog extends SF_Model_Acl_Abstract implements Zend_Acl
         }
 
         $product = $this->getProductById($productId);
-$this->getIndexer()->deleteProduct($product->productId);
+        $this->getIndexer()->deleteProduct($product->productId);
         if (null !== $product) {
             $product->delete();
             return true;
@@ -330,7 +337,7 @@ $this->getIndexer()->deleteProduct($product->productId);
      * @param SF_Acl_Interface $acl
      * @return SF_Model_Abstract
      */
-    public function setAcl(SF_Acl_Interface $acl)
+    public function setAcl(Acl\Acl $acl)
     {
         if (!$acl->has($this->getResourceId())) {
             $acl->add($this)

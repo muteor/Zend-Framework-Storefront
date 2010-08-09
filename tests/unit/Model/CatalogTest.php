@@ -1,4 +1,16 @@
 <?php
+namespace SFTest\Model;
+
+use Storefront\Model;
+
+use Mockery as m;
+
+/**
+ * Test resources to load
+ */
+require_once __DIR__ . '/TestResources/Product.php';
+require_once __DIR__ . '/TestResources/Category.php';
+
 /**
  * Test case for Storefront_Catalog
  * 
@@ -7,8 +19,10 @@
  * tests will run quickly and do not need to access things
  * like the database. Databases etc will be tested during the
  * integration tests.
+ *
+ * @group migration
  */
-class CatalogTest extends PHPUnit_Framework_TestCase
+class CatalogTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SF_Model_Interface
@@ -17,30 +31,18 @@ class CatalogTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        _SF_Autloader_SetUp();
-
-        // configure the resource loader atuo load models
-        $loader = new Zend_Loader_Autoloader_Resource(array(
-            'basePath' => APPLICATION_PATH . '/modules/storefront',
-            'namespace' => 'Storefront'
+        $options = array(
+            'resources' => array(
+                'Product'  => new \SFTest\Model\Resource\ProductResource(),
+                'Category' => new \SFTest\Model\Resource\CategoryResource(),
             )
         );
-        $loader->addResourceType('Model', 'models', 'Model');
-
-        // configure another loader so we can replace Model Resources
-        $loader = new Zend_Loader_Autoloader_Resource(array(
-            'basePath' => dirname(__FILE__),
-            'namespace' => 'Storefront'
-            )
-        );
-        $loader->addResourceType('modelResource', 'TestResources', 'Resource');
-        
-        $this->_model = new Storefront_Model_Catalog();
+        $this->_model = new Model\Catalog($options);
     }
     
     protected function tearDown()
     {
-        _SF_Autloader_TearDown();
+        $this->_model = null;
     }
     
     public function test_Catalog_Get_Product_By_Id_Returns_Product_Item()
@@ -50,7 +52,7 @@ class CatalogTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $p->productId);
         $this->assertEquals('Product-2', $p->ident);
 
-        $this->assertType('Storefront_Resource_Product_Item_Interface', $p);
+        $this->assertType('Storefront\\Model\\Resource\\Product\\Product', $p);
     }
     
     public function test_Catalog_Get_Product_By_Ident_Returns_Product_Item()
@@ -60,7 +62,7 @@ class CatalogTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, $p->productId);
         $this->assertEquals('Product-3', $p->ident);
 
-        $this->assertType('Storefront_Resource_Product_Item_Interface', $p);
+        $this->assertType('Storefront\\Model\\Resource\\Product\\Product', $p);
     }
 
     public function test_Catalog_Product_Item_Can_Get_Images()
@@ -82,7 +84,7 @@ class CatalogTest extends PHPUnit_Framework_TestCase
     {
         $category = $this->_model->getCategoryByIdent('Category-5');
         
-        $this->assertType('Storefront_Resource_Category_Item_Interface', $category);
+        $this->assertType('Storefront\\Model\\Resource\\Category\\Category', $category);
         $this->assertEquals(5, $category->categoryId);
     }
     
@@ -91,7 +93,7 @@ class CatalogTest extends PHPUnit_Framework_TestCase
         $category = $this->_model->getCategoryByIdent('Category-8');
         $parent   = $category->getParentCategory();
 
-        $this->assertType('Storefront_Resource_Category_Item_Interface', $parent);
+        $this->assertType('Storefront\\Model\\Resource\\Category\\Category', $parent);
         $this->assertEquals(7, $parent->categoryId);
     }
 

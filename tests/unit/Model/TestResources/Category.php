@@ -1,9 +1,10 @@
 <?php
-require_once 'modules/storefront/models/resources/Category/Interface.php';
-require_once 'modules/storefront/models/resources/Category/Item/Interface.php';
-require_once 'modules/storefront/models/resources/Product/Item/Interface.php';
+namespace SFTest\Model\Resource;
 
-class Storefront_Resource_Category extends PHPUnit_Framework_TestCase implements Storefront_Resource_Category_Interface
+use Storefront\Model\Resource\Category,
+    Mockery as m;
+
+class CategoryResource implements Category\Resource
 {
     protected $_products = null;
     protected $_categories = null;
@@ -13,12 +14,8 @@ class Storefront_Resource_Category extends PHPUnit_Framework_TestCase implements
         // create some test products
         $data = array();
         for($i=0; $i<10; $i++) {
-            $mock = $this->getMock('Storefront_Resource_Product_Item_Interface');
-            
-            // mock the i
-            $mock->expects($this->any())
-                 ->method('getImages')
-                 ->will($this->returnValue(array(true)));
+            $mock = m::mock('Storefront\\Model\\Resource\\Product\\Product');
+            $mock->shouldReceive('getImages')->andReturn(array(true));
             
             $mock->productId = $i;
             $mock->ident = 'Product-' . $i;
@@ -38,7 +35,7 @@ class Storefront_Resource_Category extends PHPUnit_Framework_TestCase implements
         
         $data = array();
         for($i=0; $i<10; $i++) {
-            $mock = $this->getMock('Storefront_Resource_Category_Item_Interface');
+            $mock = m::mock('Storefront\\Model\\Resource\\Category\\Category');
             
             $mock->categoryId = $i;
             $mock->name = 'Category ' . $i;
@@ -46,9 +43,8 @@ class Storefront_Resource_Category extends PHPUnit_Framework_TestCase implements
             $mock->ident = 'Category-' . $i;
 
             if($i > 0) {
-            $mock->expects($this->any())
-                      ->method('getParentCategory')
-                      ->will($this->returnValue($data[$i-1]));
+                $mock->shouldReceive('getParentCategory')
+                      ->andReturn($data[$i-1]);
             }
             $data[] = $mock;
         }
@@ -57,9 +53,7 @@ class Storefront_Resource_Category extends PHPUnit_Framework_TestCase implements
     }
     
     public function getCategoriesByParentId($parentId)
-    {
-        $this->assertType('int', $parentId, 'Assertion failed in ' . __CLASS__ . ' ' . __METHOD__);
-        
+    {        
         $found = array();
         foreach ($this->_categories as $cat) {
             if ($parentId === $cat->parentId) {
@@ -76,9 +70,7 @@ class Storefront_Resource_Category extends PHPUnit_Framework_TestCase implements
     {}
     
     public function getCategoryByIdent ($ident)
-    {
-        $this->assertType('string', $ident, 'Assertion failed in ' . __CLASS__ . ' ' . __METHOD__);
-        
+    {        
         foreach ($this->_categories as $cat) {
             if ($ident === $cat->ident) {
                return $cat;
