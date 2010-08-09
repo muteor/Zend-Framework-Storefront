@@ -1,6 +1,12 @@
 <?php
+namespace Storefront\Model\Document;
+
+use Zend\Search\Lucene,
+    Storefront\Model
+;
+
 /**
- *  Storefront_Model_Document_Product
+ * Product document
  *
  * A product document used in the Lucene index
  *
@@ -9,15 +15,15 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Model_Document_Product extends Zend_Search_Lucene_Document
+class Product extends Lucene\Document
 {
-    public function  __construct(Storefront_Resource_Product_Item_Interface $item, $category)
+    public function  __construct(Model\Resource\Product\Product $item, $category)
     {
-        $this->addField(Zend_Search_Lucene_Field::keyword('productId', $item->productId, 'UTF-8'));
-        $this->addField(Zend_Search_Lucene_Field::text('categories', $category, 'UTF-8'));
-        $this->addField(Zend_Search_Lucene_Field::text('name', $item->name, 'UTF-8'));
-        $this->addField(Zend_Search_Lucene_Field::unStored('description', $item->description, 'UTF-8'));
-        $this->addField(Zend_Search_Lucene_Field::text('price', $this->_formatPrice($item->getPrice()) , 'UTF-8'));
+        $this->addField(Lucene\Document\Field::keyword('productId', $item->productId, 'UTF-8'));
+        $this->addField(Lucene\Document\Field::text('categories', $category, 'UTF-8'));
+        $this->addField(Lucene\Document\Field::text('name', $item->name, 'UTF-8'));
+        $this->addField(Lucene\Document\Field::unStored('description', $item->description, 'UTF-8'));
+        $this->addField(Lucene\Document\Field::text('price', $this->_formatPrice($item->getPrice()) , 'UTF-8'));
     }
 
     protected function _formatPrice($price)
