@@ -1,4 +1,8 @@
 <?php
+namespace Storefront\Form\User;
+
+use SF\Form;
+
 /**
  * Storefront_Form_User_Admin
  *
@@ -9,7 +13,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_User_Admin extends Storefront_Form_User_Base
+class Admin extends Base
 {
     public function init()
     {

@@ -46,6 +46,7 @@ class CategoryResource implements Category\Resource
                 $mock->shouldReceive('getParentCategory')
                       ->andReturn($data[$i-1]);
             }
+
             $data[] = $mock;
         }
         
@@ -64,7 +65,15 @@ class CategoryResource implements Category\Resource
     }
     
     public function getCategoryById ($id)
-    {}
+    {
+        $found = null;
+        foreach ($this->_categories as $cat) {
+            if ($id == $cat->categoryId) {
+                $found[] = $cat;
+            }
+        }
+        return $found;
+    }
 
     public function getCategories()
     {}

@@ -1,19 +1,25 @@
 <?php
-class Storefront_Form_Catalog_Product_Add extends SF_Form_Abstract
+namespace Storefront\Form\Catalog\Product;
+
+use SF\Form,
+    Storefront\Model,
+    Zend\Form as ZendForm;
+
+class Add extends Form\AbstractForm
 {
     public function init()
     {
         // add path to custom validators & filters
         $this->addElementPrefixPath(
-            'Storefront_Validate',
+            'Storefront\\Model\\Validate',
             APPLICATION_PATH . '/modules/storefront/models/validate/',
-            'validate'
+            ZendForm\Element::VALIDATE
         );
 
         $this->addElementPrefixPath(
-            'Storefront_Filter',
+            'Storefront\\Model\\Filter',
             APPLICATION_PATH . '/modules/storefront/models/filter/',
-            'filter'
+            ZendForm\Element::FILTER
         );
 
         $this->setMethod('post');

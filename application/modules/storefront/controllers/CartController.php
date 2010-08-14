@@ -1,4 +1,9 @@
 <?php
+namespace Storefront;
+
+use Zend\Controller,
+    Storefront\Model;
+
 /**
  * Cart Controller
  *
@@ -7,15 +12,15 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_CartController extends Zend_Controller_Action
+class CartController extends Controller\Action
 {
     protected $_cartModel;
     protected $_catalogModel;
 
     public function init()
     {
-        $this->_cartModel = new Storefront_Model_Cart();
-        $this->_catalogModel = new Storefront_Model_Catalog();
+        $this->_cartModel = new Model\Cart();
+        $this->_catalogModel = new Model\Catalog();
     }
 
     public function addAction()
@@ -23,13 +28,13 @@ class Storefront_CartController extends Zend_Controller_Action
         $product = $this->_catalogModel->getProductById($this->_getParam('productId'));
 
         if (null === $product) {
-            throw new SF_Exception('Product could not be added to cart as it does not exist');
+            throw new SF\Exception\Base('Product could not be added to cart as it does not exist');
         }
 
         $this->_cartModel->addItem($product, $this->_getParam('qty'));
 
         $return = rtrim($this->getRequest()->getBaseUrl(), '/') .
-            $this->_getParam('returnto');
+        $this->_getParam('returnto');
         $redirector = $this->getHelper('redirector');
 
         return $redirector->gotoUrl($return);

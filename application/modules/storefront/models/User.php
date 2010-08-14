@@ -138,7 +138,7 @@ class User extends SFAbstractAcl
             throw new Acl\AccessDenied("Insufficient rights");
         }
 
-        if ($user instanceof Storefront_Resource_User_Item_Interface) {
+        if ($user instanceof User\User) {
             $userId = (int) $user->userId;
         } else {
             $userId = (int) $user;

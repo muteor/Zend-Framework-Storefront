@@ -1,4 +1,8 @@
 <?php
+namespace Storefront\Form\User;
+
+use SF\Form;
+
 /**
  * Storefront_Form_Login
  * 
@@ -9,7 +13,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_User_Login extends SF_Form_Abstract
+class Login extends Form\AbstractForm
 {
     public function init()
     {               

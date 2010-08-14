@@ -1,4 +1,10 @@
 <?php
+namespace Storefront\Service;
+
+use Storefront\Model,
+    Zend\Authentication,
+    Zend\Db\Table;
+
 /**
  * Storefront_Service_Authentication
  * 
@@ -10,7 +16,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Service_Authentication 
+class Authentication 
 {
     /**
      * @var Zend_Auth_Adapter_DbTable
@@ -18,23 +24,28 @@ class Storefront_Service_Authentication
     protected $_authAdapter;
 
     /**
-     * @var Storefront_Model_User
+     * @var Storefront\Model\User
      */
     protected $_userModel;
 
     /**
-     * @var Zend_Auth
+     * @var Zend\Authentication\AuthenticationService
      */
     protected $_auth;
+
+    /**
+     * @var Zend\Authentication\Storage
+     */
+    protected $_authStorage;
 
     /**
      * Construct 
      * 
      * @param null|Storefront_Model_User $userModel 
      */
-    public function __construct(Storefront_Model_User $userModel = null)
+    public function __construct(Model\User $userModel = null)
     {
-        $this->_userModel = null === $userModel ? new Storefront_Model_User() : $userModel;
+        $this->_userModel = null === $userModel ? new Model\User() : $userModel;
     }
 
     /**
@@ -63,9 +74,23 @@ class Storefront_Service_Authentication
     public function getAuth()
     {
         if (null === $this->_auth) {
-            $this->_auth = Zend_Auth::getInstance();
+            $storage = $this->getAuthStorage();
+            $this->_auth = new Authentication\AuthenticationService($storage);
         }
         return $this->_auth;
+    }
+
+    public function getAuthStorage()
+    {
+        if (null === $this->_authStorage) {
+            $this->_authStorage = new Authentication\Storage\Session();
+        }
+        return $this->_authStorage;
+    }
+
+    public function setAuthStoreage(Authentication\Storage $storage)
+    {
+        $this->_authStorage = $storage;
     }
 
     public function getIdentity()
@@ -90,7 +115,7 @@ class Storefront_Service_Authentication
      *
      * @param Zend_Auth_Adapter_Interface $adapter
      */
-    public function setAuthAdapter(Zend_Auth_Adapter_Interface $adapter)
+    public function setAuthAdapter(Authentication\Adapter $adapter)
     {
         $this->_authAdapter = $adapter;
     }
@@ -104,8 +129,8 @@ class Storefront_Service_Authentication
     public function getAuthAdapter($values)
     {
         if (null === $this->_authAdapter) {
-            $authAdapter = new Zend_Auth_Adapter_DbTable(
-                Zend_Db_Table_Abstract::getDefaultAdapter(),
+            $authAdapter = new Authentication\Adapter\DbTable(
+                Table\AbstractTable::getDefaultAdapter(),
                 'user',
                 'email',
                 'passwd',

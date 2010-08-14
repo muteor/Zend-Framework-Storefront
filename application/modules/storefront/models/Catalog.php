@@ -4,7 +4,9 @@ namespace Storefront\Model;
 use SF\Model\Acl\AbstractAcl as SFAbstractAcl,
     Zend\Acl\Resource as ZendAclResourceInterface,
     Zend\Cache,
-    SF\Acl;
+    Zend\Controller,
+    SF\Acl,
+    Storefront\Service;
 
 /**
  * Storefront_Catalog
@@ -262,7 +264,7 @@ class Catalog extends SFAbstractAcl implements ZendAclResourceInterface
     * @param string $validator
     * @return int|false
     */
-   public function saveProductImage(Storefront_Resource_Product_Item $product, $data, $validator = null)
+   public function saveProductImage(Product\Product $product, $data, $validator = null)
     {
         if (!$this->checkAcl('saveProductImage')) {
             throw new Acl\AccessDenied("Insufficient rights");
@@ -296,7 +298,7 @@ class Catalog extends SFAbstractAcl implements ZendAclResourceInterface
             throw new Acl\AccessDenied("Insufficient rights");
         }
 
-        if ($product instanceof Storefront_Resource_Product_Item_Interface) {
+        if ($product instanceof Product\Product) {
             $productId = (int) $product->productId;
         } else {
             $productId = (int) $product;
@@ -356,7 +358,7 @@ class Catalog extends SFAbstractAcl implements ZendAclResourceInterface
     public function getAcl()
     {
         if (null === $this->_acl) {
-            $this->setAcl(new Storefront_Model_Acl_Storefront());
+            $this->setAcl(new Acl\Storefront());
         }
         return $this->_acl;
     }
@@ -383,7 +385,7 @@ class Catalog extends SFAbstractAcl implements ZendAclResourceInterface
     public function reindexProducts()
     {
         if (!$this->checkAcl('reindexProduct')) {
-            throw new SF_Acl_Exception("Insufficient rights");
+            throw new SF\Acl\AccessDenied("Insufficient rights");
         }
 
         $this->getIndexer()->reIndexAllProducts($this);
@@ -392,7 +394,7 @@ class Catalog extends SFAbstractAcl implements ZendAclResourceInterface
     public function optimizeProductIndex()
     {
         if (!$this->checkAcl('optimizeProductIndex')) {
-            throw new SF_Acl_Exception("Insufficient rights");
+            throw new SF\Acl\AccessDenied("Insufficient rights");
         }
 
         $this->getIndexer()->doMaintenance();
@@ -404,7 +406,7 @@ class Catalog extends SFAbstractAcl implements ZendAclResourceInterface
     public function getIndexer()
     {
         if (null === $this->_indexerService) {
-            $this->_indexerService = new Storefront_Service_ProductIndexer();
+            $this->_indexerService = new Service\ProductIndexer();
             $this->_indexerService->setIndexDirectory($this->getIndexDirectory());
         }
         return $this->_indexerService;
@@ -433,7 +435,7 @@ class Catalog extends SFAbstractAcl implements ZendAclResourceInterface
                     $categories[$key] = $cat->name;
                 }
             }
-            $this->_document = new Storefront_Model_Document_Product($product, join(',', $categories));
+            $this->_document = new Document\Product($product, join(',', $categories));
         }
         return $this->_document;
     }
@@ -449,7 +451,7 @@ class Catalog extends SFAbstractAcl implements ZendAclResourceInterface
     public function getIndexDirectory()
     {
         if (null === $this->_indexDirectory) {
-            $fc = Zend_Controller_Front::getInstance();
+            $fc = Controller\Front::getInstance();
             $config = $fc->getParam('bootstrap')->getOption('product');
             $this->_indexDirectory = $config['index'];
         }

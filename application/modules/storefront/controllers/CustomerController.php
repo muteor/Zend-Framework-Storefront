@@ -1,5 +1,12 @@
 <?php
-/**sadf
+
+namespace Storefront;
+
+use Zend\Controller,
+ Storefront\Model,
+ Storefront\Service;
+
+/**
  * CustomerController
  * 
  * @category   Storefront
@@ -7,29 +14,30 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_CustomerController extends Zend_Controller_Action 
+class CustomerController extends Controller\Action
 {
+
     protected $_model;
     protected $_authService;
-    
+
     public function init()
     {
         // get the default model
-        $this->_model = new Storefront_Model_User();
-        $this->_authService = new Storefront_Service_Authentication();
+        $this->_model = new Model\User();
+        $this->_authService = new Service\Authentication();
 
         // add forms
         $this->view->registerForm = $this->getRegistrationForm();
         $this->view->loginForm = $this->getLoginForm();
         $this->view->userForm = $this->getUserForm();
     }
-    
-	public function indexAction() 
-	{
+
+    public function indexAction()
+    {
         if (!$this->_model->checkAcl('updateUser')) {
             return $this->_helper->redirectCommon('gotoLogin');
         }
-        
+
         $this->view->user = $this->_model->getUserById($this->_authService->getIdentity()->userId);
 
         if (null === $this->view->user) {
@@ -76,9 +84,11 @@ class Storefront_CustomerController extends Zend_Controller_Action
         return $redirector->gotoRoute($onSuccess['urlOptions'], $onSuccess['route']);
     }
 
-	public function registerAction()
-	{}
-	
+    public function registerAction()
+    {
+        
+    }
+
     public function completeRegistrationAction()
     {
         $request = $this->getRequest();
@@ -90,23 +100,23 @@ class Storefront_CustomerController extends Zend_Controller_Action
         if (false === $this->_model->registerUser($request->getPost())) {
             return $this->render('register');
         }
-	}
-	
-	public function listAction()
-	{
+    }
+
+    public function listAction()
+    {
         if (!$this->_helper->acl('Admin')) {
             return $this->_helper->redirectCommon('gotoLogin');
         }
-        
-	    $this->view->users = $this->_model->getUsers();
-	}
+
+        $this->view->users = $this->_model->getUsers();
+    }
 
     public function editAction()
     {
         if (!$this->_helper->acl('Admin')) {
             return $this->_helper->redirectCommon('gotoLogin');
         }
-        
+
         $this->view->userForm = $this->getUserAdminForm();
         $this->view->user = $this->_model->getUserById($this->_getParam('id'));
         $this->view->userForm->populate($this->view->user->toArray());
@@ -114,7 +124,7 @@ class Storefront_CustomerController extends Zend_Controller_Action
 
     public function deleteAction()
     {
-        if (false === ($id = $this->_getParam('id',false))) {
+        if (false === ($id = $this->_getParam('id', false))) {
             throw new SF_Exception('Unknown user');
         }
 
@@ -123,12 +133,14 @@ class Storefront_CustomerController extends Zend_Controller_Action
         $redirector = $this->getHelper('redirector');
         return $redirector->gotoRoute(array('action' => 'list'), 'admin');
     }
-	
-	public function loginAction()
-	{}
-	
-	public function authenticateAction()
-	{
+
+    public function loginAction()
+    {
+
+    }
+
+    public function authenticateAction()
+    {
         $request = $this->getRequest();
 
         if (!$request->isPost()) {
@@ -140,34 +152,34 @@ class Storefront_CustomerController extends Zend_Controller_Action
         if (!$form->isValid($request->getPost())) {
             return $this->render('login');
         }
-        
+
         if (false === $this->_authService->authenticate($form->getValues())) {
             $form->setDescription('Login failed, please try again.');
             return $this->render('login');
         }
-        
+
         return $this->_helper->redirector('index');
-	}
-	
-	public function logoutAction()
+    }
+
+    public function logoutAction()
     {
         $this->_authService->clear();
         return $this->_helper->redirector('index');
     }
-    
+
     public function getRegistrationForm()
     {
         $urlHelper = $this->_helper->getHelper('url');
-        
+
         $this->_forms['register'] = $this->_model->getForm('userRegister');
         $this->_forms['register']->setAction($urlHelper->url(array(
-            'controller' => 'customer' , 
-            'action' => 'complete-registration'
-            ), 
-            'default'
+                'controller' => 'customer',
+                'action' => 'complete-registration'
+                ),
+                'default'
         ));
         $this->_forms['register']->setMethod('post');
-        
+
         return $this->_forms['register'];
     }
 
@@ -177,10 +189,10 @@ class Storefront_CustomerController extends Zend_Controller_Action
 
         $this->_forms['userEdit'] = $this->_model->getForm('userEdit');
         $this->_forms['userEdit']->setAction($urlHelper->url(array(
-            'controller' => 'customer' ,
-            'action' => 'save'
-            ),
-            'default'
+                'controller' => 'customer',
+                'action' => 'save'
+                ),
+                'default'
         ));
         $this->_forms['userEdit']->setMethod('post');
 
@@ -193,29 +205,30 @@ class Storefront_CustomerController extends Zend_Controller_Action
 
         $this->_forms['userAdmin'] = $this->_model->getForm('userAdmin');
         $this->_forms['userAdmin']->setAction($urlHelper->url(array(
-            'controller' => 'customer' ,
-            'action' => 'save'
-            ),
-            'admin'
+                'controller' => 'customer',
+                'action' => 'save'
+                ),
+                'admin'
         ));
         $this->_forms['userAdmin']->setMethod('post');
 
         return $this->_forms['userAdmin'];
     }
-    
+
     public function getLoginForm()
     {
         $urlHelper = $this->_helper->getHelper('url');
-        
+
         $this->_forms['login'] = $this->_model->getForm('userLogin');
         $this->_forms['login']->setAction($urlHelper->url(array(
-            'controller' => 'customer',
-            'action'     => 'authenticate',
-            ), 
-            'default'
+                'controller' => 'customer',
+                'action' => 'authenticate',
+                ),
+                'default'
         ));
         $this->_forms['login']->setMethod('post');
-        
+
         return $this->_forms['login'];
     }
+
 }

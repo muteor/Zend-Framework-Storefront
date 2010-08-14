@@ -1,6 +1,11 @@
 <?php
+namespace Storefront\Service;
+
+use Zend\Search\Lucene,
+    Storefront\Model;
+
 /**
- * Storefront_Service_ProductIndexer
+ * ProductIndexer
  *
  * Provides access to the product index
  *
@@ -9,7 +14,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Service_ProductIndexer
+class ProductIndexer
 {
     /**
      * @var Zend_Search_Lucene_Interface
@@ -26,7 +31,7 @@ class Storefront_Service_ProductIndexer
      * 
      * @param Zend_Search_Lucene_Interface $engine
      */
-    public function setIndexingEngine(Zend_Search_Lucene_Interface $engine)
+    public function setIndexingEngine(Lucene\SearchIndex $engine)
     {
         $this->_engine = $engine;
     }
@@ -41,12 +46,12 @@ class Storefront_Service_ProductIndexer
         if (null === $this->_engine) {
             $directory = $this->getIndexDirectory();
             if (null === $directory) {
-                throw new Storefront_Service_Indexer_Exception('Index directory must be set');
+                throw new \Exception('Index directory must be set');
             }
             if(($files = @scandir($directory)) && count($files) <= 3) {
-                $this->_engine = new Zend_Search_Lucene_Proxy(new Zend_Search_Lucene($directory, true));
+                $this->_engine = new Lucene\Index($directory, true);
             } else {
-                $this->_engine = new Zend_Search_Lucene_Proxy(new Zend_Search_Lucene($directory, false));
+                $this->_engine = new Lucene\Index($directory, false);
             }
         }
         return $this->_engine;
@@ -58,7 +63,7 @@ class Storefront_Service_ProductIndexer
      *
      * @param Storefront_Model_Document_Product $document 
      */
-    public function indexProduct(Storefront_Model_Document_Product $document)
+    public function indexProduct(Model\Document\Product $document)
     {
         $this->deleteProduct($document);
         $this->getIndexingEngine()->addDocument($document);
@@ -73,7 +78,7 @@ class Storefront_Service_ProductIndexer
     {
         $id = $documentOrId;
 
-        if ($documentOrId instanceof Storefront_Model_Document_Product) {
+        if ($documentOrId instanceof Model\Document\Product) {
             $id = $documentOrId->getFieldUtf8Value('productId');
         }
 
@@ -96,7 +101,7 @@ class Storefront_Service_ProductIndexer
      * 
      * @param Storefront_Model_Catalog $catalogModel 
      */
-    public function reIndexAllProducts(Storefront_Model_Catalog $catalogModel)
+    public function reIndexAllProducts(Model\Catalog $catalogModel)
     {
         $products = $catalogModel->getAllProducts();
 
@@ -109,7 +114,7 @@ class Storefront_Service_ProductIndexer
                     }
                 }
                 $categories[] = $catalogModel->getCategoryById($product->categoryId)->name;
-                $document = new Storefront_Model_Document_Product($product, join(',', $categories));
+                $document = new Model\Document\Product($product, join(',', $categories));
                 $this->indexProduct($document);
             }
             $this->getIndexingEngine()->commit();

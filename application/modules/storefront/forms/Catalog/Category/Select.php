@@ -1,4 +1,7 @@
 <?php
+namespace Storefront\Form\Catalog\Category;
+
+use SF\Form;
 /**
  * Category Select
  *
@@ -7,7 +10,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_Catalog_Category_Select extends SF_Form_Abstract
+class Select extends Form\AbstractForm
 {
     public function init()
     {

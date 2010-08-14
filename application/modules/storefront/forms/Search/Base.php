@@ -1,4 +1,8 @@
 <?php
+namespace Storefront\Form\Search;
+
+use SF\Form;
+
 /**
  * The base search form
  *
@@ -7,7 +11,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_Search_Base extends SF_Form_Abstract
+class Base extends Form\AbstractForm
 {
     public function init()
     {

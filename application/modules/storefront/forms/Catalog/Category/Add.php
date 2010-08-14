@@ -1,4 +1,7 @@
 <?php
+namespace Storefront\Form\Catalog\Category;
+
+use SF\Form;
 /**
  * Add new category
  *
@@ -7,7 +10,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_Catalog_Category_Add extends SF_Form_Abstract
+class Add extends Form\AbstractForm
 {
     public function init()
     {
@@ -42,7 +45,7 @@ class Storefront_Form_Catalog_Category_Add extends SF_Form_Abstract
         ));
 
         // get the select
-        $form = new Storefront_Form_Catalog_Category_Select(
+        $form = new Storefront\Form\Catalog\Category\Select(
             array('model' => $this->getModel())
         );
         $element = $form->getElement('categoryId');

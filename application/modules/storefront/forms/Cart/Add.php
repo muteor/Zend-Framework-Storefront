@@ -1,4 +1,8 @@
 <?php
+namespace Storefront\Form\Cart;
+
+use SF\Form;
+
 /**
  * Add to cart form
  *
@@ -7,7 +11,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_Cart_Add extends SF_Form_Abstract
+class Add extends Form\AbstractForm
 {
     public function init()
     {

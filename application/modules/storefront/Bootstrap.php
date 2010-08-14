@@ -1,4 +1,5 @@
 <?php
+die('laoded');
 namespace Storefront;
 
 use Zend\Application\Bootstrap as ZendBootstrap,
@@ -316,7 +317,6 @@ class Bootstrap extends ZendBootstrap
 
     protected function _initZendSearch()
     {
-        
         $filter = new ZendSearch\Lucene\Analysis\TokenFilter\ShortWords();
 
         $analyzer = new ZendSearch\Lucene\Analysis\Analyzer\Common\Utf8Num\CaseInsensitive();

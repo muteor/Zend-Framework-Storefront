@@ -1,12 +1,18 @@
 <?php
-class Storefront_IndexController extends Zend_Controller_Action
+namespace Storefront;
+
+use Zend\Controller,
+    Storefront\Model,
+    Storefront\Service;
+
+class IndexController extends Controller\Action
 {
     protected $_forms = array();
     protected $_catalogModel;
 
     public function init()
     {
-        $this->_catalogModel = new Storefront_Model_Catalog();
+        $this->_catalogModel = new Model\Catalog();
     }
 
     public function indexAction()

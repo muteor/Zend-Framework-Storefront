@@ -1,5 +1,9 @@
 <?php
-class Storefront_Form_Catalog_Product_Image_Add extends SF_Form_Abstract
+namespace Storefront\Form\Catalog\Product\Image;
+
+use SF\Form;
+
+class Add extends Form\AbstractForm
 {
     public function init()
     {

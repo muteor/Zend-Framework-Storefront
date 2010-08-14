@@ -1,5 +1,21 @@
 <?php
-class IndexerServiceTest extends PHPUnit_Framework_TestCase
+namespace SFTest\Service;
+
+use Storefront\Model,
+    Storefront\Service,
+    Zend\Application,
+    Mockery as m;
+
+/**
+ * Test resources to load
+ */
+require_once __DIR__ . '/../Model/TestResources/Product.php';
+require_once __DIR__ . '/../Model/TestResources/Category.php';
+
+/**
+ * @group migration
+ */
+class IndexerServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Storefront_Service_Indexer
@@ -13,34 +29,30 @@ class IndexerServiceTest extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        // get the config
-        $application = new Zend_Application(
-            'development',
-            APPLICATION_PATH . '/config/store.ini'
-        );
-        $application->bootstrap('ZendSearch');
-
         // mock Zend_Search
-        $indexEngine = new Zend_Search_Stub();
+        $indexEngine = m::mock('Zend\Search\Lucene\Index', array(
+            'delete' => 1,
+            'addDocument' => 1,
+            'commit' => 1,
+            'optimize' => 1
+        ));
 
-        $this->_indexer = new Storefront_Service_ProductIndexer();
+        $indexed = new \stdClass();
+        $indexed->id = 1;
+        $indexEngine->shouldReceive('find')->andReturn(array($indexed));
+
+        $this->_indexer = new Service\ProductIndexer();
         $this->_indexer->setIndexingEngine($indexEngine);
 
         // mock product
-        $item = $this->getMock('Storefront_Resource_Product_Item_Interface');
+        $item = m::mock('Storefront\\Model\\Resource\\Product\\Product');
+        $item->shouldReceive('getPrice')->times(1)->andReturn('10.99');
         $item->productId = 1;
         $item->name = 'test1';
         $item->description = 'description';
-        $item->expects($this->once())->method('getPrice')->will($this->returnValue('10.99'));
 
         // create a document for indexing
-        $this->_document = new Storefront_Model_Document_Product($item, 'category1,category2');
-    }
-
-    public function test_Indexer_Has_Correct_Config()
-    {
-        $analyzer = Zend_Search_Lucene_Analysis_Analyzer::getDefault();
-        $this->assertType('Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive', $analyzer);
+        $this->_document = new Model\Document\Product($item, 'category1,category2');
     }
 
     public function test_Can_GetSet_The_Index_Directory()
@@ -56,7 +68,14 @@ class IndexerServiceTest extends PHPUnit_Framework_TestCase
 
     public function test_Indexer_Can_Reindex_All_Products()
     {
-        $catalogModel = new Catalog_Stub();
+        $options = array(
+            'resources' => array(
+                'Product'  => new \SFTest\Model\Resource\ProductResource(),
+                'Category' => new \SFTest\Model\Resource\CategoryResource(),
+            )
+        );
+        $catalogModel = new Model\Catalog($options);
+
         $this->_indexer->reIndexAllProducts($catalogModel);
     }
 

@@ -1,4 +1,8 @@
 <?php
+namespace Storefront\Form\Cart;
+
+use SF\Form;
+
 /**
  * Base of the cart table where users edit delete from their cart,
  * elements are dynamically added for the qty fields in
@@ -10,7 +14,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_Form_Cart_Table extends SF_Form_Abstract
+class Table extends Form\AbstractForm
 {
     public function init()
     {
