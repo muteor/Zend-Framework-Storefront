@@ -1,4 +1,7 @@
 <?php
+namespace Storefront\View\Helper;
+
+use Zend\View\Helper;
 /**
  * Storefront_View_Helper_Breadcrumb
  * 
@@ -9,8 +12,13 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_View_Helper_Breadcrumb extends Zend_View_Helper_Abstract
-{       
+class Breadcrumb extends Helper\AbstractHelper
+{
+    public function direct($product = null)
+    {
+        return $this->breadcrumb($product);
+    }
+
     public function breadcrumb($product = null)
     {
         if ($this->view->bread) {

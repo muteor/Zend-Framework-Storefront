@@ -4,7 +4,7 @@
  */
 namespace SF\Controller\Helper;
 
-use Zend\Controller\Action\Helper\AbstractHelper as ZendHelperAbstract;
+use Zend\Controller\Action\Helper;
 
 /**
  * Simple helper to encapsulate our most common redirects
@@ -14,13 +14,13 @@ use Zend\Controller\Action\Helper\AbstractHelper as ZendHelperAbstract;
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class RedirectCommon extends ZendHelperAbstract
+class RedirectCommon extends Helper\AbstractHelper
 {
     protected $_redirector;
 
     public function __construct()
     {
-        $this->_redirector = new Zend_Controller_Action_Helper_Redirector();
+        $this->_redirector = new Helper\Redirector();
     }
 
     public function gotoLogin()

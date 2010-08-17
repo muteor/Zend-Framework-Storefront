@@ -2,7 +2,7 @@
 /**
  * @namespace SF\Model
  */
-namespace SF\Model;
+namespace SF\Model\Cache;
 
 use SF\Model\Cache\AbstractCache as ModelCache;
 

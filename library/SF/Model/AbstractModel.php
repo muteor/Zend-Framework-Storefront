@@ -169,7 +169,7 @@ abstract class AbstractModel implements Model
                 'cache_dir'=> APPLICATION_PATH . '/../data/cache/db'
             );
             $this->_cacheOptions = array(
-                'frontend'        => 'Class',
+                'frontend'        => 'ClassFrontend',
                 'backend'         => 'File',
                 'frontendOptions' => $frontendOptions,
                 'backendOptions'  => $backendOptions

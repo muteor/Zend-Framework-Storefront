@@ -1,5 +1,9 @@
 <?php
-class Cms_Model_Page extends SF_Model_Abstract
+namespace Cms\Model;
+
+use SF\Model;
+
+class Page extends Model\AbstractModel
 {
     public function getPageById($id)
     {

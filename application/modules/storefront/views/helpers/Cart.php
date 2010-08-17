@@ -1,4 +1,9 @@
 <?php
+namespace Storefront\View\Helper;
+
+use Zend\View\Helper,
+    Zend\Currency,
+    Storefront\Model;
 /**
  * Storefront_View_Helper_Cart
  *
@@ -9,20 +14,25 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_View_Helper_Cart extends Zend_View_Helper_Abstract
+class Cart extends Helper\AbstractHelper
 {
     public $cartModel;
 
+    public function direct()
+    {
+        return $this->Cart();
+    }
+
     public function Cart()
     {
-        $this->cartModel = new Storefront_Model_Cart();
+        $this->cartModel = new Model\Cart();
 
         return $this;
     }
 
     public function getSummary()
     {
-        $currency = new Zend_Currency();
+        $currency = new Currency\Currency();
         $itemCount = count($this->cartModel);
 
         if (0 == $itemCount) {
@@ -45,7 +55,7 @@ class Storefront_View_Helper_Cart extends Zend_View_Helper_Abstract
         return $html;
     }
 
-    public function addForm(Storefront_Resource_Product_Item $product)
+    public function addForm(Storefront\Model\Resource\Product $product)
     {
         $form = $this->cartModel->getForm('cartAdd');
         $form->populate(array(
@@ -105,14 +115,14 @@ class Storefront_View_Helper_Cart extends Zend_View_Helper_Abstract
 
     public function formatAmount($amount)
     {
-        $currency = new Zend_Currency();
+        $currency = new Currency\Currency();
         return $currency->toCurrency($amount);
     }
 
     private function _getShippingMultiOptions()
     {
-        $currency = new Zend_Currency();
-        $shipping = new Storefront_Model_Shipping();
+        $currency = new Currency\Currency();
+        $shipping = new Model\Shipping();
         $options = array(0 => 'Please Select');
 
         foreach($shipping->getShippingOptions() as $key => $value) {

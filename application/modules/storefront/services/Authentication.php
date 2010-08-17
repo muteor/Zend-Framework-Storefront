@@ -2,9 +2,8 @@
 namespace Storefront\Service;
 
 use Storefront\Model,
-    Zend\Authentication,
+    Zend\Authentication as ZendAuth,
     Zend\Db\Table;
-
 /**
  * Storefront_Service_Authentication
  * 
@@ -16,7 +15,7 @@ use Storefront\Model,
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Authentication 
+class Authentication
 {
     /**
      * @var Zend_Auth_Adapter_DbTable
@@ -29,12 +28,12 @@ class Authentication
     protected $_userModel;
 
     /**
-     * @var Zend\Authentication\AuthenticationService
+     * @var Zend\ZendAuth\AuthenticationService
      */
     protected $_auth;
 
     /**
-     * @var Zend\Authentication\Storage
+     * @var Zend\ZendAuth\Storage
      */
     protected $_authStorage;
 
@@ -75,7 +74,7 @@ class Authentication
     {
         if (null === $this->_auth) {
             $storage = $this->getAuthStorage();
-            $this->_auth = new Authentication\AuthenticationService($storage);
+            $this->_auth = new ZendAuth\AuthenticationService($storage);
         }
         return $this->_auth;
     }
@@ -83,12 +82,12 @@ class Authentication
     public function getAuthStorage()
     {
         if (null === $this->_authStorage) {
-            $this->_authStorage = new Authentication\Storage\Session();
+            $this->_authStorage = new ZendAuth\Storage\Session();
         }
         return $this->_authStorage;
     }
 
-    public function setAuthStoreage(Authentication\Storage $storage)
+    public function setAuthStoreage(ZendAuth\Storage $storage)
     {
         $this->_authStorage = $storage;
     }
@@ -115,7 +114,7 @@ class Authentication
      *
      * @param Zend_Auth_Adapter_Interface $adapter
      */
-    public function setAuthAdapter(Authentication\Adapter $adapter)
+    public function setAuthAdapter(ZendAuth\Adapter $adapter)
     {
         $this->_authAdapter = $adapter;
     }
@@ -129,7 +128,7 @@ class Authentication
     public function getAuthAdapter($values)
     {
         if (null === $this->_authAdapter) {
-            $authAdapter = new Authentication\Adapter\DbTable(
+            $authAdapter = new ZendAuth\Adapter\DbTable(
                 Table\AbstractTable::getDefaultAdapter(),
                 'user',
                 'email',

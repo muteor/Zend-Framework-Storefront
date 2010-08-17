@@ -4,7 +4,8 @@
  */
 namespace SF\Controller\Helper;
 
-use Zend\Controller\Action\Helper\AbstractHelper as ZendHelperAbstract;
+use Zend\Controller\Action\Helper\AbstractHelper as ZendHelperAbstract,
+    Zend\Controller\Front as ZendFront;
 
 /**
  * Module service finder
@@ -21,19 +22,19 @@ class Service extends ZendHelperAbstract
     public function getService($service, $module)
     {
         if (!isset($this->_services[$module][$service])) {
-            $class = implode('_', array(
+            $class = implode('\\', array(
                     ucfirst($module),
                     'Service',
                     ucfirst($service)
             ));
 
-            $front = Zend_Controller_Front::getInstance();
+            $front = ZendFront::getInstance();
             $classPath = $front->getModuleDirectory($module) . '/services/' . ucfirst($service) . '.php';
             if (!file_exists($classPath)) {
                 return false;
             }
             if (!class_exists($class)) {
-                throw new SF_Exception("Class $class not found in " . basename($classPath));
+                throw new \Exception("Class $class not found in " . basename($classPath));
             }
             $this->_services[$module][$service] = new $class();
         }

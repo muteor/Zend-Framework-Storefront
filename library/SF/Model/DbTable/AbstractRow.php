@@ -95,7 +95,7 @@ abstract class AbstractRow
      */
     public function setRow(array $config = array())
     {
-        $rowClass = 'Zend_Db_Table_Row';  
+        $rowClass = 'Zend\\Db\\Table\\Row';
         if (isset($config['rowClass'])) {
             $rowClass = $config['rowClass'];
         }

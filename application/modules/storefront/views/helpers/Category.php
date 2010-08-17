@@ -1,4 +1,9 @@
 <?php
+namespace Storefront\View\Helper;
+
+use Zend\View\Helper,
+    Storefront\Model;
+
 /**
  * Storefront_View_Helper_UserInfo
  *
@@ -9,18 +14,22 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-require_once 'Zend/View/Interface.php';
 
 /**
  * AuthInfo helper
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Storefront_View_Helper_Category extends Zend_View_Helper_Abstract
+class Category extends Helper\AbstractHelper
 {
+    public function direct()
+    {
+        return $this->Category();
+    }
+
     public function Category()
     {
-        $catalogModel = new Storefront_Model_Catalog();
+        $catalogModel = new Model\Catalog();
         return $catalogModel->getCached()->getCategoriesByParentId(0);
     }
 }

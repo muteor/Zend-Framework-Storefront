@@ -1,4 +1,9 @@
 <?php
+namespace Storefront\View\Helper;
+
+use Zend\View\Helper,
+    Storefront\Service\Authentication as Auth;
+
 /**
  * Storefront_View_Helper_UserInfo
  * 
@@ -9,19 +14,23 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-require_once 'Zend/View/Interface.php';
 
 /**
  * AuthInfo helper
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Storefront_View_Helper_AuthInfo extends Zend_View_Helper_Abstract
+class AuthInfo extends Helper\AbstractHelper
 {   
     /**
      * @var Storefront_Service_Authentication
      */
     protected $_authService;
+
+    public function direct($info = null)
+    {
+        return $this->_authInfo($info);
+    }
     
     /**
      * Get user info from the auth session
@@ -29,10 +38,10 @@ class Storefront_View_Helper_AuthInfo extends Zend_View_Helper_Abstract
      * @param string|null $info The data to fetch, null to chain
      * @return string|Zend_View_Helper_AuthInfo
      */
-    public function authInfo ($info = null)
+    public function _authInfo ($info = null)
     {
         if (null === $this->_authService) {
-            $this->_authService = new Storefront_Service_Authentication();
+            $this->_authService = new Auth();
         }
          
         if (null === $info) {

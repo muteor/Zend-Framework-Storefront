@@ -1,4 +1,9 @@
 <?php
+namespace Storefront\View\Helper;
+
+use Zend\View\Helper,
+    Storefront\Model;
+
 /**
  * Storefront_View_Helper_ProductImage
  * 
@@ -9,7 +14,7 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_View_Helper_ProductImage extends Zend_View_Helper_HtmlElement
+class ProductImage extends Helper\HtmlElement
 {
     /**
      * @var Storefront_Resource_ProductImage_Item
@@ -20,7 +25,12 @@ class Storefront_View_Helper_ProductImage extends Zend_View_Helper_HtmlElement
      * @var array|false
      */
     protected $_attribs;
-        
+
+    public function direct(Storefront\Model\Resource\Productimage $image = null, $attribs = false)
+    {
+        return $this->ProductImage($image, $attribs);
+    }
+
     /**
      * productImage
      *
@@ -28,7 +38,7 @@ class Storefront_View_Helper_ProductImage extends Zend_View_Helper_HtmlElement
      * @param array $attribs Attributes for the img tag
      * @return Zend_View_Helper_ProductImage
      */
-    public function productImage(Storefront_Resource_Productimage_Item $image = null, $attribs = false)
+    public function productImage(Storefront\Model\Resource\Productimage $image = null, $attribs = false)
     {
         $this->_image = $image;
         $this->_attribs = $attribs;

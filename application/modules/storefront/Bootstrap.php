@@ -1,5 +1,4 @@
 <?php
-die('laoded');
 namespace Storefront;
 
 use Zend\Application\Bootstrap as ZendBootstrap,
@@ -10,7 +9,8 @@ use Zend\Application\Bootstrap as ZendBootstrap,
     Zend\Db\Profiler as ZendDbProfiler,
     Zend\Controller\Router\Route as ZendRouter,
     Zend\Controller\Action\HelperBroker as ZendActionHelperBroker,
-    Zend\Search as ZendSearch
+    Zend\Search as ZendSearch,
+    SF\Controller\Helper as SFActionHelper
 ;
 
 /**
@@ -58,6 +58,7 @@ class Bootstrap extends ZendBootstrap
     protected function _initLogging()
     {
         $this->bootstrap('frontController');
+        
         $logger = new ZendLog\Logger();
 
         $writer = 'production' == $this->getEnvironment() ?
@@ -84,11 +85,11 @@ class Bootstrap extends ZendBootstrap
         $this->getResourceLoader()->addResourceTypes(array(
             'modelResource' => array(
               'path'      => 'models/resources',
-              'namespace' => 'Resource',
+              'namespace' => 'Model\\Resource',
             ),
             'document' => array(
                 'path' => 'models/document',
-                'namespace' => 'Model\Document'
+                'namespace' => 'Model\\Document'
             )
         ));
     }
@@ -109,14 +110,14 @@ class Bootstrap extends ZendBootstrap
      */
     protected function _initDbProfiler()
     {
-//        $this->_logger->info('Bootstrap ' . __METHOD__);
-//
-//        if ('production' !== $this->getEnvironment()) {
-//            $this->bootstrap('db');
-//            $profiler = new ZendDbProfiler\Firebug('All DB Queries');
-//            $profiler->setEnabled(true);
-//            $this->getPluginResource('db')->getDbAdapter()->setProfiler($profiler);
-//        }
+        $this->_logger->info('Bootstrap ' . __METHOD__);
+
+        if ('production' !== $this->getEnvironment()) {
+            $this->bootstrap('db');
+            $profiler = new ZendDbProfiler\Firebug('All DB Queries');
+            $profiler->setEnabled(true);
+            $this->getPluginResource('db')->getDbAdapter()->setProfiler($profiler);
+        }
     }
     
     /**
@@ -173,6 +174,14 @@ class Bootstrap extends ZendBootstrap
 
         $router = $this->frontController->getRouter();
 
+        // workaround for the default route being renamed to application
+        $route = new ZendRouter\Module(array(
+            'action'     => 'index',
+            'controller' => 'index',
+            'module'     => 'storefront',
+        ));
+        $router->addRoute('default', $route);
+
         // Admin context route
         $route = new ZendRouter\Route(
             'admin/:module/:controller/:action/*',
@@ -228,9 +237,9 @@ class Bootstrap extends ZendBootstrap
     protected function _initActionHelpers()
     {
         $this->_logger->info('Bootstrap ' . __METHOD__);
-        //ZendActionHelperBroker::addHelper(new SF\Controller\Helper\Acl());
-        //ZendActionHelperBroker::addHelper(new SF\Controller\Helper\RedirectCommon());
-        //ZendActionHelperBroker::addHelper(new SF\Controller\Helper\Service());
+        ZendActionHelperBroker::addHelper(new SFActionHelper\Acl());
+        ZendActionHelperBroker::addHelper(new SFActionHelper\RedirectCommon());
+        ZendActionHelperBroker::addHelper(new SFActionHelper\Service());
     }
 
     /**

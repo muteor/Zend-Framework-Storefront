@@ -170,7 +170,7 @@ abstract class AbstractCache
      */
     public function setFrontend($frontend)
     {
-        if ('Class' != $frontend) {
+        if ('ClassFrontend' != $frontend) {
             throw new Model\InvalidOperation('Frontend type must be Class');
         }
         $this->_frontend = $frontend;

@@ -1,4 +1,8 @@
 <?php
+namespace Storefront\View\Helper;
+
+use Zend\View\Helper,
+    Storefront\Model;
 /**
  * Storefront_View_Helper_SearchResult
  *
@@ -9,11 +13,16 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_View_Helper_SearchResult extends Zend_View_Helper_Abstract
+class SearchResult extends Helper\AbstractHelper
 {
+    public function direct($hit)
+    {
+        return $this->SearchResult($hit);
+    }
+
     public function searchResult($hit)
     {
-        $catalog = new Storefront_Model_Catalog();
+        $catalog = new Model\Catalog();
         $product = $catalog->getProductById($hit->productId);
 
         if (null !== $product) {

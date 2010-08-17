@@ -50,7 +50,7 @@ class IndexController extends Controller\Action
         $urlHelper = $this->_helper->getHelper('url');
 
         $this->_forms['search'] = $this->_catalogModel->getForm('searchBase');
-        $this->_forms['search']->setAction($urlHelper->url(array(
+        $this->_forms['search']->setAction($urlHelper->direct(array(
             'controller' => 'index' ,
             'action' => 'search'
             ),

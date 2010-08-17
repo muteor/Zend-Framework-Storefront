@@ -1,4 +1,8 @@
 <?php
+namespace Storefront\View\Helper;
+
+use Zend\View\Helper,
+    Storefront\Form;
 /**
  * Storefront_View_Helper_SearchForm
  *
@@ -9,12 +13,12 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_View_Helper_SearchForm extends Zend_View_Helper_Abstract
+class SearchForm extends Helper\AbstractHelper
 {
-    public function searchForm()
+    public function direct()
     {
-        $form = new Storefront_Form_Search_Base();
-        $form->setAction($this->view->url(array(
+        $form = new Form\Search\Base();
+        $form->setAction($this->view->Url(array(
             'controller' => 'index' ,
             'action' => 'search'
             ),

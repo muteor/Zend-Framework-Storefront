@@ -1,4 +1,9 @@
 <?php
+namespace Storefront\View\Helper;
+
+use Zend\View\Helper,
+    Zend\Currency,
+    Storefront\Model;
 /**
  * Storefront_View_Helper_ProductPrice
  * 
@@ -9,11 +14,16 @@
  * @copyright  Copyright (c) 2008 Keith Pope (http://www.thepopeisdead.com)
  * @license    http://www.thepopeisdead.com/license.txt     New BSD License
  */
-class Storefront_View_Helper_ProductPrice extends Zend_View_Helper_Abstract
-{       
-    public function productPrice(Storefront_Resource_Product_Item $product)
+class ProductPrice extends Helper\AbstractHelper
+{
+    public function direct(Storefront\Model\Resource\Product $product)
     {
-        $currency = new Zend_Currency();
+        return $this->ProductPrice($product);
+    }
+
+    public function productPrice(Storefront\Model\Resource\Product $product)
+    {
+        $currency = new Currency\Currency();
         $formatted = $currency->toCurrency($product->getPrice());
         
         if ($product->isDiscounted()) {
