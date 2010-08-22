@@ -1,6 +1,8 @@
 <?php
 namespace SFTest\Service;
 
+use Storefront\Service;
+
 /**
  * Test case for Storefront_Service_Authentication
  */
@@ -11,23 +13,23 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->_service = new Storefront_Service_Authentication();
+        $this->_service = new Service\Authentication();
         
         // setup in memory db so we get no Zend_Db errors (we dont need any schema!)
-        $this->_db = new Zend_Db_Adapter_Pdo_Sqlite(array('dbname'   => ':memory:'));
-        Zend_Db_Table_Abstract::setDefaultAdapter($this->_db);
+        $this->_db = new \Zend\Db\Adapter\Pdo\Sqlite(array('dbname'   => ':memory:'));
+        \Zend\Db\Table\Table::setDefaultAdapter($this->_db);
     }
     
     protected function tearDown()
     {
-        Zend_Db_Table_Abstract::setDefaultAdapter(null);
+        \Zend\Db\Table\Table::setDefaultAdapter(null);
         $this->_service = null;
         $this->_db = null;
     }
     
     public function test_Get_Adpater_Returns_Zend_Auth_Adapter_DbTable()
     {
-        $this->assertType('Zend_Auth_Adapter_DbTable', $this->_service->getAuthAdapter(
+        $this->assertType('Zend\Authentication\Adapter\DbTable', $this->_service->getAuthAdapter(
                 array('email' => '',
                     'passwd' => ''
                 )

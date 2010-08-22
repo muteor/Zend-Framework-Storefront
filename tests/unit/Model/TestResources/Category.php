@@ -69,7 +69,7 @@ class CategoryResource implements Category\Resource
         $found = null;
         foreach ($this->_categories as $cat) {
             if ($id == $cat->categoryId) {
-                $found[] = $cat;
+                $found = $cat;
             }
         }
         return $found;

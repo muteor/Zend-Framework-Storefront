@@ -27,6 +27,8 @@ class ProductResource implements Product\Resource
             $mock->taxable = $i % 2 ? 'Yes' : 'No';
             $mock->deliveryMethod = $i % 2 ? 'Mail' : 'Download';
             $mock->stockStatus = 'InStock';
+
+            $mock->shouldReceive('getPrice')->andReturn($mock->price);
             
             $data[] = $mock;
         }
